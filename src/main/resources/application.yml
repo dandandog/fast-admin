@@ -1,0 +1,8 @@
+fast-code:
+  swagger:
+    apiScans:
+      - groupName: admin
+        basePackage: pers.dandandog.admin.controller
+        basePath: /test/hello
+
+
