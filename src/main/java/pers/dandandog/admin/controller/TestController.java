@@ -22,6 +22,7 @@ public class TestController {
         Test test = new Test();
         test.setName("liuqiang");
         test.setAge(11);
+        test.setUrl("/haha.png");
         return MapperRepo.mapTo(test, TestVo.class);
     }
 

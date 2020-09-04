@@ -1,8 +1,16 @@
+server:
+  servlet:
+    context-path: /admin
+spring:
+  application:
+    name: fast-admin
+  profiles:
+    active: @profileActive@
 fast-code:
   swagger:
-    apiScans:
-      - groupName: admin
-        basePackage: pers.dandandog.admin.controller
-        basePath: /test/hello
-
-
+    api-scans:
+      - group-name: admin
+        base-package: pers.dandandog.admin.controller
+        base-path: /test/hello
+  map-struct:
+    url-domain: https://www.myelephant.cn
