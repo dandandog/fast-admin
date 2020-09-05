@@ -1,7 +1,10 @@
 server:
   servlet:
     context-path: /admin
+  port: 8081
 spring:
+  config:
+    name:
   application:
     name: fast-admin
   profiles:
