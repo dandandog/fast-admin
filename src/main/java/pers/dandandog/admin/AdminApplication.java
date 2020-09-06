@@ -12,7 +12,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
  * @author Administrator
  */
 @SpringBootApplication
-@MapperScan(value = "pers.dandandog.admin", annotationClass = Mapper.class)
+@MapperScan(basePackages = "pers.dandandog.admin", annotationClass = Mapper.class)
 public class AdminApplication extends SpringBootServletInitializer {
 
     @Override

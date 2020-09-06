@@ -14,6 +14,6 @@ fast-code:
     api-scans:
       - group-name: admin
         base-package: pers.dandandog.admin.controller
-        base-path: /test/hello
+        base-path: /sys
   map-struct:
     url-domain: https://www.myelephant.cn
