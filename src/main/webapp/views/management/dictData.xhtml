@@ -1,0 +1,80 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:framework="http://java.sun.com/jsf/composite/components"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="title"><h:outputText value="#{msg['dictionary']['dictData']}"/></ui:define>
+    <ui:define name="viewname">
+        <h:outputText value="#{msg['dictionary']['dictData']}"/>
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="contentForm">
+
+            <framework:dataTable id="dictDataTable" widgetVar="dictDataTable" value="#{viewScope.dictDatas}"
+                                 formDialogId="dictData"
+                                 singleSelection="#{viewScope.singleDictData}"
+                                 multipleSelection="#{viewScope.multipleDictDatas}">
+                <f:facet name="toolbarBtn">
+                    <p:button id="backBtn" widgetVar="backBtn" icon="fa fa-mail-reply"
+                              value="#{msg['framework']['back']}" href="javascript:history.back();"/>
+                </f:facet>
+                <p:column headerText="#{msg['dictData']['label']}">
+                    <h:outputText value="#{element.label}"/>
+                </p:column>
+                <p:column headerText="#{msg['dictData']['value']}">
+                    <h:outputText value="#{element.value}"/>
+                </p:column>
+                <p:column headerText="#{msg['dictData']['status']}">
+                    <h:outputText value="#{element.status}"/>
+                </p:column>
+                <p:column headerText="#{msg['framework']['remark']}">
+                    <h:outputText value="#{element.remark}"/>
+                </p:column>
+                <p:column headerText="#{msg['framework']['createdTime']}">
+                    <h:outputText value="#{element.createdTime}"/>
+                </p:column>
+            </framework:dataTable>
+        </h:form>
+    </ui:define>
+    <ui:define name="dialog">
+        <h:form id="dialogForm">
+            <framework:dialog id="dictData" value="#{viewScope.dictData}" saveUpdate="@widgetVar(dictDataTable)">
+
+                <framework:label for="dictDataLabel" value="#{msg['dictData']['label']}">
+                    <p:inputText id="dictDataLabel" required="true" value="#{viewScope.dictData.label}"/>
+                </framework:label>
+
+                <framework:label for="dictDataValue" value="#{msg['dictData']['value']}">
+                    <p:inputText id="dictDataValue" required="true" value="#{viewScope.dictData.value}"/>
+                </framework:label>
+
+                <framework:label for="dictDataType" value="#{msg['dictData']['type']}">
+                    <p:inputText id="dictDataType" readonly="true" required="true"
+                                 value="#{viewScope.dictData.type}"/>
+                </framework:label>
+
+                <framework:label for="dictDataStatus" value="#{msg['dictData']['status']}">
+                    <p:selectOneRadio id="dictDataStatus" value="#{viewScope.dictData.status}">
+                        <f:selectItems value="#{viewScope.statuses}" var="status" itemValue="#{status}"
+                                       itemLabel="#{msg['enum'][status]}"/>
+                    </p:selectOneRadio>
+                </framework:label>
+
+                <framework:label for="dictDataSeq" value="#{msg['dictData']['seq']}">
+                    <p:inputNumber id="dictDataSeq" value="#{viewScope.dictData.seq}" decimalPlaces="0"/>
+                </framework:label>
+
+                <framework:label for="dictDataDefault" value="#{msg['dictData']['def']}">
+                    <p:selectBooleanCheckbox id="dictDataDefault" value="#{viewScope.dictData.def}"/>
+                </framework:label>
+
+                <framework:label for="dictDataRemark" value="#{msg['framework']['remark']}">
+                    <p:inputTextarea id="dictDataRemark" value="#{viewScope.dictData.remark}"/>
+                </framework:label>
+            </framework:dialog>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,104 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="../../WEB-INF/template.xhtml"
+                xmlns:framework="http://java.sun.com/jsf/composite/components">
+    <ui:define name="viewname">
+        <i class="fa fa-user-plus"></i>
+        <p:outputPanel id="viewname" layout="inline">
+            <h:outputText value="#{msg['menu']['role']}"/>
+        </p:outputPanel>
+    </ui:define>
+    <ui:define name="head">
+        <style type="text/css">
+            li.menu-list > ul:last-child {
+                display: flex;
+                width: 100%;
+                flex-wrap: wrap;
+            }
+        </style>
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="contentform" prependId="false">
+            <framework:dataTable id="roleTable" widgetVar="roleTable"
+                                 value="#{viewScope.roles}" formDialogId="roleDialog"
+                                 singleSelection="#{viewScope.singleRole}" resizableColumns="true"
+                                 multipleSelection="#{viewScope.multipleRoles}">
+                <p:column headerText="#{msg['role']['name']}">
+                    <h:outputText value="#{element.name}"/>
+                </p:column>
+                <p:column headerText="#{msg['role']['code']}">
+                    <h:outputText value="#{element.code}"/>
+                </p:column>
+                <p:column headerText="#{msg['role']['status']}">
+                    <p:toggleSwitch value="#{element.status}">
+                        <p:ajax listener="#{controller.onChangeStatus(element)}"/>
+                    </p:toggleSwitch>
+                </p:column>
+                <p:column headerText="#{msg['framework']['createdTime']}">
+                    <h:outputText value="#{element.createdTime}"/>
+                </p:column>
+                <f:facet name="rowOperation">
+                    <p:outputPanel layout="inline" styleClass="ui-separator" style="text-align: center">
+                        <span class="ui-icon fa fa-ellipsis-v"/>
+                    </p:outputPanel>
+                    <p:link id="dataList" value="#{msg['role']['userList']}" href="javascript:void(0);"
+                            onclick="parent.router('/views/system/dictData?type=#{element.id}');">
+                    </p:link>
+                </f:facet>
+            </framework:dataTable>
+        </h:form>
+    </ui:define>
+    <ui:define name="dialog">
+        <h:form id="dialogform">
+            <framework:dialog id="roleDialog" value="#{viewScope.role}" saveUpdate="@widgetVar(roleTable)">
+                <framework:label for="roleName" value="#{msg['role']['name']}">
+                    <p:inputText id="roleName" value="#{viewScope.role.name}" required="true"/>
+                </framework:label>
+
+                <framework:label for="roleCode" value="#{msg['role']['code']}">
+                    <p:inputText id="roleCode" value="#{viewScope.role.code}" required="true"/>
+                </framework:label>
+
+                <framework:label for="roleDataScope" value="#{msg['role']['dataScope']}">
+                    <p:selectOneMenu id="roleDataScope" value="#{viewScope.role.dataScope}">
+                        <f:selectItems value="#{viewScope.dataScopes}" var="dataScope"
+                                       itemLabel="#{msg['enum'][dataScope.name]}" itemValue="#{dataScope}"/>
+                    </p:selectOneMenu>
+                </framework:label>
+
+                <framework:label for="roleStatus" value="#{msg['role']['status']}">
+                    <p:selectBooleanButton id="roleStatus" value="#{viewScope.role.status}"
+                                           onLabel="#{msg['framework']['enable']}"
+                                           offLabel="#{msg['framework']['disable']}"
+                                           onIcon="fa fa-check" offIcon="fa fa-times" style="width:80px"/>
+                </framework:label>
+
+                <framework:label for="resourceRemark" value="#{msg['framework']['remark']}">
+                    <p:inputTextarea id="resourceRemark" value="#{viewScope.role.remark}" autoResize="false"/>
+                </framework:label>
+
+                <p:panelGrid columns="2" layout="grid"
+                             columnClasses="ui-g-12 ui-md-12 ui-lg-2 ,ui-g-12 ui-md-12 ui-lg-10">
+                    <p:outputLabel for="menuTree" value="#{msg['role']['permission']}" style="line-height: 30px;"/>
+                    <p:tree id="menuTree" widgetVar="menuTree" value="#{viewScope.rootTree}" propagateSelectionUp="false"
+                            selectionMode="checkbox"
+                            var="node" datakey="#{node.id}" selection="#{viewScope.selectedResources}">
+                        <p:treeNode type="catalog">
+                            <h:outputText value="#{node.name}"/>
+                        </p:treeNode>
+                        <p:treeNode type="menu" styleClass="menu-list">
+                            <h:outputText value="#{node.name}"/>
+                        </p:treeNode>
+                        <p:treeNode type="button">
+                            <h:outputText value="#{node.name}"/>
+                        </p:treeNode>
+                    </p:tree>
+                </p:panelGrid>
+            </framework:dialog>
+        </h:form>
+    </ui:define>
+</ui:composition>

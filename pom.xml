@@ -27,7 +27,7 @@
         </dependency>
         <dependency>
             <groupId>com.dandandog.fastcode</groupId>
-            <artifactId>framework-rest</artifactId>
+            <artifactId>framework-faces</artifactId>
         </dependency>
         <dependency>
             <groupId>com.dandandog.fastcode</groupId>

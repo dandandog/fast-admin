@@ -1,0 +1,366 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:p="http://primefaces.org/ui">
+
+<composite:interface>
+    <!--  The default configuration-->
+    <composite:attribute name="ariaRowLabel"/>
+    <composite:attribute name="binding" default="#{entityTableComponent}"/>
+    <composite:attribute name="caseSensitiveSort" default="false"/>
+    <composite:attribute name="cellEditMode" default="eager"/>
+    <composite:attribute name="cellSeparator"/>
+    <composite:attribute name="clientCache" default="false"/>
+    <composite:attribute name="currentPageReportTemplate"/>
+    <composite:attribute name="dataLocale"/>
+    <composite:attribute name="dir" default="ltr"/>
+    <composite:attribute name="disableContextMenuIfEmpty" default="false"/>
+    <composite:attribute name="disabledSelection" default="false"/>
+    <composite:attribute name="disabledTextSelection" default="true"/>
+    <composite:attribute name="draggableColumns" default="false"/>
+    <composite:attribute name="draggableRows" default="false"/>
+    <composite:attribute name="draggableRowsFunction"/>
+    <composite:attribute name="editInitEvent"/>
+    <composite:attribute name="editMode" default="row"/>
+    <composite:attribute name="editable" default="false"/>
+    <composite:attribute name="editingRow" default="false"/>
+    <composite:attribute name="emptyMessage" default="#{msg['framework']['noRecords']}"/>
+    <composite:attribute name="escapeText" default="true"/>
+    <composite:attribute name="expandableRowGroups" default="false"/>
+    <composite:attribute name="expandedRow" default="false"/>
+    <composite:attribute name="filterBy"/>
+    <composite:attribute name="filterDelay" default="300"/>
+    <composite:attribute name="filterEvent" default="enter"/>
+    <composite:attribute name="filteredValue"/>
+    <composite:attribute name="first" default="0"/>
+    <composite:attribute name="frozenColumns" default="0"/>
+    <composite:attribute name="frozenRows"/>
+    <composite:attribute name="globalFilter"/>
+    <composite:attribute name="id" default="entityDataTable"/>
+    <composite:attribute name="initMode" default="load"/>
+    <composite:attribute name="lazy" default="false"/>
+    <composite:attribute name="liveResize" default="false"/>
+    <composite:attribute name="liveScroll" default="false"/>
+    <composite:attribute name="liveScrollBuffer" default="0"/>
+    <composite:attribute name="meaning"/>
+    <composite:attribute name="multiViewState" default="false"/>
+    <composite:attribute name="nativeElements" default="false"/>
+    <composite:attribute name="nullSortOrder" default="1"/>
+    <composite:attribute name="onExpandStart"/>
+    <composite:attribute name="onRowClick"/>
+    <composite:attribute name="pageLinks" default="5"/>
+    <composite:attribute name="paginator" default="true"/>
+    <composite:attribute name="paginatorAlwaysVisible" default="true"/>
+    <composite:attribute name="paginatorPosition" default="bottom"/>
+    <composite:attribute name="paginatorTemplate"
+                         default="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "/>
+    <composite:attribute name="reflow" default="true"/>
+    <composite:attribute name="rendered" default="true"/>
+    <composite:attribute name="resizableColumns" default="false"/>
+    <composite:attribute name="resizeMode" default="fit"/>
+    <composite:attribute name="rowDragSelector" default="td,span:not(.ui-c)"/>
+    <composite:attribute name="rowEditMode" default="eager"/>
+    <composite:attribute name="rowExpandMode" default="new"/>
+    <composite:attribute name="rowHover" default="false"/>
+    <composite:attribute name="rowIndexVar" default="index"/>
+    <composite:attribute name="rowKey" default="#{element.id}"/>
+    <composite:attribute name="rowSelectMode" default="new"/>
+    <composite:attribute name="rowSelector" default="#{element}"/>
+    <composite:attribute name="rowStatePreserved" default="false"/>
+    <composite:attribute name="rowStyleClass"/>
+    <composite:attribute name="rows" default="10"/>
+    <composite:attribute name="rowsPerPageLabel"/>
+    <composite:attribute name="rowsPerPageTemplate" default="5, 10, 15"/>
+    <composite:attribute name="saveOnCellBlur" default="true"/>
+    <composite:attribute name="scrollHeight" default="100%"/>
+    <composite:attribute name="scrollRows" default="10"/>
+    <composite:attribute name="scrollWidth" default="100%"/>
+    <composite:attribute name="scrollable" default="false"/>
+    <composite:attribute name="selectionMode" default="multiple"/>
+    <composite:attribute name="skipChildren" default="false"/>
+    <composite:attribute name="sortBy"/>
+    <composite:attribute name="sortField"/>
+    <composite:attribute name="sortMode" default="single"/>
+    <composite:attribute name="sortOrder" default="ascending"/>
+    <composite:attribute name="stickyHeader" default="false"/>
+    <composite:attribute name="stickyTopAt"/>
+    <composite:attribute name="style"/>
+    <composite:attribute name="styleClass"/>
+    <composite:attribute name="summary"/>
+    <composite:attribute name="tabindex"/>
+    <composite:attribute name="tableStyle"/>
+    <composite:attribute name="tableStyleClass"/>
+    <composite:attribute name="value" required="true"/>
+    <composite:attribute name="var" default="element"/>
+    <composite:attribute name="virtualScroll" default="false"/>
+    <composite:attribute name="widgetVar"
+                         default="#{cc.clientId.replace(':', '_')}_var"/>
+
+    <!-- coustom attrs-->
+    <composite:attribute name="rowCountRendered" default="false"/>
+    <composite:attribute name="formDialogId" default=""/>
+    <composite:attribute name="dialogWidgetVar"
+                         default="#{cc.attrs.formDialogId}_dialog"/>
+
+
+    <composite:attribute name="singleSelection"/>
+    <composite:attribute name="multipleSelection"/>
+
+
+    <!--  add操作按钮-->
+    <composite:attribute name="addRendered" default="true"/>
+    <composite:attribute name="addMethod" method-signature="void add()" default="#{controller.add}"/>
+    <composite:attribute name="addUpdate" default="@widgetVar(#{cc.attrs.dialogWidgetVar})"/>
+    <composite:attribute name="addOncomplete"
+                         default="PF('#{cc.attrs.dialogWidgetVar}').show();"/>
+
+    <!--  refresh操作按钮-->
+    <composite:attribute name="refreshRendered" default="true"/>
+    <composite:attribute name="refreshMethod" method-signature="void onEntry()" default="#{controller.onEntry}"/>
+    <composite:attribute name="refreshUpdate" default="@form"/>
+    <composite:attribute name="refreshOncomplete" default=""/>
+
+    <!--  deleteBatch操作按钮-->
+    <composite:attribute name="deleteRendered" default="true"/>
+    <composite:attribute name="deleteMethod" method-signature="void deleteBatch()" default="#{controller.deleteBatch}"/>
+    <composite:attribute name="deleteUpdate" default="@form"/>
+    <composite:attribute name="deleteOncomplete" default=""/>
+
+    <composite:attribute name="rowOperationSupport" default="true"/>
+
+    <!--  edit row操作按钮-->
+    <composite:attribute name="editRowRendered" default="true"/>
+    <composite:attribute name="editRowMethod" method-signature="void edit()" default="#{controller.edit}"/>
+    <composite:attribute name="editRowUpdate" default="@widgetVar(#{cc.attrs.dialogWidgetVar})"/>
+    <composite:attribute name="editRowOncomplete"
+                         default="PF('#{cc.attrs.dialogWidgetVar}').show();"/>
+
+    <!--  delete row操作按钮-->
+    <composite:attribute name="deleteRowRendered" default="true"/>
+    <composite:attribute name="deleteRowMethod" method-signature="void delete()" default="#{controller.delete}"/>
+    <composite:attribute name="deleteRowUpdate" default="@form"/>
+    <composite:attribute name="deleteRowOncomplete" default=""/>
+
+
+    <!--  多选-->
+    <composite:attribute name="selectionModeColumn" default="true"/>
+
+    <!--  facet-->
+    <composite:facet name="header"/>
+    <composite:facet name="rowOperation"/>
+    <composite:facet name="toolbarBtn"/>
+
+
+</composite:interface>
+
+<composite:implementation>
+    <script>
+        function #{cc.attrs.widgetVar}_isSelected() {
+            let status = (PF('#{cc.attrs.widgetVar}').getSelectedRowsCount() > 0);
+            if (!status) {
+                PF('#{cc.attrs.widgetVar}_select_tips').show();
+            }
+            return status;
+        }
+
+        function #{cc.attrs.widgetVar}_checkDelete() {
+            let selected = #{cc.attrs.widgetVar}_isSelected();
+            if (selected) {
+                PF('#{cc.attrs.widgetVar}_delete_tips').show();
+            }
+            return selected;
+        }
+    </script>
+    <h:outputStylesheet>
+        .ui-state-highlight a {
+            color: #ffffff !important;
+        }
+    </h:outputStylesheet>
+    <p:toolbar id="entityToolbar">
+        <f:facet name="left">
+            <p:commandButton id="addBtn" widgetVar="#{cc.attrs.widgetVar}_addBtn" icon="fa fa-plus"
+                             value="#{msg['framework']['add']}" process="@this"
+                             rendered="#{cc.attrs.addRendered}"
+                             action="#{cc.attrs.addMethod}"
+                             update="#{cc.attrs.addUpdate}"
+                             oncomplete="#{cc.attrs.addOncomplete}"/>
+
+            <p:commandButton id="deleteBtn" widgetVar="#{cc.attrs.widgetVar}_deleteBtn" icon="fa fa-trash"
+                             value="#{msg['framework']['delete']}"
+                             rendered="#{cc.attrs.deleteRendered}"
+                             onclick="if(!#{cc.attrs.widgetVar}_checkDelete()) return false;"/>
+
+
+            <composite:renderFacet name="toolbarBtn"/>
+
+
+        </f:facet>
+
+        <f:facet name="right">
+            <p:commandButton id="searchBtn" type="button" icon="fa fa-search"/>
+
+            <p:commandButton id="refreshBtn" widgetVar="refreshBtn" icon="fa fa-refresh"
+                             rendered="#{cc.attrs.refreshRendered}"
+                             action="#{cc.attrs.refreshMethod}"
+                             update="#{cc.attrs.refreshUpdate}"
+                             oncomplete="PF('#{cc.attrs.widgetVar}').clearFilters()"/>
+            <p:commandButton id="toggler" type="button" icon="fa fa-align-justify"/>
+            <p:columnToggler datasource="entityDataTable" trigger="toggler"/>
+        </f:facet>
+    </p:toolbar>
+    <p:sticky target="entityToolbar" margin="70"/>
+    <p:dataTable id="entityDataTable" ariaRowLabel="#{cc.attrs.ariaRowLabel}"
+                 binding="#{cc.attrs.binding}"
+                 caseSensitiveSort="#{cc.attrs.caseSensitiveSort}"
+                 cellEditMode="#{cc.attrs.cellEditMode}"
+                 cellSeparator="#{cc.attrs.cellSeparator}"
+                 clientCache="#{cc.attrs.clientCache}"
+                 currentPageReportTemplate="#{cc.attrs.currentPageReportTemplate}"
+                 dataLocale="#{cc.attrs.dataLocale}"
+                 dir="#{cc.attrs.dir}"
+                 disableContextMenuIfEmpty="#{cc.attrs.disableContextMenuIfEmpty}"
+                 disabledSelection="#{cc.attrs.disabledSelection}"
+                 disabledTextSelection="#{cc.attrs.disabledTextSelection}"
+                 draggableColumns="#{cc.attrs.draggableColumns}"
+                 draggableRows="#{cc.attrs.draggableRows}"
+                 draggableRowsFunction="#{cc.attrs.draggableRowsFunction}"
+                 editInitEvent="#{cc.attrs.editInitEvent}"
+                 editMode="#{cc.attrs.editMode}"
+                 editable="#{cc.attrs.editable}"
+                 editingRow="#{cc.attrs.editingRow}"
+                 emptyMessage="#{cc.attrs.emptyMessage}"
+                 escapeText="#{cc.attrs.escapeText}"
+                 expandableRowGroups="#{cc.attrs.expandableRowGroups}"
+                 expandedRow="#{cc.attrs.expandedRow}"
+                 filterBy="#{cc.attrs.filterBy}"
+                 filterDelay="#{cc.attrs.filterDelay}"
+                 filterEvent="#{cc.attrs.filterEvent}"
+                 filteredValue="#{cc.attrs.filteredValue}"
+                 first="#{cc.attrs.first}"
+                 frozenColumns="#{cc.attrs.frozenColumns}"
+                 frozenRows="#{cc.attrs.frozenRows}"
+                 globalFilter="#{cc.attrs.globalFilter}"
+                 initMode="#{cc.attrs.initMode}"
+                 lazy="#{cc.attrs.lazy}"
+                 liveResize="#{cc.attrs.liveResize}"
+                 liveScroll="#{cc.attrs.liveScroll}"
+                 liveScrollBuffer="#{cc.attrs.liveScrollBuffer}"
+                 meaning="#{cc.attrs.meaning}"
+                 multiViewState="#{cc.attrs.multiViewState}"
+                 nativeElements="#{cc.attrs.nativeElements}"
+                 nullSortOrder="#{cc.attrs.nullSortOrder}"
+                 onExpandStart="#{cc.attrs.onExpandStart}"
+                 onRowClick="#{cc.attrs.onRowClick}"
+                 pageLinks="#{cc.attrs.pageLinks}"
+                 paginator="#{cc.attrs.paginator}"
+                 paginatorAlwaysVisible="#{cc.attrs.paginatorAlwaysVisible}"
+                 paginatorPosition="#{cc.attrs.paginatorPosition}"
+                 paginatorTemplate="#{cc.attrs.paginatorTemplate}"
+                 reflow="#{cc.attrs.reflow}"
+                 rendered="#{cc.attrs.rendered}"
+                 resizableColumns="#{cc.attrs.resizableColumns}"
+                 resizeMode="#{cc.attrs.resizeMode}"
+                 rowDragSelector="#{cc.attrs.rowDragSelector}"
+                 rowEditMode="#{cc.attrs.rowEditMode}"
+                 rowExpandMode="#{cc.attrs.rowExpandMode}"
+                 rowHover="#{cc.attrs.rowHover}"
+                 rowIndexVar="#{cc.attrs.rowIndexVar}"
+                 rowKey="#{cc.attrs.rowKey}"
+                 rowSelectMode="#{cc.attrs.rowSelectMode}"
+                 rowSelector="#{cc.attrs.rowSelector}"
+                 rowStatePreserved="#{cc.attrs.rowStatePreserved}"
+                 rowStyleClass="#{cc.attrs.rowStyleClass}"
+                 rows="#{cc.attrs.rows}"
+                 rowsPerPageLabel="#{cc.attrs.rowsPerPageLabel}"
+                 rowsPerPageTemplate="#{cc.attrs.rowsPerPageTemplate}"
+                 saveOnCellBlur="#{cc.attrs.saveOnCellBlur}"
+                 scrollHeight="#{cc.attrs.scrollHeight}"
+                 scrollRows="#{cc.attrs.scrollRows}"
+                 scrollWidth="#{cc.attrs.scrollWidth}"
+                 scrollable="#{cc.attrs.scrollable}"
+                 selection="#{cc.attrs.multipleSelection}"
+                 skipChildren="#{cc.attrs.skipChildren}"
+                 sortBy="#{cc.attrs.sortBy}"
+                 sortField="#{cc.attrs.sortField}"
+                 sortMode="#{cc.attrs.sortMode}"
+                 sortOrder="#{cc.attrs.sortOrder}"
+                 stickyHeader="#{cc.attrs.stickyHeader}"
+                 stickyTopAt="#{cc.attrs.stickyTopAt}"
+                 style="#{cc.attrs.style}"
+                 styleClass="#{cc.attrs.styleClass}"
+                 summary="#{cc.attrs.summary}"
+                 tabindex="#{cc.attrs.tabindex}"
+                 tableStyle="#{cc.attrs.tableStyle}"
+                 tableStyleClass="#{cc.attrs.tableStyleClass}"
+                 value="#{cc.attrs.value}"
+                 virtualScroll="#{cc.attrs.virtualScroll}"
+                 widgetVar="#{cc.attrs.widgetVar}">
+        <c:set target="#{component}" property="var" value="#{cc.attrs.var}"/>
+
+        <p:column selectionMode="#{cc.attrs.selectionMode}" width="20"
+                  rendered="#{cc.attrs.selectionModeColumn}" toggleable="false">
+            <f:facet name="header">
+                <h:outputText style="display: none" value="#{msg['framework']['checkbox']}"/>
+            </f:facet>
+
+        </p:column>
+
+        <composite:insertChildren/>
+
+        <p:column headerText="#{msg['framework']['operation']}"
+                  rendered="#{cc.attrs.rowOperationSupport}">
+            <p:commandLink id="editLine" process="@this" value="#{msg['framework']['edit']}"
+                           rendered="#{cc.attrs.editRowRendered}" action="#{cc.attrs.editRowMethod}"
+                           update="#{cc.attrs.editRowUpdate}" oncomplete="#{cc.attrs.editRowOncomplete}">
+                <f:setPropertyActionListener value="#{element}" target="#{cc.attrs.singleSelection}"/>
+            </p:commandLink>
+            <p:outputPanel layout="inline" styleClass="ui-separator" style="text-align: center;display:inline-block;" rendered="#{cc.attrs.deleteRowRendered}">
+                <span class="ui-icon fa fa-ellipsis-v"/>
+            </p:outputPanel>
+            <p:commandLink id="deleteRowLine" value="#{msg['framework']['delete']}"
+                           rendered="#{cc.attrs.deleteRowRendered}" action="#{cc.attrs.deleteRowMethod}"
+                           update="#{cc.attrs.deleteRowUpdate}" oncomplete="#{cc.attrs.deleteRowOncomplete}">
+                <f:setPropertyActionListener value="#{element}" target="#{cc.attrs.singleSelection}"/>
+                <p:confirm header="#{msg['framework']['message']}" message="#{msg['framework']['confirmDeletion']}"
+                           icon="fa fa-question-circle"/>
+            </p:commandLink>
+            <composite:renderFacet name="rowOperation"/>
+        </p:column>
+
+        <f:facet name="footer">
+            <p:outputPanel style="width:100%;text-align:left;">
+                <h:outputText
+                        value="#{msg['framework']['recordCount']}:#{cc.attrs.binding.rowCount}"
+                        rendered="#{cc.attrs.rowCountRendered}"/>
+            </p:outputPanel>
+        </f:facet>
+    </p:dataTable>
+
+
+    <p:confirmDialog id="#{cc.attrs.widgetVar}_select_tips" widgetVar="#{cc.attrs.widgetVar}_select_tips"
+                     header="#{msg['framework']['message']}" severity=" fa fa-exclamation-triangle"
+                     showEffect="fade" hideEffect="fade" width="300" message="#{msg['framework']['selectRecordFirst']}">
+        <p:commandButton value="#{msg['framework']['confirm']}" type="button"
+                         onclick="PF('#{cc.attrs.widgetVar}_select_tips').hide()"
+                         styleClass="ui-confirmdialog-no" icon="fa fa-check"/>
+    </p:confirmDialog>
+    <p:confirmDialog id="#{cc.attrs.widgetVar}_delete_tip" widgetVar="#{cc.attrs.widgetVar}_delete_tips"
+                     rendered="#{cc.attrs.deleteRendered}" severity=" fa fa-question-circle"
+                     header="#{msg['framework']['message']}" message="#{msg['framework']['confirmDeletion']}"
+                     showEffect="fade" hideEffect="fade" width="300">
+        <p:commandButton value="#{msg['framework']['cancel']}" type="button"
+                         styleClass="ui-confirmdialog-no secondary-button"
+                         icon="fa fa-close" onclick="PF('#{cc.attrs.widgetVar}_delete_tips').hide()"/>
+        <p:commandButton
+                id="deleteButton" styleClass="ui-confirmdialog-yes" icon="fa fa-check"
+                value="#{msg['framework']['confirm']}" process="@form"
+                rendered="#{cc.attrs.deleteRendered}"
+                action="#{cc.attrs.deleteMethod}"
+                update="#{cc.attrs.deleteUpdate}"
+                oncomplete="PF('#{cc.attrs.widgetVar}_delete_tips').hide(); #{cc.attrs.deleteOncomplete}"/>
+    </p:confirmDialog>
+
+</composite:implementation>
+</html>

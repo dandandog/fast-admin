@@ -1,0 +1,75 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:framework="http://java.sun.com/jsf/composite/components">
+    <ui:define name="title">User Page</ui:define>
+    <ui:define name="content">
+        <h:form id="user_form">
+            <framework:dataTable id="userTable" widgetVar="userTable" lazy="true"
+                                 value="#{controller.dataModel}" formDialogId="userDialog"
+                                 singleSelection="#{viewScope.user}" resizableColumns="true"
+                                 multipleSelection="#{viewScope.selectedUsers}">
+
+                <p:column headerText="#{msg['user']['avatar']}">
+                    <p:graphicImage name="avatar/#{element.avatar}" library="assets"/>
+                </p:column>
+
+                <p:column headerText="#{msg['user']['username']}">
+                    <h:outputText value="#{element.username}"/>
+                </p:column>
+                <p:column headerText="#{msg['user']['mobile']}">
+                    <h:outputText value="#{element.mobile}"/>
+                </p:column>
+                <p:column headerText="#{msg['user']['email']}">
+                    <h:outputText value="#{element.email}"/>
+                </p:column>
+                <p:column headerText="#{msg['user']['status']}">
+                    <h:outputText value="#{element.status}"/>
+                </p:column>
+            </framework:dataTable>
+        </h:form>
+    </ui:define>
+    <ui:define name="dialog">
+        <h:form id="dialogform">
+            <framework:dialog id="userDialog" value="#{viewScope.user}" saveUpdate="@widgetVar(userTable)">
+                <framework:label for="username" value="#{msg['user']['usermane']}">
+                    <p:inputText id="username" required="true" value="#{viewScope.user.username}"/>
+                </framework:label>
+                <framework:label for="nickname" value="#{msg['user']['nickname']}">
+                    <p:inputText id="nickname" value="#{viewScope.user.nickname}"/>
+                </framework:label>
+                <framework:label for="password1" value="#{msg['user']['password']}">
+                    <p:password id="password1" required="true" match="@widgetVar(password2)" value="#{viewScope.user.password}"/>
+                </framework:label>
+                <framework:label for="password2" value="#{msg['user']['password']}">
+                    <p:password id="password2" widgetVar="password2" required="true" value="#{viewScope.user.password}"/>
+                </framework:label>
+
+                <framework:label for="mobile" value="#{msg['user']['mobile']}">
+                    <p:inputNumber id="mobile" value="#{viewScope.user.mobile}"/>
+                </framework:label>
+
+                <framework:label for="email" value="#{msg['user']['email']}">
+                    <p:inputText id="email" value="#{viewScope.user.email}"/>
+                </framework:label>
+
+                <framework:label for="userRole" value="#{msg['menu']['role']}">
+                    <p:selectCheckboxMenu id="userRole" value="#{viewScope.selectedRoles}" label="Roles" multiple="true"
+                                          filter="true" filterMatchMode="startsWith">
+                        <f:selectItems value="#{viewScope.roles}" var="role" itemLabel="#{role.name}" itemValue="#{role}"/>
+                    </p:selectCheckboxMenu>
+                </framework:label>
+
+                <framework:label for="remark" value="#{msg['framework']['remark']}">
+                    <p:inputTextarea id="remark" value="#{viewScope.user.remark}" autoResize="false"/>
+                </framework:label>
+
+            </framework:dialog>
+        </h:form>
+    </ui:define>
+</ui:composition>

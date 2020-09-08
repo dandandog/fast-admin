@@ -1,0 +1,73 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:framework="http://java.sun.com/jsf/composite/components"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="title"> <h:outputText value="#{msg['menu']['dictionary']}"/></ui:define>
+    <ui:define name="viewname">
+        <i class="fa fa-columns"></i>
+        <p:outputPanel id="viewname" layout="inline">
+            <h:outputText value="#{msg['menu']['dictionary']}"/>
+        </p:outputPanel>
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="contentForm">
+            <framework:dataTable id="dictTypeTable" widgetVar="dictTypeTable" value="#{viewScope.dictTypes}"
+                                 formDialogId="dictType"
+                                 singleSelection="#{viewScope.singleDictType}"
+                                 multipleSelection="#{viewScope.multipleDictTypes}">
+                <p:column headerText="#{msg['dictType']['type']}">
+                    <h:outputText value="#{element.type}"/>
+                </p:column>
+                <p:column headerText="#{msg['dictType']['name']}">
+                    <h:outputText value="#{element.name}"/>
+                </p:column>
+                <p:column headerText="#{msg['dictType']['status']}">
+                    <h:outputText value="#{element.status}"/>
+                </p:column>
+                <p:column headerText="#{msg['framework']['remark']}">
+                    <h:outputText value="#{element.remark}"/>
+                </p:column>
+                <p:column headerText="#{msg['framework']['createdTime']}">
+                    <h:outputText value="#{element.createdTime}"/>
+                </p:column>
+                <f:facet name="rowOperation">
+                    <p:outputPanel layout="inline" styleClass="ui-separator" style="text-align: center;display:inline-block;">
+                        <span class="ui-icon fa fa-ellipsis-v"/>
+                    </p:outputPanel>
+                    <p:link id="dataList" value="#{msg['dictType']['list']}" href="#{ctx}/views/management/dictData.faces?type=#{element.type}">
+                    </p:link>
+                </f:facet>
+            </framework:dataTable>
+        </h:form>
+    </ui:define>
+    <ui:define name="dialog">
+        <h:form id="dialogForm">
+            <framework:dialog id="dictType" value="#{viewScope.dictType}" saveUpdate="@widgetVar(dictTypeTable)">
+                <framework:label for="dictTypeName" value="#{msg['employee']['no']}">
+                    <p:inputText id="dictTypeName" required="true" value="#{viewScope.dictType.type}"/>
+                </framework:label>
+
+                <framework:label for="dictTypeCode" value="#{msg['dictType']['name']}">
+                    <p:inputText id="dictTypeCode" required="true" value="#{viewScope.dictType.name}"/>
+                </framework:label>
+
+                <framework:label for="dictTypeStatus" value="#{msg['dictType']['status']}">
+                    <p:selectOneRadio id="dictTypeStatus" value="#{viewScope.dictType.status}">
+                        <f:selectItems value="#{viewScope.statuses}" var="status" itemValue="#{status}"
+                                       itemLabel="#{msg['enum'][status]}"/>
+                    </p:selectOneRadio>
+                </framework:label>
+
+                <framework:label for="dictTypeRemark" value="#{msg['framework']['remark']}">
+                    <p:inputTextarea id="dictTypeRemark" value="#{viewScope.dictType.remark}"/>
+                </framework:label>
+
+
+            </framework:dialog>
+        </h:form>
+    </ui:define>
+</ui:composition>

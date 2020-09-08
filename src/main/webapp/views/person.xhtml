@@ -1,0 +1,85 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:framework="http://java.sun.com/jsf/composite/components"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Person</ui:define>
+    <ui:define name="viewname">
+        <i class="fa fa-users"></i>
+        <p:outputPanel id="viewname" layout="inline">Person</p:outputPanel>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="listForm">
+            <framework:dataTable id="personTable" widgetVar="personTable" lazy="true"
+                                 value="#{controller.personDataModel}" formDialogId="personDialog"
+                                 singleSelection="#{viewScope.singleNode}" resizableColumns="true"
+                                 multipleSelection="#{viewScope.multipleNodes}">
+                <p:column headerText="#{msg['person']['name']}">
+                    <h:outputText value="#{element.name}"/>
+                </p:column>
+                <p:column headerText="#{msg['person']['age']}">
+                    <h:outputText value="#{element.age}"/>
+                </p:column>
+                <p:column headerText="#{msg['person']['name']}">
+                    <h:outputText value="#{element.name}"/>
+                </p:column>
+                <p:column headerText="#{msg['person']['birthday']}">
+                    <h:outputText value="#{element.birthday}"/>
+                </p:column>
+                <p:column headerText="#{msg['person']['gender']}">
+                    <h:outputText value="#{element.gender.name}"/>
+                </p:column>
+            </framework:dataTable>
+        </h:form>
+    </ui:define>
+    <ui:define name="dialog">
+        <h:form id="dialogForm">
+            <framework:dialog id="personDialog" value="#{viewScope.person}" saveUpdate="@widgetVar(personTable)">
+                <framework:label for="presonName" value="#{msg['person']['name']}">
+                    <p:inputText id="presonName" required="true" value="#{viewScope.person.name}"/>
+                </framework:label>
+                <framework:label for="presonAge" value="#{msg['person']['age']}">
+                    <p:inputNumber id="presonAge" required="true" value="#{viewScope.person.age}" minValue="0" maxValue="200" decimalPlaces="0"/>
+                </framework:label>
+
+                <framework:label for="presonBirthday" value="#{msg['person']['birthday']}">
+                    <p:datePicker id="presonBirthday" required="true" value="#{viewScope.person.birthday}"
+                                  converter="#{localDateTimeConverter}" readonlyInput="true" pattern="yyyy年MM月dd日"/>
+                </framework:label>
+
+                <framework:label for="presonGender" value="#{msg['person']['gender']}">
+                    <p:selectOneRadio id="presonGender" required="true" value="#{viewScope.person.gender}">
+                        <f:selectItems value="#{viewScope.genders}" var="gender" itemLabel="#{gender.name}" itemValue="#{gender}"/>
+                    </p:selectOneRadio>
+                </framework:label>
+                <framework:label for="province" columns="3" columnClasses="ui-g-12 ui-md-4 , ui-g-12 ui-md-4  ,ui-g-12 ui-md-4" value="#{msg['person']['area']}">
+                    <p:selectOneMenu id="province" value="#{viewScope.person.province}">
+                        <p:ajax event="itemSelect" listener="#{controller.onChangeProvince}" update="city"/>
+                        <f:selectItem itemLabel="Select Province" itemValue="" noSelectionOption="true"/>
+                        <f:selectItems value="#{viewScope.provinces}" var="province" itemValue="#{province.code}" itemLabel="#{province.name}"/>
+                    </p:selectOneMenu>
+                    <p:selectOneMenu id="city" value="#{viewScope.person.city}">
+                        <p:ajax event="itemSelect" listener="#{controller.onChangeCity}" update="district"/>
+                        <f:selectItem itemLabel="Select City" itemValue="" noSelectionOption="true"/>
+                        <f:selectItems value="#{viewScope.cities}" var="city" itemValue="#{city.code}" itemLabel="#{city.name}"/>
+                    </p:selectOneMenu>
+                    <p:selectOneMenu id="district" value="#{viewScope.person.district}">
+                        <f:selectItem itemLabel="Select District" itemValue="" noSelectionOption="true"/>
+                        <f:selectItems value="#{viewScope.districts}" var="district" itemValue="#{district.code}" itemLabel="#{district.name}"/>
+                    </p:selectOneMenu>
+                </framework:label>
+
+                <framework:label for="personSignature" value="#{msg['person']['signature']}">
+                    <p:inputTextarea id="personSignature" value="#{viewScope.person.signature}" autoResize="false"/>
+                </framework:label>
+
+
+            </framework:dialog>
+        </h:form>
+    </ui:define>
+</ui:composition>

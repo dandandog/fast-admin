@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:framework="http://java.sun.com/jsf/composite/components"
+      xmlns:p="http://primefaces.org/ui" lang="en">
+<h:head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <title><ui:insert name="title">APJ</ui:insert></title>
+    <ui:insert name="head"/>
+
+    <script>
+        $(function () {
+            $('#menu-button').off('click').on('click', function (e) {
+                if (isMobile()) {
+                    if ($(".layout-sidebar").hasClass('layout-menu-static-active')) {
+                        $("body").removeClass('hidden-overflow-body');
+                    } else {
+                        $("body").addClass('hidden-overflow-body');
+                    }
+                }
+                $(".layout-sidebar").toggleClass('layout-menu-static-active');
+                $(".layout-main").toggleClass('layout-main-active');
+            });
+
+            function isMobile() {
+                return window.innerWidth &lt;= 1024;
+            }
+        })
+
+        function start() {
+            PF('downloadStatus').show();
+        }
+
+        function stop() {
+            PF('downloadStatus').hide();
+        }
+    </script>
+</h:head>
+<h:body>
+    <div class="layout-wrapper layout-menu-static">
+
+        <ui:include src="./include/topbar.xhtml"/>
+        <ui:include src="./include/menu.xhtml"/>
+
+        <div class="layout-main">
+            <div class="route-bar">
+                <p:button id="menu-button" href="javascript:void(0)" icon="pi pi-bars" styleClass="secondary-button"/>
+                <div class="route-bar-breadcrumb">
+                    <p:link>
+                        <ui:insert name="viewname"/>
+                    </p:link>
+                </div>
+            </div>
+            <framework:card>
+                <ui:insert name="content"/>
+            </framework:card>
+            <ui:insert name="dialog"/>
+        </div>
+
+
+        <h:form>
+            <p:confirmDialog id="confirmDialog" widgetVar="confirmDialog" severity="alert"
+                             global="true" showEffect="fade" hideEffect="fade" width="300">
+                <p:commandButton value="#{msg['framework']['cancel']}" type="button"
+                                 styleClass="ui-confirmdialog-no secondary-button" icon="fa fa-close"/>
+                <p:commandButton value="#{msg['framework']['confirm']}" type="button"
+                                 styleClass="ui-confirmdialog-yes" icon="fa fa-check"/>
+            </p:confirmDialog>
+        </h:form>
+        <p:growl id="globalMessageGrowl" widgetVar="globalMessageGrowl"
+                 showDetail="true" showSummary="true" sticky="false" life="3000"
+                 autoUpdate="false" redisplay="true"/>
+
+        <p:dialog modal="true" widgetVar="downloadStatus" showHeader="false" draggable="false" closable="false" resizable="false">
+            <p:outputPanel styleClass="layout-download-loader">
+                <i class="fa fa-circle-o-notch fa-spin layout-ajax-loader-icon"
+                   aria-hidden="true"></i>
+            </p:outputPanel>
+        </p:dialog>
+
+
+        <p:ajaxStatus widgetVar="ajaxStatus" styleClass="layout-ajax-loader">
+            <f:facet name="start">
+                <i class="fa fa-circle-o-notch fa-spin layout-ajax-loader-icon"
+                   aria-hidden="true"></i>
+            </f:facet>
+            <f:facet name="complete">
+
+            </f:facet>
+        </p:ajaxStatus>
+    </div>
+    <h:outputStylesheet name="css/layout.css" library="assets"/>
+    <h:outputStylesheet name="css/nanoscroller.css" library="assets"/>
+</h:body>
+</html>

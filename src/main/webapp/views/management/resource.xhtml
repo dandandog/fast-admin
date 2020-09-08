@@ -1,0 +1,191 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:framework="http://java.sun.com/jsf/composite/components">
+    <ui:define name="viewname">
+        <h:outputText value="#{msg['security']['resource']}"/>
+    </ui:define>
+    <ui:define name="head">
+        <script>
+            function selectedResourceType() {
+                let type = PF('type').getJQ().find(':checked').val();
+                PF("resourceUrl").hide();
+                PF("resourceTarget").hide();
+                PF("resourcePermission").hide();
+                PF("resourceSeq").hide();
+                PF("iconPlane").hide();
+                PF("resourceVisible").hide();
+                switch (type) {
+                    case 'CATALOG' :
+                        PF("resourceSeq").show();
+                        PF("iconPlane").show();
+                        PF("resourceVisible").show();
+                        break;
+                    case 'MENU' :
+                        PF("resourceUrl").show();
+                        PF("resourceTarget").show();
+                        PF("resourcePermission").show();
+                        PF("resourceSeq").show();
+                        PF("iconPlane").show();
+                        PF("resourceVisible").show();
+                        break;
+                    case 'BUTTON' :
+                        PF("resourcePermission").show();
+                        PF("resourceSeq").show();
+                        break;
+                }
+            }
+
+        </script>
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="contentForm">
+            <framework:treeTable id="resourceTreeTable" widgetVar="resourceTreeTable"
+                                 value="#{viewScope.resources}" formDialogId="resource"
+                                 singleSelection="#{viewScope.singleNode}" resizableColumns="true"
+                                 multipleSelection="#{viewScope.multipleNodes}">
+                <f:facet name="toolbarBtn">
+                    <p:commandButton id="expandBtn" icon="fa #{viewScope.isExpand ? 'fa-expand' : 'fa-compress'}"
+                                     value="#{msg['resource']['expand']}" action="#{controller.onToggleExpand}"
+                                     update="@widgetVar(resourceTreeTable) @this"/>
+                </f:facet>
+                <p:column headerText="#{msg['resource']['name']}">
+                    <i class="#{element.icon}" style="padding-right: 5px;"/>
+                    <h:outputText value="#{element.name}"/>
+                </p:column>
+                <p:column priority="4" headerText="#{msg['resource']['seq']}">
+                    <h:outputText value="#{element.seq}"/>
+                </p:column>
+                <p:column priority="2" headerText="#{msg['resource']['url']}">
+                    <h:outputText value="#{element.url}"/>
+                </p:column>
+                <p:column priority="2" headerText="#{msg['resource']['type']}">
+                    <h:outputText value="#{element.type}"/>
+                </p:column>
+                <p:column priority="3" headerText="#{msg['resource']['visible']}">
+                    <p:toggleSwitch value="#{element.visible}">
+                        <p:ajax listener="#{controller.onChangeStatus(element)}"/>
+                    </p:toggleSwitch>
+                </p:column>
+                <p:column priority="4" headerText="#{msg['resource']['permission']}">
+                    <h:outputText value="#{element.permission}"/>
+                </p:column>
+            </framework:treeTable>
+        </h:form>
+    </ui:define>
+    <ui:define name="dialog">
+        <h:form id="dialogForm">
+            <framework:dialog id="resource" value="#{viewScope.resource}" saveUpdate="@widgetVar(resourceTreeTable)">
+                <framework:label id="resourceParentIdLabel" for="resourceParentId" value="#{msg['resource']['parentNode']}">
+                    <p:outputPanel id="resourceParentId">
+                        <p:outputPanel class="ui-inputgroup">
+                            <p:inputText id="parentInput" widgetVar="parentInput"
+                                         value="#{viewScope.singleNode.name}"/>
+                            <p:commandLink styleClass="ui-inputgroup-addon" process="@this"
+                                           update="resourceParentId">
+                                <i class="fa fa-times"></i>
+                                <p:resetInput target="treePanel"/>
+                            </p:commandLink>
+                        </p:outputPanel>
+                        <p:overlayPanel id="treePanel" widgetVar="treePanel" hideEvent="scroll" appendTo="resourceParentId"
+                                        dynamic="true" for="parentInput" hideEffect="blind"
+                                        showEffect="blind">
+                            <p:autoUpdate/>
+                            <p:tree id="menuTree" widgetVar="menuTree" value="#{viewScope.rootTree}"
+                                    var="node" datakey="#{node.id}"
+                                    style="border: 0px transparent;" selectionMode="single">
+                                <p:ajax event="select" listener="#{controller.onSelectParent}"
+                                        oncomplete="PF('treePanel').hide()"
+                                        update="@widgetVar(parentInput)"/>
+                                <p:treeNode type="catalog">
+                                    <h:outputText value="#{node.name}"/>
+                                </p:treeNode>
+                                <p:treeNode type="menu">
+                                    <h:outputText value="#{node.name}"/>
+                                </p:treeNode>
+                            </p:tree>
+                        </p:overlayPanel>
+                    </p:outputPanel>
+                </framework:label>
+
+                <framework:label for="resourceType" value="#{msg['resource']['type']}">
+                    <p:selectOneRadio id="resourceType" widgetVar="type" required="true"
+                                      onclick="selectedResourceType()"
+                                      value="#{viewScope.resource.type}" unselectable="false">
+                        <f:selectItems value="#{viewScope.types}" var="type"
+                                       itemLabel="#{msg['resource'][type.name]}" itemValue="#{type}"/>
+                    </p:selectOneRadio>
+                </framework:label>
+                <framework:label for="resourceName" value="#{msg['resource']['name']}">
+                    <p:inputText id="resourceName" value="#{viewScope.resource.name}" required="true"/>
+                </framework:label>
+                <framework:label widgetVar="resourceUrl" for="resourceUrl" value="#{msg['resource']['url']}">
+                    <p:inputText id="resourceUrl" value="#{viewScope.resource.url}"/>
+                </framework:label>
+                <framework:label widgetVar="resourceTarget" for="resourceTarget" value="#{msg['resource']['target']}">
+                    <p:selectOneMenu id="resourceTarget" value="#{viewScope.resource.target}">
+                        <f:selectItem itemLabel="页签内" itemValue="0"></f:selectItem>
+                        <f:selectItem itemLabel="新窗口" itemValue="1"></f:selectItem>
+                    </p:selectOneMenu>
+                </framework:label>
+                <framework:label widgetVar="resourcePermission" for="resourcePermission"
+                                 value="#{msg['resource']['permission']}">
+                    <p:inputText id="resourcePermission" value="#{viewScope.resource.permission}"/>
+                </framework:label>
+                <framework:label widgetVar="resourceSeq" for="resourceSeq" value="#{msg['resource']['seq']}">
+                    <p:inputText id="resourceSeq" value="#{viewScope.resource.seq}" required="true"/>
+                </framework:label>
+                <framework:label widgetVar="iconPlane" for="iconPlane" value="#{msg['resource']['icon']}">
+                    <p:fragment>
+                        <p:outputPanel id="iconPlane" styleClass="ui-inputgroup">
+                            <p:inputText id="iconInput" widgetVar="iconInput"
+                                         readonly="true" value="#{viewScope.resource.icon}"
+                                         onclick="panelWidth()"/>
+                            <p:commandLink class="ui-inputgroup-addon" update="iconPlane">
+                                <i class="fa fa-times"/>
+                                <p:resetInput target="iconInput" resetValues="true"/>
+                            </p:commandLink>
+                        </p:outputPanel>
+                        <p:overlayPanel widgetVar="icon_panel" id="icon_panel"
+                                        for="iconInput" hideEffect="fade">
+                            <p:outputPanel layout="block" style="width:300px">
+                                <p:inputText onkeyup="onFilter(event)"
+                                             placeholder="Search an icon"
+                                             style="width:100%; margin: 16px 0px 26px;"/>
+                                <div class="p-grid icons-gird"
+                                     style=" max-height: 300px;">
+                                    <ui:repeat value="#{viewScope.icons}" var="icon">
+                                        <div class="p-col-6 p-md-6 p-lg-4 icon-container"
+                                             onclick="PF('icon_panel').hide()" data-name="#{icon.name}"
+                                             data-key="#{icon.key}">
+                                            <p:commandLink>
+                                                <i class="pi pi-#{icon.name}"></i>
+                                                <div>#{icon.name}</div>
+                                                <f:setPropertyActionListener value="#{icon.name}"
+                                                                             target="#{viewScope.resource.icon}"/>
+                                            </p:commandLink>
+                                        </div>
+                                    </ui:repeat>
+                                </div>
+                            </p:outputPanel>
+                        </p:overlayPanel>
+                    </p:fragment>
+                </framework:label>
+                <framework:label widgetVar="resourceVisible" for="resourceVisible"
+                                 value="#{msg['resource']['visible']}">
+                    <p:selectOneRadio id="resourceVisible" value="#{viewScope.resource.visible}">
+                        <f:selectItem itemLabel="显示" itemValue="true"></f:selectItem>
+                        <f:selectItem itemLabel="隐藏" itemValue="false"></f:selectItem>
+                    </p:selectOneRadio>
+                </framework:label>
+                <framework:label for="resourceRemark" value="#{msg['framework']['remark']}">
+                    <p:inputTextarea id="resourceRemark" value="#{viewScope.remark}" autoResize="false"/>
+                </framework:label>
+            </framework:dialog>
+        </h:form>
+    </ui:define>
+</ui:composition>
