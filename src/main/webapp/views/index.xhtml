@@ -8,8 +8,7 @@
 <h:head></h:head>
 <h:body>
     <h:form id="uploadForm">
-        <p:fileUpload fileUploadListener="#{controller.onUpload}" process="uploadForm" mode="advanced"
-                      allowTypes="/(\.|\/)(xls|xlsx)$/"/>
+       <p:outputLabel value="${viewScope.name}"/>
     </h:form>
 </h:body>
 </html>
