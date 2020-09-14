@@ -39,7 +39,6 @@
                         break;
                 }
             }
-
         </script>
     </ui:define>
     <ui:define name="content">
@@ -80,7 +79,8 @@
     <ui:define name="dialog">
         <h:form id="dialogForm">
             <framework:dialog id="resource" value="#{viewScope.resource}" saveUpdate="@widgetVar(resourceTreeTable)">
-                <framework:label id="resourceParentIdLabel" for="resourceParentId" value="#{msg['resource']['parentNode']}">
+                <framework:label id="resourceParentIdLabel" for="resourceParentId"
+                                 value="#{msg['resource']['parentNode']}">
                     <p:outputPanel id="resourceParentId">
                         <p:outputPanel class="ui-inputgroup">
                             <p:inputText id="parentInput" widgetVar="parentInput"
@@ -91,7 +91,8 @@
                                 <p:resetInput target="treePanel"/>
                             </p:commandLink>
                         </p:outputPanel>
-                        <p:overlayPanel id="treePanel" widgetVar="treePanel" hideEvent="scroll" appendTo="resourceParentId"
+                        <p:overlayPanel id="treePanel" widgetVar="treePanel" hideEvent="scroll"
+                                        appendTo="resourceParentId"
                                         dynamic="true" for="parentInput" hideEffect="blind"
                                         showEffect="blind">
                             <p:autoUpdate/>

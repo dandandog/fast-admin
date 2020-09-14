@@ -10,8 +10,8 @@ import org.springframework.stereotype.Controller;
  * @author JohnnyLiu
  * @since 2020-09-06 22:06:06
  */
-@Controller("/index.faces")
-public class IndexController extends FacesController {
+@Controller("/dashboard.faces")
+public class DashboardController extends FacesController {
 
     @Override
     public void onEntry() {

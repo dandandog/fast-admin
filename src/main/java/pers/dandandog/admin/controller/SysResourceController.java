@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  * @author JohnnyLiu
  * @since 2020-09-06 22:06:06
  */
-@Controller("sys/resource")
+@Controller("/views/sys/resource.faces")
 public class SysResourceController extends FacesController {
 
     /**

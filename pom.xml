@@ -18,8 +18,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.dandandog.fastcode</groupId>
-            <artifactId>framework-common</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         <dependency>
             <groupId>com.dandandog.fastcode</groupId>
