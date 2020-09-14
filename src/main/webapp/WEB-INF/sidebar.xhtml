@@ -21,6 +21,9 @@
                                 <sec:authorize access="hasRole('admin')">
                                   <p:outputLabel value="You have the ADMIN role"/>
                                 </sec:authorize>
+                                 <sec:authorize access="hasRole('user')">
+                                  <p:outputLabel value="You have the USER role"/>
+                                </sec:authorize>
                             </span>
                             <i class="fa fa-fw fa-cog"/>
                         </a>

@@ -18,4 +18,9 @@ public class IndexController extends FacesController {
         putViewScope("name", "hello world");
     }
 
+
+    public void test() {
+        throw new RuntimeException("error");
+    }
+
 }
