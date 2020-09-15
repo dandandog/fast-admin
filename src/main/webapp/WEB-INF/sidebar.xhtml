@@ -4,8 +4,9 @@
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui"
+        xmlns:pe="http://primefaces.org/ui/extensions"
         xmlns:po="http://primefaces.org/omega"
-        xmlns:sec="http://www.springframework.org/security/tags">
+        xmlns:sec="https://joinfaces.org/security">
     <h:form id="menuform">
         <div class="sidebar">
             <div class="nano">
@@ -18,10 +19,10 @@
                         <p:graphicImage name="images/profile.png" library="omega-layout"/>
                         <a id="profile-button" href="#">
                             <span class="username">
-                                 <sec:authorize  access="hasRole('ROLE_ADMIN')">
+                                 <sec:authorize ifAllGranted="ROLE_ADMIN">
                                   <p:outputLabel value="You have the ADMIN role"/>
                                 </sec:authorize>
-                                  <sec:authorize access="hasRole('ROLE_USER')">
+                                  <sec:authorize ifAllGranted="ROLE_USER">
                                   <p:outputLabel value="You have the USER role"/>
                                 </sec:authorize>
                             </span>
