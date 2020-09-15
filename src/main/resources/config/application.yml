@@ -2,6 +2,16 @@ server:
   servlet:
     context-path: /admin
   port: 8081
+joinfaces:
+  jsf:
+    PROJECT_STAGE: Production
+    facelets-suffix: .faces
+    facelets-libraries: /META-INF/joinfaces-security.taglib.xml
+  primefaces:
+    theme: omega
+    font-awesome: true
+    uploader: auto
+
 spring:
   config:
     name:

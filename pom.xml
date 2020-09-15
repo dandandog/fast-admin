@@ -18,10 +18,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.dandandog.fastcode</groupId>
             <artifactId>framework-core</artifactId>
         </dependency>
@@ -32,6 +28,10 @@
         <dependency>
             <groupId>com.dandandog.fastcode</groupId>
             <artifactId>framework-mapstruct</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.enterprise</groupId>
+            <artifactId>cdi-api</artifactId>
         </dependency>
     </dependencies>
     <profiles>

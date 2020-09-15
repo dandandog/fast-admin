@@ -15,7 +15,7 @@ public class LoginController extends FacesController {
     @Override
     public void onEntry() {
         if (SecurityUtil.isLogin()) {
-            redirectInternal("forward:/index.faces");
+            redirectInternal("/index.faces");
         }
     }
 }
