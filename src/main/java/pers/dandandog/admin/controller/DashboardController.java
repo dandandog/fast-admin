@@ -10,7 +10,7 @@ import org.springframework.stereotype.Controller;
  * @author JohnnyLiu
  * @since 2020-09-06 22:06:06
  */
-@Controller("/dashboard.faces")
+@Controller("/atuh/dashboard.faces")
 public class DashboardController extends FacesController {
 
     @Override
