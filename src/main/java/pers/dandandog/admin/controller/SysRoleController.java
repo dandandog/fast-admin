@@ -13,7 +13,7 @@ import pers.dandandog.admin.service.SysRoleService;
 /**
  * @author JohnnyLiu
  */
-@Controller("/views/sys/role.faces")
+@Controller("/auth/role.faces")
 public class SysRoleController extends FacesController {
     @Autowired
     private SysRoleService roleService;

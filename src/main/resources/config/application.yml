@@ -4,12 +4,17 @@ server:
   port: 8081
 joinfaces:
   jsf:
-    PROJECT_STAGE: Production
+    project-stage: Production
     facelets-suffix: .faces
-    facelets-libraries: /META-INF/joinfaces-security.taglib.xml
+    facelets-skip-comments: true
+    state-saving-method: server
+    enable-validate-whole-bean: true
+    interpret-empty-string-submitted-values-as-null: true
   primefaces:
     theme: omega
     font-awesome: true
+    transform-metadata: true
+    client-side-validation: true
     uploader: auto
 
 spring:
@@ -34,11 +39,12 @@ spring:
         test-while-idle: true
         test-on-borrow: false
         test-on-return: false
+
+mybatis-plus:
+  type-aliases-package: pers.dandandog.admin.entity
+  type-enums-package: pers.dandandog.admin.entity.enums
+  configuration:
+    default-enum-type-handler: org.apache.ibatis.type.EnumTypeHandler
 fast-code:
-  swagger:
-    api-scans:
-      - group-name: admin
-        base-package: pers.dandandog.admin.controller
-        base-path: /sys
   map-struct:
     url-domain: https://www.myelephant.cn

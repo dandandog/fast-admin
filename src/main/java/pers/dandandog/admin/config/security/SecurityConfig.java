@@ -17,9 +17,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.userDetailsService(userDetailsService());
         http.authorizeRequests().anyRequest().authenticated();
-        http.formLogin().loginPage("/login.faces").permitAll()
-                .failureForwardUrl("/login.faces?error=true");
-        http.logout().logoutSuccessUrl("/login.faces");
+        http.formLogin().loginPage("/login").permitAll()
+                .failureForwardUrl("/login?error=true");
+        http.logout().logoutSuccessUrl("/login");
         http.csrf().disable();
     }
 
