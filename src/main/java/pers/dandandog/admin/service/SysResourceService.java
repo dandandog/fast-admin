@@ -1,6 +1,7 @@
 package pers.dandandog.admin.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.primefaces.model.CheckboxTreeNode;
 import pers.dandandog.admin.entity.SysResource;
 
 /**
@@ -10,5 +11,7 @@ import pers.dandandog.admin.entity.SysResource;
  * @since 2020-09-06 22:06:06
  */
 public interface SysResourceService extends IService<SysResource> {
+
+    CheckboxTreeNode getRootTree(boolean isExpand, SysResource... selected);
 
 }

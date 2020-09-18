@@ -13,7 +13,7 @@ import pers.dandandog.admin.service.SysUserService;
 /**
  * @author JohnnyLiu
  */
-@Controller("/views/sys/user.faces")
+@Controller("/auth/user.faces")
 public class SysUserController extends FacesController {
 
     @Autowired

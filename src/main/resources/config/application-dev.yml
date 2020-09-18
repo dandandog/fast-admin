@@ -7,3 +7,8 @@ spring:
           url: jdbc:mysql://127.0.0.1:3306/fast-admin?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
           username: root
           password: password
+mybatis-plus:
+  type-aliases-package: pers.dandandog.admin.entity
+  type-enums-package: pers.dandandog.admin.entity.enums
+  configuration:
+    default-enum-type-handler: org.apache.ibatis.type.EnumTypeHandler
