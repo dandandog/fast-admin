@@ -1,5 +1,6 @@
 package pers.dandandog.admin.config.model;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.TypeUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -18,36 +19,18 @@ import java.util.List;
  */
 public class TreeDataModel<T extends ITree> {
 
-    private TreeDataModel() {
-    }
+    BaseMapper baseMapper;
 
-    private static class InnerAccountDataModel {
-        private static final TreeDataModel dataModel = new TreeDataModel<>();
-    }
-
-    public static TreeDataModel getInstance() {
-        TreeDataModel treeDataModel = TreeDataModel.InnerAccountDataModel.dataModel;
-        return treeDataModel;
-    }
-
-    private Class<?> getMClass() {
-        ParameterizedType type = (ParameterizedType) this.getClass().getGenericSuperclass();
-        return TypeUtil.getClass(type);
-    }
-
-
-    public BaseMapper<T> getBaseMapper() {
-        Class<T> clazz = (Class<T>) getMClass();
+    public <T extends ITree> TreeDataModel(Class<T> tClass) {
         try {
-            return MybatisUtil.getMapper(clazz);
+            this.baseMapper = MybatisUtil.getMapper(tClass);
         } catch (Exception ignored) {
         }
-        return null;
     }
 
 
     private List<T> load(LambdaQueryWrapper<T> queryWrapper) {
-        return getBaseMapper().selectList(queryWrapper);
+        return baseMapper.selectList(queryWrapper);
     }
 
 
@@ -61,7 +44,7 @@ public class TreeDataModel<T extends ITree> {
 
         idMap.keySet().forEach(id -> {
             sources.forEach(t -> {
-                if (id.equals(t.getId())) {
+                if (ObjectUtil.equal(id, t.getId())) {
                     objMap.putAll(t, idMap.get(id));
                 }
             });

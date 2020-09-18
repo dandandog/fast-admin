@@ -10,14 +10,16 @@ joinfaces:
     state-saving-method: server
     enable-validate-whole-bean: true
     interpret-empty-string-submitted-values-as-null: true
+
   primefaces:
     theme: omega
     font-awesome: true
     transform-metadata: true
     client-side-validation: true
     uploader: auto
-
 spring:
+  messages:
+    basename: framework-messages, admin-messages
   config:
     name:
   application:
@@ -41,10 +43,10 @@ spring:
         test-on-return: false
 
 mybatis-plus:
-  type-aliases-package: pers.dandandog.admin.entity
-  type-enums-package: pers.dandandog.admin.entity.enums
+  type-aliases-package: pers.dandandog.**.entity
+  typeEnumsPackage: pers.dandandog.**.entity.enums
   configuration:
-    default-enum-type-handler: org.apache.ibatis.type.EnumTypeHandler
+    default-enum-type-handler: org.apache.ibatis.type.EnumOrdinalTypeHandler
 fast-code:
   map-struct:
     url-domain: https://www.myelephant.cn

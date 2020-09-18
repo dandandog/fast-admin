@@ -7,8 +7,8 @@
                 template="/WEB-INF/template.xhtml"
                 xmlns:framework="http://java.sun.com/jsf/composite/components">
     <ui:define name="breadCrum">
-        <p:menuitem value="Dashboard" url="#"/>
-        <p:menuitem value="#{msg['security']['resource']}" outcome="/auth/resource"/>
+        <p:menuitem value="#{msg['authority']['title']}" url="#"/>
+        <p:menuitem value="#{msg['authority']['resource']}" outcome="/auth/resource"/>
     </ui:define>
     <ui:define name="head">
         <script>
@@ -43,41 +43,73 @@
         </script>
     </ui:define>
     <ui:define name="content">
-        <h:form id="contentForm">
-            <framework:treeTable id="resourceTreeTable" widgetVar="resourceTreeTable"
-                                 value="#{viewScope.resources}" formDialogId="resource"
-                                 singleSelection="#{viewScope.singleNode}" resizableColumns="true"
-                                 multipleSelection="#{viewScope.multipleNodes}">
-                <f:facet name="toolbarBtn">
-                    <p:commandButton id="expandBtn" icon="fa #{viewScope.isExpand ? 'fa-expand' : 'fa-compress'}"
-                                     value="#{msg['resource']['expand']}" action="#{controller.onToggleExpand}"
-                                     update="@widgetVar(resourceTreeTable) @this"/>
-                </f:facet>
-                <p:column headerText="#{msg['resource']['name']}">
-                    <i class="#{element.icon}" style="padding-right: 5px;"/>
-                    <h:outputText value="#{element.name}"/>
-                </p:column>
-                <p:column priority="4" headerText="#{msg['resource']['seq']}">
-                    <h:outputText value="#{element.seq}"/>
-                </p:column>
-                <p:column priority="2" headerText="#{msg['resource']['url']}">
-                    <h:outputText value="#{element.url}"/>
-                </p:column>
-                <p:column priority="2" headerText="#{msg['resource']['type']}">
-                    <h:outputText value="#{element.type}"/>
-                </p:column>
-                <p:column priority="3" headerText="#{msg['resource']['visible']}">
-                    <p:toggleSwitch value="#{element.visible}">
-                        <p:ajax listener="#{controller.onChangeStatus(element)}"/>
-                    </p:toggleSwitch>
-                </p:column>
-                <p:column priority="4" headerText="#{msg['resource']['permission']}">
-                    <h:outputText value="#{element.permission}"/>
-                </p:column>
-            </framework:treeTable>
-        </h:form>
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card">
+                    <h1>Empty Page</h1>
+                    <h:form id="contentForm">
+                        <framework:treeTable id="resourceTreeTable" widgetVar="resourceTreeTable"
+                                             value="#{viewScope.resources}" formDialogId="resource"
+                                             singleSelection="#{viewScope.singleNode}" resizableColumns="true"
+                                             multipleSelection="#{viewScope.multipleNodes}">
+                            <p:column headerText="#{msg['resource']['title']}">
+                                <i class="#{element.icon}" style="padding-right: 5px;"/>
+                                <h:outputText value="#{element.title}"/>
+                            </p:column>
+                            <p:column priority="4" headerText="#{msg['resource']['seq']}">
+                                <h:outputText value="#{element.seq}"/>
+                            </p:column>
+                            <p:column priority="2" headerText="#{msg['resource']['path']}">
+                                <h:outputText value="#{element.path}"/>
+                            </p:column>
+                            <p:column priority="2" headerText="#{msg['resource']['type']}">
+                                <h:outputText value="#{element.type}"/>
+                            </p:column>
+                            <p:column priority="3" headerText="#{msg['resource']['display']}">
+                                <p:toggleSwitch value="#{element.display}">
+                                    <p:ajax listener="#{controller.onChangeStatus(element)}"/>
+                                </p:toggleSwitch>
+                            </p:column>
+                            <p:column priority="4" headerText="#{msg['resource']['perms']}">
+                                <h:outputText value="#{element.perms}"/>
+                            </p:column>
+                        </framework:treeTable>
+                    </h:form>
+                </div>
+            </div>
+        </div>
     </ui:define>
     <ui:define name="dialog">
+        <h:form id="dialogForm">
+            <framework:dialog id="resource" value="#{viewScope.resource}" saveUpdate="@widgetVar(resourceTreeTable)">
+                <h:panelGrid cellpadding="5" cellspacing="5" styleClass="ui-g-nopad" columns="3">
 
+                    <p:outputLabel for="@next" value="#{msg['resource']['type']}:"/>
+                    <p:selectOneRadio id="type" value="#{viewScope.resource.type}" layout="responsive" columns="3">
+                        <f:selectItems value="#{viewScope.types}" var="type" itemLabel="#{msg['resource'][type.title]}"
+                                       itemValue="#{type}"/>
+                    </p:selectOneRadio>
+                    <p:message display="text" for="type"/>
+
+                    <p:outputLabel for="@next" value="#{msg['resource']['title']}"/>
+                    <p:inputText id="title" value="#{viewScope.resource.title}"/>
+                    <p:message display="text" for="title"/>
+
+                    <p:outputLabel for="@next" value="#{msg['resource']['code']}"/>
+                    <p:inputText id="code" value="#{viewScope.resource.code}"/>
+                    <p:message display="text" for="code"/>
+
+                    <p:outputLabel for="@next" value="#{msg['resource']['path']}"/>
+                    <p:inputText id="path" value="#{viewScope.resource.path}"/>
+                    <p:message display="path" for="title"/>
+
+                    <p:outputLabel for="@next" value="#{msg['resource']['perms']}"/>
+                    <p:inputText id="perms" value="#{viewScope.resource.perms}"/>
+                    <p:message display="text" for="perms"/>
+
+
+                </h:panelGrid>
+            </framework:dialog>
+        </h:form>
     </ui:define>
 </ui:composition>

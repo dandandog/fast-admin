@@ -1,5 +1,6 @@
 package pers.dandandog.admin.entity;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.dandandog.framework.core.entity.AuditableEntity;
 import com.dandandog.framework.core.entity.ITree;
 import lombok.Data;
@@ -15,6 +16,7 @@ import pers.dandandog.admin.entity.enums.ResourceType;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
+@TableName("sys_resource")
 public class SysResource extends AuditableEntity implements ITree {
     private static final long serialVersionUID = 916304099916723584L;
 
@@ -41,7 +43,7 @@ public class SysResource extends AuditableEntity implements ITree {
     /**
      * 类型（0：目录; 1：菜单; 2：按钮）
      */
-    private ResourceType type;
+    private ResourceType type = ResourceType.CATALOG;
     /**
      * 图标
      */

@@ -1,14 +1,18 @@
 package pers.dandandog.admin.controller;
 
 
+import cn.hutool.core.util.EnumUtil;
 import com.dandandog.framework.core.entity.BaseEntity;
 import com.dandandog.framework.faces.annotation.MessageRequired;
 import com.dandandog.framework.faces.annotation.MessageType;
 import com.dandandog.framework.faces.controller.FacesController;
 import com.google.common.collect.Lists;
+import lombok.AllArgsConstructor;
 import org.primefaces.model.DefaultTreeNode;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import pers.dandandog.admin.entity.SysResource;
+import pers.dandandog.admin.entity.enums.ResourceType;
 import pers.dandandog.admin.service.SysResourceService;
 
 import javax.annotation.Resource;
@@ -30,32 +34,32 @@ public class SysResourceController extends FacesController {
     @Resource
     private SysResourceService resourceService;
 
-
     @Override
-    public final void onEntry() {
+    public void onEntry() {
         dataTree(null);
         putViewScope("resource", null);
     }
 
-    public final void add() {
+    public void add() {
         SysResource resource = new SysResource();
         putViewScope("resource", resource);
+        putViewScope("types", ResourceType.values());
     }
 
-    public final void edit() {
+    public void edit() {
         String editId = getViewScope("editId");
         SysResource resource = resourceService.getById(editId);
         putViewScope("resource", resource);
     }
 
     @MessageRequired(type = MessageType.SAVE)
-    public final void save() {
+    public void save() {
         SysResource resource = getViewScope("resource");
         resourceService.save(resource);
     }
 
     @MessageRequired(type = MessageType.DELETE)
-    public final void delete() {
+    public void delete() {
         SysResource[] resources = getViewScope("selectedId");
         List<String> userIds = Lists.newArrayList(resources).stream().map(BaseEntity::getId).collect(Collectors.toList());
         resourceService.removeByIds(userIds);

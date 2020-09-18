@@ -67,7 +67,7 @@
     <composite:attribute name="addMethod" method-signature="void add()" default="#{controller.add}"/>
     <composite:attribute name="addUpdate" default="@widgetVar(#{cc.attrs.dialogWidgetVar})"/>
     <composite:attribute name="addOncomplete"
-                         default="PF('#{cc.attrs.dialogWidgetVar}').show(); $(PF('#{cc.attrs.dialogWidgetVar}').jqEl).css('height','100%');"/>
+                         default="PF('#{cc.attrs.dialogWidgetVar}').show();"/>
 
     <!--  refresh操作按钮-->
     <composite:attribute name="refreshRendered" default="true"/>
@@ -107,6 +107,10 @@
         .ui-state-highlight a {
             color: #ffffff !important;
         }
+
+        .ui-separator {
+            display: inline-table;
+        }
     </h:outputStylesheet>
     <script>
         function #{cc.attrs.widgetVar}_isSelected() {
@@ -125,7 +129,7 @@
             return selected;
         }
     </script>
-    <p:toolbar id="entityToolbar"  >
+    <p:toolbar id="entityToolbar">
         <f:facet name="left">
             <p:commandButton id="addBtn" widgetVar="#{cc.attrs.widgetVar}_addBtn" icon="fa fa-plus"
                              value="#{msg['framework']['add']}" process="@this"
@@ -205,7 +209,7 @@
         <composite:insertChildren/>
 
         <p:column headerText="#{msg['framework']['operation']}" style="text-align: center"
-                  rendered="#{cc.attrs.rowOperationSupport}">
+                  rendered="#{cc.attrs.rowOperationSupport}" toggleable="false">
             <p:commandLink id="editLine" process="@this" value="#{msg['framework']['edit']}"
                            rendered="#{cc.attrs.editRowRendered}" action="#{cc.attrs.editRowMethod}"
                            update="#{cc.attrs.editRowUpdate}" oncomplete="#{cc.attrs.editRowOncomplete}">

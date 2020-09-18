@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dandandog.framework.core.entity.ITree;
 import com.google.common.collect.Multimap;
+import lombok.extern.slf4j.Slf4j;
 import org.primefaces.model.CheckboxTreeNode;
 import org.primefaces.model.TreeNode;
 import org.springframework.stereotype.Service;
@@ -21,13 +22,13 @@ import java.util.Collection;
  * @author JohnnyLiu
  * @since 2020-09-06 22:06:06
  */
-@Service("sysResourceService")
+@Service
 public class SysResourceServiceImpl extends ServiceImpl<SysResourceDao, SysResource> implements SysResourceService {
 
-    private static final TreeDataModel<SysResource> treeDataModel = TreeDataModel.getInstance();
 
     @Override
     public CheckboxTreeNode getRootTree(boolean isExpand, SysResource... selected) {
+        TreeDataModel treeDataModel = new TreeDataModel(SysResource.class);
         Multimap sources = treeDataModel.getValue(new QueryWrapper<SysResource>().lambda().orderByAsc(SysResource::getId, SysResource::getSeq));
         CheckboxTreeNode root = new CheckboxTreeNode(null, null);
         setTreeLeaf(root, sources, isExpand, selected);
@@ -43,7 +44,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceDao, SysResou
         Collection children = resourceMaps.removeAll(root.getData());
         if (children != null) {
             for (Object resource : children) {
-                TreeNode node = new CheckboxTreeNode(((SysResource) resource).getType().getName(), resource, root);
+                TreeNode node = new CheckboxTreeNode("test", resource, root);
                 setTreeLeaf(node, resourceMaps, isExpand, selected);
             }
         }

@@ -1,14 +1,15 @@
 package pers.dandandog.admin.entity.enums;
 
-import com.baomidou.mybatisplus.annotation.IEnum;
-import lombok.Getter;
+import com.dandandog.framework.core.entity.enums.IBaseEnum;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
  * @author JohnnyLiu
  */
 
-@Getter
-public enum ResourceType implements IEnum<Integer> {
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
+public enum ResourceType implements IBaseEnum<Integer> {
     /**
      * 目录
      */
@@ -24,11 +25,11 @@ public enum ResourceType implements IEnum<Integer> {
 
     private final int value;
 
-    private final String name;
+    private final String title;
 
-    ResourceType(int value, String name) {
+    ResourceType(int value, String title) {
         this.value = value;
-        this.name = name;
+        this.title = title;
     }
 
     @Override
@@ -36,5 +37,9 @@ public enum ResourceType implements IEnum<Integer> {
         return this.value;
     }
 
-
+    @Override
+    @JsonValue
+    public String getTitle() {
+        return this.title;
+    }
 }

@@ -1,6 +1,7 @@
 package pers.dandandog.admin.model.vo;
 
 import lombok.Data;
+import pers.dandandog.admin.entity.enums.ResourceType;
 
 @Data
 public class SysResourceVo {
@@ -17,7 +18,7 @@ public class SysResourceVo {
 
     private String perms;
 
-    private Integer type;
+    private ResourceType type;
 
     private String icon;
 

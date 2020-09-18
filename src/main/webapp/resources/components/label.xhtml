@@ -50,13 +50,11 @@
     <p:panelGrid id="labelPanel" columns="3" layout="grid"
                  columnClasses="ui-g-12 ui-md-12 ui-lg-2 ,ui-g-12 ui-md-12 ui-lg-5 #{cc.attrs.messageSupport?'ui-lg-5 ,ui-g-12 ui-md-12 ui-lg-5':'ui-lg-10'}">
 
-        <p:outputLabel for="#{cc.attrs.for}" value="#{cc.attrs.value}" style="line-height: 30px;"/>
+        <h:outputLabel for="#{cc.attrs.for}"  value="#{cc.attrs.value}" style="line-height: 30px;"/>
         <p:panelGrid columns="#{cc.attrs.columns}" layout="grid"
                      columnClasses="#{cc.attrs.columnClasses} ">
             <composite:insertChildren/>
         </p:panelGrid>
-        <p:message for="#{cc.attrs.for}" display="text" rendered="#{cc.attrs.messageSupport}"
-                   style="background-color: transparent !important;border: 0px solid transparent !important;color: #a80000 !important;padding: 0px !important;"/>
 
     </p:panelGrid>
 

@@ -13,7 +13,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
  * @author Administrator
  */
 @SpringBootApplication(exclude = DruidDataSourceAutoConfigure.class)
-@MapperScan(basePackages = "pers.dandandog.admin", annotationClass = Mapper.class)
+@MapperScan(basePackages = "pers.dandandog.**.dao", annotationClass = Mapper.class)
 public class AdminApplication extends SpringBootServletInitializer {
 
     @Override
