@@ -191,11 +191,7 @@
                              value="#{msg['framework']['delete']}"
                              rendered="#{cc.attrs.deleteRendered}"
                              onclick="if(!#{cc.attrs.widgetVar}_checkDelete()) return false;"/>
-
-
             <composite:renderFacet name="toolbarBtn"/>
-
-
         </f:facet>
 
         <f:facet name="right">
@@ -316,7 +312,8 @@
                            update="#{cc.attrs.editRowUpdate}" oncomplete="#{cc.attrs.editRowOncomplete}">
                 <f:setPropertyActionListener value="#{element}" target="#{cc.attrs.singleSelection}"/>
             </p:commandLink>
-            <p:outputPanel layout="inline" styleClass="ui-separator" style="text-align: center;display:inline-block;" rendered="#{cc.attrs.deleteRowRendered}">
+            <p:outputPanel layout="inline" styleClass="ui-separator" style="text-align: center;display:inline-block;"
+                           rendered="#{cc.attrs.deleteRowRendered}">
                 <span class="ui-icon fa fa-ellipsis-v"/>
             </p:outputPanel>
             <p:commandLink id="deleteRowLine" value="#{msg['framework']['delete']}"
@@ -340,14 +337,14 @@
 
 
     <p:confirmDialog id="#{cc.attrs.widgetVar}_select_tips" widgetVar="#{cc.attrs.widgetVar}_select_tips"
-                     header="#{msg['framework']['message']}" severity=" fa fa-exclamation-triangle"
+                     header="#{msg['framework']['message']}" severity="fa fa-exclamation-triangle"
                      showEffect="fade" hideEffect="fade" width="300" message="#{msg['framework']['selectRecordFirst']}">
         <p:commandButton value="#{msg['framework']['confirm']}" type="button"
                          onclick="PF('#{cc.attrs.widgetVar}_select_tips').hide()"
                          styleClass="ui-confirmdialog-no" icon="fa fa-check"/>
     </p:confirmDialog>
     <p:confirmDialog id="#{cc.attrs.widgetVar}_delete_tip" widgetVar="#{cc.attrs.widgetVar}_delete_tips"
-                     rendered="#{cc.attrs.deleteRendered}" severity=" fa fa-question-circle"
+                     rendered="#{cc.attrs.deleteRendered}" severity="fa fa-question-circle"
                      header="#{msg['framework']['message']}" message="#{msg['framework']['confirmDeletion']}"
                      showEffect="fade" hideEffect="fade" width="300">
         <p:commandButton value="#{msg['framework']['cancel']}" type="button"

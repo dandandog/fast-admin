@@ -34,6 +34,25 @@
         <ui:include src="footer.xhtml"/>
     </div>
     <ui:insert name="dialog"/>
+
+    <p:growl id="globalMessageGrowl" widgetVar="globalMessageGrowl"
+             showDetail="true" showSummary="true" sticky="false" life="3000"
+             autoUpdate="false" redisplay="true"/>
+
+    <p:dialog id="globalMessageDialog">
+        <p:messages id="messages"/>
+    </p:dialog>
+
+    <h:form>
+        <p:confirmDialog id="confirmDialog" widgetVar="confirmDialog" severity="alert"
+                         global="true" showEffect="fade" hideEffect="fade" width="300">
+            <p:commandButton value="#{msg['framework']['cancel']}" type="button"
+                             styleClass="ui-confirmdialog-no secondary-button" icon="fa fa-close"/>
+            <p:commandButton value="#{msg['framework']['confirm']}" type="button"
+                             styleClass="ui-confirmdialog-yes" icon="fa fa-check"/>
+        </p:confirmDialog>
+    </h:form>
+
     <p:ajaxStatus style="width:32px;height:32px;position:fixed;right:7px;bottom:7px">
         <f:facet name="start">
             <p:graphicImage name="images/preloader.gif" library="omega-layout" style="width: 32px;"/>
@@ -46,16 +65,19 @@
     <h:outputStylesheet name="css/animate.css" library="omega-layout"/>
     <h:outputStylesheet name="css/nanoscroller.css" library="omega-layout"/>
     <h:outputStylesheet name="css/layout.css" library="omega-layout"/>
-    <h:outputStylesheet name="css/primeflex.css" library="assets"/>
+    <h:outputStylesheet name="primeflex.css" library="primeflex"/>
+    <h:outputStylesheet name="primeicons.css" library="primeicons"/>
     <h:outputStylesheet>
         .ui-outputlabel-rfi {
             color: red;
         }
+
         .ui-dialog .ui-dialog-footer {
             padding: .4em 1em;
             border-width: 1px 0 0 0;
             text-align: right;
         }
+
     </h:outputStylesheet>
 </h:body>
 

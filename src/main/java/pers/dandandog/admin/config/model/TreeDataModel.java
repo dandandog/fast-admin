@@ -1,7 +1,7 @@
 package pers.dandandog.admin.config.model;
 
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.TypeUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.dandandog.framework.core.entity.ITree;
@@ -9,7 +9,6 @@ import com.dandandog.framework.core.utils.MybatisUtil;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 
-import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 /**
@@ -33,12 +32,11 @@ public class TreeDataModel<T extends ITree> {
         return baseMapper.selectList(queryWrapper);
     }
 
-
     public Multimap<T, T> getValue(LambdaQueryWrapper<T> queryWrapper) {
         List<T> sources = load(queryWrapper);
         Multimap<String, T> idMap = ArrayListMultimap.create();
         sources.forEach(t -> {
-            idMap.put(t.getParentId(), t);
+            idMap.put(StrUtil.isNotBlank(t.getParentId()) ? t.getParentId() : null, t);
         });
         Multimap<T, T> objMap = ArrayListMultimap.create();
 

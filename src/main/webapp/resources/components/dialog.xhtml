@@ -17,9 +17,9 @@
     <composite:attribute name="resizable" default="true"/>
     <composite:attribute name="modal" default="true"/>
     <composite:attribute name="visible" default="false"/>
-    <composite:attribute name="width" default="800"/>
-    <composite:attribute name="height" default="atuo"/>
-    <composite:attribute name="minWidth" default="150"/>
+    <composite:attribute name="width" default="auto"/>
+    <composite:attribute name="height" default="auto"/>
+    <composite:attribute name="minWidth" default="450"/>
     <composite:attribute name="minHeight" default="0"/>
     <composite:attribute name="style"/>
     <composite:attribute name="styleClass" default=""/>
@@ -33,8 +33,8 @@
     <composite:attribute name="showHeader" default="true"/>
     <composite:attribute name="footer" default=""/>
     <composite:attribute name="dynamic" default="false"/>
-    <composite:attribute name="minimizable" default="true"/>
-    <composite:attribute name="maximizable" default="true"/>
+    <composite:attribute name="minimizable" default="false"/>
+    <composite:attribute name="maximizable" default="false"/>
     <composite:attribute name="closeOnEscape" default="false"/>
     <composite:attribute name="dir" default="ltr"/>
     <composite:attribute name="focus" default=""/>
@@ -42,7 +42,6 @@
     <composite:attribute name="positionType" default="absolute"/>
     <composite:attribute name="responsive" default="true"/>
     <composite:attribute name="blockScroll" default="true"/>
-    <composite:attribute name="my" default="center"/>
 
     <!-- coustom attrs-->
     <composite:attribute name="tableWidgetVar"/>
@@ -82,7 +81,18 @@
 </composite:interface>
 
 <composite:implementation>
+    <h:outputStylesheet>
 
+        div[id$="\:entityDialog"] .ui-dialog .ui-dialog-footer {
+            border: 1px solid #dedede;
+            border-top: 0 none;
+            background-color: #ffffff;
+            color: #333333;
+            padding: 0.571em 1em;
+            margin: 0;
+            text-align: left !important;
+        }
+    </h:outputStylesheet>
     <script>
         function handleComplete(xhr, status, args) {
             debugger
@@ -93,9 +103,9 @@
 
     </script>
     <p:dialog id="entityDialog"
+              header="#{cc.attrs.header}"
               rendered="#{cc.attrs.rendered}"
               widgetVar="#{cc.attrs.widgetVar}"
-              header="#{cc.attrs.header}"
               draggable="#{cc.attrs.draggable}"
               resizable="#{cc.attrs.resizable}"
               modal="#{cc.attrs.modal}"
@@ -124,20 +134,19 @@
               positionType="#{cc.attrs.positionType}"
               responsive="#{cc.attrs.responsive}"
               blockScroll="#{cc.attrs.blockScroll}"
-              my="#{cc.attrs.my}">
+    >
 
         <composite:insertFacet name="header"/>
 
         <p:messages id="messages" showDetail="true" showSummary="false"
                     rendered="#{cc.attrs.showMessages}" severity="error"/>
-        <p:outputPanel id="contentPanel" style="overflow-y: auto;padding: 0 30px"
-                       width="100%" rendered="#{!cc.attrs.saveDisabled}"
+        <p:outputPanel id="contentPanel" width="100%"
+                       rendered="#{!cc.attrs.saveDisabled}"
                        styleClass="ui-fluid  #{cc.attrs.dialogContentStyleClass}">
             <composite:insertChildren/>
         </p:outputPanel>
 
         <f:facet name="footer">
-
             <composite:renderFacet name="button"/>
             <p:outputPanel rendered="#{cc.attrs.cancelSupported}" layout="inline">
                 <p:commandButton id="cancelButton"
@@ -154,7 +163,6 @@
                                  update=":#{cc.clientId}:contentPanel, #{cc.attrs.saveUpdate}"
                                  oncomplete="handleComplete(xhr, status, args);"/>
             </p:outputPanel>
-
         </f:facet>
 
         <c:if test="#{cc.attrs.closeAjaxSupported}">

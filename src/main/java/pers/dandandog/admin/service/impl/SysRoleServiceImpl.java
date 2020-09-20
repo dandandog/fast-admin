@@ -1,9 +1,9 @@
 package pers.dandandog.admin.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import pers.dandandog.admin.dao.SysRoleDao;
-import pers.dandandog.admin.entity.SysRole;
-import pers.dandandog.admin.service.SysRoleService;
+import pers.dandandog.admin.dao.AuthRoleDao;
+import pers.dandandog.admin.entity.AuthRole;
+import pers.dandandog.admin.service.AuthRoleService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -13,6 +13,6 @@ import org.springframework.stereotype.Service;
  * @since 2020-09-06 22:06:06
  */
 @Service("sysRoleService")
-public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> implements SysRoleService {
+public class SysRoleServiceImpl extends ServiceImpl<AuthRoleDao, AuthRole> implements AuthRoleService {
 
 }

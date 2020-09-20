@@ -88,7 +88,7 @@
     <composite:attribute name="editRowMethod" method-signature="void edit()" default="#{controller.edit}"/>
     <composite:attribute name="editRowUpdate" default="@widgetVar(#{cc.attrs.dialogWidgetVar})"/>
     <composite:attribute name="editRowOncomplete"
-                         default="PF('#{cc.attrs.dialogWidgetVar}').show(); $(PF('#{cc.attrs.dialogWidgetVar}').jqEl).css('height','100%');"/>
+                         default="PF('#{cc.attrs.dialogWidgetVar}').show();"/>
 
     <!--  delete row操作按钮-->
     <composite:attribute name="deleteRowRendered" default="true"/>
@@ -108,8 +108,10 @@
             color: #ffffff !important;
         }
 
-        .ui-separator {
-            display: inline-table;
+        .ui-my-toolbar {
+            border: transparent !important;
+            background: transparent !important;
+            padding: .571em 0em .571em 0em !important;
         }
     </h:outputStylesheet>
     <script>
@@ -129,7 +131,7 @@
             return selected;
         }
     </script>
-    <p:toolbar id="entityToolbar">
+    <p:toolbar id="entityToolbar" styleClass="ui-my-toolbar">
         <f:facet name="left">
             <p:commandButton id="addBtn" widgetVar="#{cc.attrs.widgetVar}_addBtn" icon="fa fa-plus"
                              value="#{msg['framework']['add']}" process="@this"
@@ -146,16 +148,19 @@
         </f:facet>
 
         <f:facet name="right">
-            <p:commandButton id="searchBtn" type="button" icon="fa fa-search"
-                             onclick="PF('#{cc.attrs.widgetVar}').filter()"/>
-            <p:commandButton id="refreshBtn" widgetVar="refreshBtn" icon="fa fa-refresh"
-                             rendered="#{cc.attrs.refreshRendered}"
-                             action="#{cc.attrs.refreshMethod}"
-                             update="#{cc.attrs.refreshUpdate}"
-                             oncomplete="PF('#{cc.attrs.widgetVar}').clearFilters()"/>
+            <div class="ui-inputgroup">
+                <p:inputText id="globalFilter" style="width:150px" placeholder="Enter keyword"/>
+                <p:commandButton id="searchBtn" type="button" icon="fa fa-search"
+                                 onclick="PF('#{cc.attrs.widgetVar}').filter()"/>
+                <p:commandButton id="refreshBtn" widgetVar="refreshBtn" icon="fa fa-refresh"
+                                 rendered="#{cc.attrs.refreshRendered}"
+                                 action="#{cc.attrs.refreshMethod}"
+                                 update="#{cc.attrs.refreshUpdate}"
+                                 oncomplete="PF('#{cc.attrs.widgetVar}').clearFilters()"/>
 
-            <p:commandButton id="toggler" type="button" icon="fa fa-align-justify"/>
-            <p:columnToggler datasource="entityTreeTable" trigger="toggler"/>
+                <p:commandButton id="toggler" type="button" icon="fa fa-align-justify"/>
+                <p:columnToggler datasource="entityTreeTable" trigger="toggler"/>
+            </div>
         </f:facet>
     </p:toolbar>
     <p:sticky target="entityToolbar" margin="70"/>
@@ -215,25 +220,23 @@
                            update="#{cc.attrs.editRowUpdate}" oncomplete="#{cc.attrs.editRowOncomplete}">
                 <f:setPropertyActionListener value="#{element}" target="#{cc.attrs.singleSelection}"/>
             </p:commandLink>
-            <p:outputPanel layout="inline" styleClass="ui-separator" rendered="#{cc.attrs.deleteRowRendered}">
-                <span class="ui-icon fa fa-ellipsis-v"/>
-            </p:outputPanel>
+            |
             <p:commandLink id="deleteRowLine" value="#{msg['framework']['delete']}"
                            rendered="#{cc.attrs.deleteRowRendered}" action="#{cc.attrs.deleteRowMethod}"
                            update="#{cc.attrs.deleteRowUpdate}" oncomplete="#{cc.attrs.deleteRowOncomplete}">
                 <f:setPropertyActionListener value="#{element}" target="#{cc.attrs.singleSelection}"/>
                 <p:confirm header="#{msg['framework']['message']}" message="#{msg['framework']['confirmDeletion']}"
-                           icon="fa fa-exclamation-triangle"/>
+                           icon="fa fa-question-circle"/>
             </p:commandLink>
             <composite:renderFacet name="rowOperation"/>
         </p:column>
     </p:treeTable>
 
     <p:confirmDialog id="#{cc.attrs.widgetVar}_select_tips" widgetVar="#{cc.attrs.widgetVar}_select_tips"
-                     header="#{msg['framework']['message']}"
+                     header="#{msg['framework']['message']}" severity=""
                      showEffect="fade" hideEffect="fade" width="300">
         <f:facet name="message">
-            <i class="fa fa-exclamation-triangle" style="font-size: 30px;margin-right: 10px;"></i>
+            <i class="fa fa-exclamation-triangle" style="font-size: 30px;margin-right: 10px;"/>
             <h:outputText value="#{msg['framework']['selectRecordFirst']}"/>
         </f:facet>
         <p:commandButton value="#{msg['framework']['confirm']}" type="button"
@@ -244,8 +247,10 @@
                      rendered="#{cc.attrs.deleteRendered}"
                      header="#{msg['framework']['message']}"
                      showEffect="fade" hideEffect="fade" width="300">
+        <f:facet name="severity">
+            <i class="fa fa-question-circle" style="font-size: 30px;margin-right: 10px;"/>
+        </f:facet>
         <f:facet name="message">
-            <i class="fa fa-exclamation-triangle" style="font-size: 30px;margin-right: 10px;"></i>
             <h:outputText value="#{msg['framework']['confirmDeletion']}"/>
         </f:facet>
         <p:commandButton value="#{msg['framework']['cancel']}" type="button"

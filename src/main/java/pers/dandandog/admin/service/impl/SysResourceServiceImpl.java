@@ -4,14 +4,13 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dandandog.framework.core.entity.ITree;
 import com.google.common.collect.Multimap;
-import lombok.extern.slf4j.Slf4j;
 import org.primefaces.model.CheckboxTreeNode;
 import org.primefaces.model.TreeNode;
 import org.springframework.stereotype.Service;
 import pers.dandandog.admin.config.model.TreeDataModel;
-import pers.dandandog.admin.dao.SysResourceDao;
-import pers.dandandog.admin.entity.SysResource;
-import pers.dandandog.admin.service.SysResourceService;
+import pers.dandandog.admin.dao.AuthResourceDao;
+import pers.dandandog.admin.entity.AuthResource;
+import pers.dandandog.admin.service.AuthResourceService;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -23,19 +22,19 @@ import java.util.Collection;
  * @since 2020-09-06 22:06:06
  */
 @Service
-public class SysResourceServiceImpl extends ServiceImpl<SysResourceDao, SysResource> implements SysResourceService {
+public class SysResourceServiceImpl extends ServiceImpl<AuthResourceDao, AuthResource> implements AuthResourceService {
 
 
     @Override
-    public CheckboxTreeNode getRootTree(boolean isExpand, SysResource... selected) {
-        TreeDataModel treeDataModel = new TreeDataModel(SysResource.class);
-        Multimap sources = treeDataModel.getValue(new QueryWrapper<SysResource>().lambda().orderByAsc(SysResource::getId, SysResource::getSeq));
+    public CheckboxTreeNode getRootTree(boolean isExpand, AuthResource... selected) {
+        TreeDataModel treeDataModel = new TreeDataModel(AuthResource.class);
+        Multimap sources = treeDataModel.getValue(new QueryWrapper<AuthResource>().lambda().orderByAsc(AuthResource::getId, AuthResource::getSeq));
         CheckboxTreeNode root = new CheckboxTreeNode(null, null);
         setTreeLeaf(root, sources, isExpand, selected);
         return root;
     }
 
-    private void setTreeLeaf(TreeNode root, Multimap resourceMaps, boolean isExpand, SysResource... selected) {
+    private void setTreeLeaf(TreeNode root, Multimap resourceMaps, boolean isExpand, AuthResource... selected) {
         root.setExpanded(isExpand);
         root.setSelected(root.getData() != null && selected != null && Arrays.asList(selected).contains(root.getData()));
         if (root.getData() != null && !(root.getData() instanceof ITree)) {

@@ -10,7 +10,7 @@
     <!--  The default configuration-->
     <composite:attribute name="widgetVar"/>
     <composite:attribute name="value" required="true"/>
-    <composite:attribute name="for" required="true"/>
+    <composite:attribute name="target" required="true"/>
     <composite:attribute name="columns" default="1"/>
     <composite:attribute name="columnClasses" default="ui-g-12 ui-md-12 ui-g-nopad"/>
     <composite:attribute name="margin" default="0"/>
@@ -28,12 +28,10 @@
             color: red;
         }
 
-        .ui-message-error span {
-            display: block;
-            margin: 5px 0px !important;
-        }
-
-        .ui-g-nopad {
+        .ui-label-message {
+            background-color: transparent !important;
+            border: 0px solid transparent !important;
+            color: #a80000 !important;
             padding: 0px !important;
         }
     </style>
@@ -47,17 +45,23 @@
             }
         }
     </script>
-    <p:panelGrid id="labelPanel" columns="3" layout="grid"
-                 columnClasses="ui-g-12 ui-md-12 ui-lg-2 ,ui-g-12 ui-md-12 ui-lg-5 #{cc.attrs.messageSupport?'ui-lg-5 ,ui-g-12 ui-md-12 ui-lg-5':'ui-lg-10'}">
 
-        <h:outputLabel for="#{cc.attrs.for}"  value="#{cc.attrs.value}" style="line-height: 30px;"/>
-        <p:panelGrid columns="#{cc.attrs.columns}" layout="grid"
-                     columnClasses="#{cc.attrs.columnClasses} ">
-            <composite:insertChildren/>
-        </p:panelGrid>
+    <p:outputPanel id="labelPanel" style="min-width: 450px" styleClass="p-grid p-justify-even">
+        <div class="p-col-12 p-md-12 p-lg-2" style="text-align: right;">
+            <p:outputLabel for="#{cc.attrs.target}" value="#{cc.attrs.value}"/>
+        </div>
+        <div class="p-col-12 p-md-12 p-lg-5">
+            <h:panelGrid columns="#{cc.attrs.columns}" layout="grid"
+                         columnClasses="#{cc.attrs.columnClasses} ">
+                <composite:insertChildren/>
+            </h:panelGrid>
 
-    </p:panelGrid>
-
+        </div>
+        <div class="p-col-12 p-md-12 p-lg-5">
+            <p:message for="#{cc.attrs.target}" rendered="#{cc.attrs.messageSupport}"
+                       styleClass="ui-label-message"/>
+        </div>
+    </p:outputPanel>
 </composite:implementation>
 
 

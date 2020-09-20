@@ -50,11 +50,13 @@
                     <h:form id="contentForm">
                         <framework:treeTable id="resourceTreeTable" widgetVar="resourceTreeTable"
                                              value="#{viewScope.resources}" formDialogId="resource"
-                                             singleSelection="#{viewScope.singleNode}" resizableColumns="true"
-                                             multipleSelection="#{viewScope.multipleNodes}">
+                                             singleSelection="#{viewScope.selected}" resizableColumns="true"
+                                             multipleSelection="#{viewScope.mulSelected}">
                             <p:column headerText="#{msg['resource']['title']}">
-                                <i class="#{element.icon}" style="padding-right: 5px;"/>
-                                <h:outputText value="#{element.title}"/>
+                                <p:outputPanel layout="inline" style="vertical-align: middle;">
+                                    <i class="#{element.icon}"/>
+                                    <h:outputText value="#{element.title}"/>
+                                </p:outputPanel>
                             </p:column>
                             <p:column priority="4" headerText="#{msg['resource']['seq']}">
                                 <h:outputText value="#{element.seq}"/>
@@ -62,13 +64,18 @@
                             <p:column priority="2" headerText="#{msg['resource']['path']}">
                                 <h:outputText value="#{element.path}"/>
                             </p:column>
-                            <p:column priority="2" headerText="#{msg['resource']['type']}">
-                                <h:outputText value="#{element.type}"/>
+                            <p:column priority="2" headerText="#{msg['resource']['type']}"
+                                      style="text-align: center">
+                                <h:outputText value="#{msg['resource'][element.type.title]}"/>
                             </p:column>
-                            <p:column priority="3" headerText="#{msg['resource']['display']}">
-                                <p:toggleSwitch value="#{element.display}">
+                            <p:column priority="3" headerText="#{msg['resource']['display']}"
+                                      style="text-align: center">
+                                <p:selectBooleanButton value="#{element.display}"
+                                                       onLabel="#{msg['framework']['yes']}"
+                                                       offLabel="#{msg['framework']['no']}"
+                                                       onIcon="pi pi-check" offIcon="pi pi-times" style="width:60px">
                                     <p:ajax listener="#{controller.onChangeStatus(element)}"/>
-                                </p:toggleSwitch>
+                                </p:selectBooleanButton>
                             </p:column>
                             <p:column priority="4" headerText="#{msg['resource']['perms']}">
                                 <h:outputText value="#{element.perms}"/>
@@ -82,33 +89,80 @@
     <ui:define name="dialog">
         <h:form id="dialogForm">
             <framework:dialog id="resource" value="#{viewScope.resource}" saveUpdate="@widgetVar(resourceTreeTable)">
-                <h:panelGrid cellpadding="5" cellspacing="5" styleClass="ui-g-nopad" columns="3">
 
-                    <p:outputLabel for="@next" value="#{msg['resource']['type']}:"/>
-                    <p:selectOneRadio id="type" value="#{viewScope.resource.type}" layout="responsive" columns="3">
-                        <f:selectItems value="#{viewScope.types}" var="type" itemLabel="#{msg['resource'][type.title]}"
-                                       itemValue="#{type}"/>
+                <framework:label target="resourceType" value="#{msg['resource']['type']}">
+                    <p:selectOneRadio id="resourceType" widgetVar="type" required="true"
+                                      onclick="selectedResourceType()"
+                                      value="#{viewScope.resource.type}" unselectable="false">
+                        <f:selectItems value="#{viewScope.types}" var="type"
+                                       itemLabel="#{msg['resource'][type.title]}" itemValue="#{type}"/>
                     </p:selectOneRadio>
-                    <p:message display="text" for="type"/>
-
-                    <p:outputLabel for="@next" value="#{msg['resource']['title']}"/>
-                    <p:inputText id="title" value="#{viewScope.resource.title}"/>
-                    <p:message display="text" for="title"/>
-
-                    <p:outputLabel for="@next" value="#{msg['resource']['code']}"/>
-                    <p:inputText id="code" value="#{viewScope.resource.code}"/>
-                    <p:message display="text" for="code"/>
-
-                    <p:outputLabel for="@next" value="#{msg['resource']['path']}"/>
+                </framework:label>
+                <framework:label target="title" value="#{msg['resource']['title']}">
+                    <p:inputText id="title" value="#{viewScope.resource.title}" required="true"/>
+                </framework:label>
+                <framework:label widgetVar="path" target="path" value="#{msg['resource']['path']}">
                     <p:inputText id="path" value="#{viewScope.resource.path}"/>
-                    <p:message display="path" for="title"/>
-
-                    <p:outputLabel for="@next" value="#{msg['resource']['perms']}"/>
+                </framework:label>
+                <framework:label widgetVar="target" target="target"
+                                 value="#{msg['resource']['target']}">
+                    <p:selectOneMenu id="target" value="#{viewScope.resource.target}">
+                        <f:selectItems value="#{viewScope.targets}" var="target"
+                                       itemLabel="#{msg['resource'][target.title]}" itemValue="#{target}"/>
+                    </p:selectOneMenu>
+                </framework:label>
+                <framework:label widgetVar="perms" target="perms"
+                                 value="#{msg['resource']['perms']}">
                     <p:inputText id="perms" value="#{viewScope.resource.perms}"/>
-                    <p:message display="text" for="perms"/>
+                </framework:label>
+                <framework:label widgetVar="seq" target="seq" value="#{msg['resource']['seq']}">
+                    <p:inputText id="seq" value="#{viewScope.resource.seq}" required="true"/>
+                </framework:label>
+                <framework:label widgetVar="iconPlane" target="iconPlane" value="#{msg['resource']['icon']}">
+                    <p:fragment>
+                        <p:outputPanel id="iconPlane" styleClass="ui-inputgroup">
+                            <p:inputText id="iconInput" widgetVar="iconInput"
+                                         readonly="true" value="#{viewScope.resource.icon}"
+                                         onclick="panelWidth()"/>
+                            <p:commandLink class="ui-inputgroup-addon" update="iconPlane">
+                                <i class="fa fa-times"/>
+                                <p:resetInput target="iconInput" resetValues="true"/>
+                            </p:commandLink>
+                        </p:outputPanel>
+                        <p:overlayPanel widgetVar="icon_panel" id="icon_panel"
+                                        target="iconInput" hideEffect="fade">
+                            <p:outputPanel layout="block" style="width:300px">
+                                <p:inputText onkeyup="onFilter(event)"
+                                             placeholder="Search an icon"
+                                             style="width:100%; margin: 16px 0px 26px;"/>
+                                <div class="p-grid icons-gird"
+                                     style=" max-height: 300px;">
+                                    <ui:repeat value="#{viewScope.icons}" var="icon">
+                                        <div class="p-col-6 p-md-6 p-lg-4 icon-container"
+                                             onclick="PF('icon_panel').hide()" data-name="#{icon.name}"
+                                             data-key="#{icon.key}">
+                                            <p:commandLink>
+                                                <i class="pi pi-#{icon.name}"></i>
+                                                <div>#{icon.name}</div>
+                                                <f:setPropertyActionListener value="#{icon.name}"
+                                                                             target="#{viewScope.resource.icon}"/>
+                                            </p:commandLink>
+                                        </div>
+                                    </ui:repeat>
+                                </div>
+                            </p:outputPanel>
+                        </p:overlayPanel>
+                    </p:fragment>
+                </framework:label>
+                <framework:label widgetVar="display" target="display"
+                                 value="#{msg['resource']['display']}">
+                    <p:selectBooleanButton id="display" value="#{viewScope.resource.display}"
+                                           onLabel="#{msg['framework']['yes']}" offLabel="#{msg['framework']['no']}"
+                                           onIcon="pi pi-check" offIcon="pi pi-times" style="width:60px">
 
+                    </p:selectBooleanButton>
+                </framework:label>
 
-                </h:panelGrid>
             </framework:dialog>
         </h:form>
     </ui:define>

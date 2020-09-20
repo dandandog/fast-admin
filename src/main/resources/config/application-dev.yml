@@ -7,3 +7,6 @@ spring:
           url: jdbc:mysql://localhost:3306/fast-admin?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
           username: root
           password: password
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

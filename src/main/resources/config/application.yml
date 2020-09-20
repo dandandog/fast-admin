@@ -12,7 +12,7 @@ joinfaces:
     interpret-empty-string-submitted-values-as-null: true
 
   primefaces:
-    theme: omega
+    theme: omega #nova-light
     font-awesome: true
     transform-metadata: true
     client-side-validation: true
