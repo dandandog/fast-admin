@@ -18,9 +18,9 @@ import java.util.List;
  */
 public class TreeDataModel<T extends ITree> {
 
-    BaseMapper baseMapper;
+    BaseMapper<T> baseMapper;
 
-    public <T extends ITree> TreeDataModel(Class<T> tClass) {
+    public TreeDataModel(Class<T> tClass) {
         try {
             this.baseMapper = MybatisUtil.getMapper(tClass);
         } catch (Exception ignored) {
@@ -35,11 +35,10 @@ public class TreeDataModel<T extends ITree> {
     public Multimap<T, T> getValue(LambdaQueryWrapper<T> queryWrapper) {
         List<T> sources = load(queryWrapper);
         Multimap<String, T> idMap = ArrayListMultimap.create();
+        Multimap<T, T> objMap = ArrayListMultimap.create();
         sources.forEach(t -> {
             idMap.put(StrUtil.isNotBlank(t.getParentId()) ? t.getParentId() : null, t);
         });
-        Multimap<T, T> objMap = ArrayListMultimap.create();
-
         idMap.keySet().forEach(id -> {
             sources.forEach(t -> {
                 if (ObjectUtil.equal(id, t.getId())) {

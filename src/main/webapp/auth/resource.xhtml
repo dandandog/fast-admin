@@ -50,9 +50,9 @@
                     <h:form id="contentForm">
                         <framework:treeTable id="resourceTreeTable" widgetVar="resourceTreeTable"
                                              value="#{viewScope.resources}" formDialogId="resource"
-                                             singleSelection="#{viewScope.selected}" resizableColumns="true"
+                                             singleSelection="#{viewScope.sinSelected}" resizableColumns="true"
                                              multipleSelection="#{viewScope.mulSelected}">
-                            <p:column headerText="#{msg['resource']['title']}">
+                            <p:column headerText="#{msg['resource']['title']}" width="200">
                                 <p:outputPanel layout="inline" style="vertical-align: middle;">
                                     <i class="#{element.icon}"/>
                                     <h:outputText value="#{element.title}"/>
@@ -65,11 +65,11 @@
                                 <h:outputText value="#{element.path}"/>
                             </p:column>
                             <p:column priority="2" headerText="#{msg['resource']['type']}"
-                                      style="text-align: center">
+                                      style="text-align: center" width="60">
                                 <h:outputText value="#{msg['resource'][element.type.title]}"/>
                             </p:column>
                             <p:column priority="3" headerText="#{msg['resource']['display']}"
-                                      style="text-align: center">
+                                      style="text-align: center" width="60">
                                 <p:selectBooleanButton value="#{element.display}"
                                                        onLabel="#{msg['framework']['yes']}"
                                                        offLabel="#{msg['framework']['no']}"
@@ -90,8 +90,40 @@
         <h:form id="dialogForm">
             <framework:dialog id="resource" value="#{viewScope.resource}" saveUpdate="@widgetVar(resourceTreeTable)">
 
+                <framework:label target="parent" value="#{msg['resource']['parent']}">
+                    <p:outputPanel id="parentPanel" class="ui-inputgroup">
+                        <p:inputText id="parent" widgetVar="parent" readonly="true"
+                                     value="#{viewScope.resource.parent.data.title}">
+                        </p:inputText>
+                        <p:commandLink styleClass="ui-inputgroup-addon" process="parent"
+                                       update="parent">
+                            <i class="fa fa-times"/>
+                            <p:resetInput target="parent"/>
+                        </p:commandLink>
+                    </p:outputPanel>
+
+                    <p:overlayPanel id="treePanel" for="parent" widgetVar="treePanel"
+                                    appendTo="parentPanel" hideEvent="scroll"
+                                    dynamic="true" hideEffect="blind"
+                                    showEffect="blind">
+                        <p:tree id="menuTree" widgetVar="menuTree" value="#{viewScope.rootTree}"
+                                var="node" datakey="#{node.id}" selection="#{viewScope.resource.parent}"
+                                onNodeClick="PF('treePanel').hide()"
+                                style="border: 0px transparent;" selectionMode="single">
+                            <p:ajax event="select" update="@widgetVar(parent)"/>
+                            <p:treeNode type="catalog">
+                                <h:outputText value="#{node.title}"/>
+                            </p:treeNode>
+                            <p:treeNode type="menu">
+                                <h:outputText value="#{node.title}"/>
+                            </p:treeNode>
+                        </p:tree>
+                    </p:overlayPanel>
+
+                </framework:label>
+
                 <framework:label target="resourceType" value="#{msg['resource']['type']}">
-                    <p:selectOneRadio id="resourceType" widgetVar="type" required="true"
+                    <p:selectOneRadio id="resourceType" widgetVar="type"
                                       onclick="selectedResourceType()"
                                       value="#{viewScope.resource.type}" unselectable="false">
                         <f:selectItems value="#{viewScope.types}" var="type"
@@ -99,14 +131,14 @@
                     </p:selectOneRadio>
                 </framework:label>
                 <framework:label target="title" value="#{msg['resource']['title']}">
-                    <p:inputText id="title" value="#{viewScope.resource.title}" required="true"/>
+                    <p:inputText id="title" value="#{viewScope.resource.title}"/>
                 </framework:label>
                 <framework:label widgetVar="path" target="path" value="#{msg['resource']['path']}">
                     <p:inputText id="path" value="#{viewScope.resource.path}"/>
                 </framework:label>
                 <framework:label widgetVar="target" target="target"
                                  value="#{msg['resource']['target']}">
-                    <p:selectOneMenu id="target" value="#{viewScope.resource.target}">
+                    <p:selectOneMenu id="target" value="#{viewScope.resource.target}" autoWidth="true">
                         <f:selectItems value="#{viewScope.targets}" var="target"
                                        itemLabel="#{msg['resource'][target.title]}" itemValue="#{target}"/>
                     </p:selectOneMenu>
@@ -116,7 +148,7 @@
                     <p:inputText id="perms" value="#{viewScope.resource.perms}"/>
                 </framework:label>
                 <framework:label widgetVar="seq" target="seq" value="#{msg['resource']['seq']}">
-                    <p:inputText id="seq" value="#{viewScope.resource.seq}" required="true"/>
+                    <p:inputText id="seq" value="#{viewScope.resource.seq}"/>
                 </framework:label>
                 <framework:label widgetVar="iconPlane" target="iconPlane" value="#{msg['resource']['icon']}">
                     <p:fragment>

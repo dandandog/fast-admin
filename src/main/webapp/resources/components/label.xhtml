@@ -23,7 +23,7 @@
 
 
 <composite:implementation>
-    <style>
+    <h:outputStylesheet>
         .ui-outputlabel-rfi {
             color: red;
         }
@@ -34,34 +34,34 @@
             color: #a80000 !important;
             padding: 0px !important;
         }
-    </style>
-    <script>
-        PrimeFaces.widgets['#{cc.attrs.widgetVar}'] = {
-            show: function () {
-                $('#' + '#{cc.clientId}:labelPanel'.replace(/:/g, "\\:")).show();
-            },
-            hide: function () {
-                $('#' + '#{cc.clientId}:labelPanel'.replace(/:/g, "\\:")).hide();
-            }
+
+        .customPanelGrid .ui-panelgrid-content {
+            align-items: center;
+            border: 0px;
+            margin-bottom: 10px;
         }
-    </script>
 
-    <p:outputPanel id="labelPanel" style="min-width: 450px" styleClass="p-grid p-justify-even">
-        <div class="p-col-12 p-md-12 p-lg-2" style="text-align: right;">
-            <p:outputLabel for="#{cc.attrs.target}" value="#{cc.attrs.value}"/>
-        </div>
-        <div class="p-col-12 p-md-12 p-lg-5">
-            <h:panelGrid columns="#{cc.attrs.columns}" layout="grid"
-                         columnClasses="#{cc.attrs.columnClasses} ">
-                <composite:insertChildren/>
-            </h:panelGrid>
+    </h:outputStylesheet>
+    <h:outputScript>
+        PrimeFaces.widgets['#{cc.attrs.widgetVar}'] = {
+        show: function () {
+        $('#' + '#{cc.clientId}:labelPanel'.replace(/:/g, "\\:")).show();
+        },
+        hide: function () {
+        $('#' + '#{cc.clientId}:labelPanel'.replace(/:/g, "\\:")).hide();
+        }
+        }
+    </h:outputScript>
 
-        </div>
-        <div class="p-col-12 p-md-12 p-lg-5">
-            <p:message for="#{cc.attrs.target}" rendered="#{cc.attrs.messageSupport}"
-                       styleClass="ui-label-message"/>
-        </div>
-    </p:outputPanel>
+    <p:panelGrid id="labelPanel" columns="4" layout="grid" styleClass="customPanelGrid"
+                 contentStyleClass="p-align-baseline ui-fluid"
+                 columnClasses="ui-g-1 ui-md-1 ui-lg-1 ,ui-g-11 ui-md-11 ui-lg-2 ,ui-g-12 ui-md-12 ui-lg-5 ,ui-g-12 ui-md-12 ui-lg-4">
+        <span/>
+        <p:outputLabel for="#{cc.attrs.target}" value="#{cc.attrs.value}" style="line-height: 30px;"/>
+        <composite:insertChildren/>
+        <p:message for="#{cc.attrs.target}" rendered="#{cc.attrs.messageSupport}"
+                   styleClass="ui-label-message"/>
+    </p:panelGrid>
 </composite:implementation>
 
 

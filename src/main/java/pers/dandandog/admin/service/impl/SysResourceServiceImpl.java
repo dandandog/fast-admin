@@ -1,6 +1,6 @@
 package pers.dandandog.admin.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dandandog.framework.core.entity.ITree;
 import com.google.common.collect.Multimap;
@@ -14,6 +14,7 @@ import pers.dandandog.admin.service.AuthResourceService;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Optional;
 
 /**
  * 系统资源表(SysResource)表服务实现类
@@ -26,9 +27,11 @@ public class SysResourceServiceImpl extends ServiceImpl<AuthResourceDao, AuthRes
 
 
     @Override
-    public CheckboxTreeNode getRootTree(boolean isExpand, AuthResource... selected) {
-        TreeDataModel treeDataModel = new TreeDataModel(AuthResource.class);
-        Multimap sources = treeDataModel.getValue(new QueryWrapper<AuthResource>().lambda().orderByAsc(AuthResource::getId, AuthResource::getSeq));
+    public CheckboxTreeNode getRootTree(boolean isExpand, LambdaQueryWrapper<AuthResource> queryWrapper, AuthResource... selected) {
+        TreeDataModel<AuthResource> treeDataModel = new TreeDataModel<>(AuthResource.class);
+        queryWrapper = Optional.ofNullable(queryWrapper).orElse(new LambdaQueryWrapper<>());
+        queryWrapper.orderByAsc(AuthResource::getSeq);
+        Multimap sources = treeDataModel.getValue(queryWrapper);
         CheckboxTreeNode root = new CheckboxTreeNode(null, null);
         setTreeLeaf(root, sources, isExpand, selected);
         return root;
@@ -43,7 +46,7 @@ public class SysResourceServiceImpl extends ServiceImpl<AuthResourceDao, AuthRes
         Collection children = resourceMaps.removeAll(root.getData());
         if (children != null) {
             for (Object resource : children) {
-                TreeNode node = new CheckboxTreeNode("test", resource, root);
+                TreeNode node = new CheckboxTreeNode(((AuthResource)resource).getType().getTitle(), resource, root);
                 setTreeLeaf(node, resourceMaps, isExpand, selected);
             }
         }

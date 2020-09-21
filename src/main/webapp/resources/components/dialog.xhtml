@@ -17,7 +17,7 @@
     <composite:attribute name="resizable" default="true"/>
     <composite:attribute name="modal" default="true"/>
     <composite:attribute name="visible" default="false"/>
-    <composite:attribute name="width" default="auto"/>
+    <composite:attribute name="width" default="650"/>
     <composite:attribute name="height" default="auto"/>
     <composite:attribute name="minWidth" default="450"/>
     <composite:attribute name="minHeight" default="0"/>
@@ -82,7 +82,6 @@
 
 <composite:implementation>
     <h:outputStylesheet>
-
         div[id$="\:entityDialog"] .ui-dialog .ui-dialog-footer {
             border: 1px solid #dedede;
             border-top: 0 none;
@@ -140,8 +139,7 @@
 
         <p:messages id="messages" showDetail="true" showSummary="false"
                     rendered="#{cc.attrs.showMessages}" severity="error"/>
-        <p:outputPanel id="contentPanel" width="100%"
-                       rendered="#{!cc.attrs.saveDisabled}"
+        <p:outputPanel id="contentPanel" rendered="#{!cc.attrs.saveDisabled}"
                        styleClass="ui-fluid  #{cc.attrs.dialogContentStyleClass}">
             <composite:insertChildren/>
         </p:outputPanel>
@@ -151,7 +149,7 @@
             <p:outputPanel rendered="#{cc.attrs.cancelSupported}" layout="inline">
                 <p:commandButton id="cancelButton"
                                  value="#{cc.attrs.cancelButtonText}"
-                                 styleClass="entity-dialog-cancel-btn secondary-button"
+                                 styleClass="entity-dialog-cancel-btn white-button"
                                  immediate="true" process="@this" action="#{cc.attrs.cancelMethod}"
                                  update="#{cc.attrs.cancelUpdate}"
                                  oncomplete="#{cc.attrs.cancelOncomplete}"/>

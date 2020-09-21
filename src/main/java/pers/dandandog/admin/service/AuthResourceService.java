@@ -1,5 +1,6 @@
 package pers.dandandog.admin.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.primefaces.model.CheckboxTreeNode;
 import pers.dandandog.admin.entity.AuthResource;
@@ -12,6 +13,6 @@ import pers.dandandog.admin.entity.AuthResource;
  */
 public interface AuthResourceService extends IService<AuthResource> {
 
-    CheckboxTreeNode getRootTree(boolean isExpand, AuthResource... selected);
+    CheckboxTreeNode getRootTree(boolean isExpand, LambdaQueryWrapper<AuthResource> queryWrapper, AuthResource... selected);
 
 }

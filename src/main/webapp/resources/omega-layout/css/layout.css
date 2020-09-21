@@ -4131,8 +4131,8 @@ h2 {
     text-indent: 0px !important;
     text-align: center;
     font-size: 20px;
-    color: #fff;
-    margin-top: -2px;
+    color: #a80000;
+    margin-top: 1px;
 }
 
 .ui-messages .ui-messages-error-icon:before, .ui-message .ui-message-error-icon:before {
