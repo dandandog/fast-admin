@@ -27,12 +27,12 @@ public class SysResourceServiceImpl extends ServiceImpl<AuthResourceDao, AuthRes
 
 
     @Override
-    public CheckboxTreeNode getRootTree(boolean isExpand, LambdaQueryWrapper<AuthResource> queryWrapper, AuthResource... selected) {
+    public TreeNode getRootTree(boolean isExpand, LambdaQueryWrapper<AuthResource> queryWrapper, AuthResource... selected) {
         TreeDataModel<AuthResource> treeDataModel = new TreeDataModel<>(AuthResource.class);
         queryWrapper = Optional.ofNullable(queryWrapper).orElse(new LambdaQueryWrapper<>());
         queryWrapper.orderByAsc(AuthResource::getSeq);
         Multimap sources = treeDataModel.getValue(queryWrapper);
-        CheckboxTreeNode root = new CheckboxTreeNode(null, null);
+        TreeNode root = new CheckboxTreeNode(null, null);
         setTreeLeaf(root, sources, isExpand, selected);
         return root;
     }
@@ -46,7 +46,7 @@ public class SysResourceServiceImpl extends ServiceImpl<AuthResourceDao, AuthRes
         Collection children = resourceMaps.removeAll(root.getData());
         if (children != null) {
             for (Object resource : children) {
-                TreeNode node = new CheckboxTreeNode(((AuthResource)resource).getType().getTitle(), resource, root);
+                TreeNode node = new CheckboxTreeNode(resource, root);
                 setTreeLeaf(node, resourceMaps, isExpand, selected);
             }
         }

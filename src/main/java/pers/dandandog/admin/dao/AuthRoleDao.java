@@ -13,4 +13,7 @@ import pers.dandandog.admin.entity.AuthRole;
 @Mapper
 public interface AuthRoleDao extends BaseMapper<AuthRole> {
 
+
+
+
 }

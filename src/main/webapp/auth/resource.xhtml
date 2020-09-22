@@ -90,36 +90,22 @@
         <h:form id="dialogForm">
             <framework:dialog id="resource" value="#{viewScope.resource}" saveUpdate="@widgetVar(resourceTreeTable)">
 
+                <framework:label target="title" value="#{msg['resource']['title']}">
+                    <p:inputText id="title" value="#{viewScope.resource.title}"/>
+                </framework:label>
+
                 <framework:label target="parent" value="#{msg['resource']['parent']}">
-                    <p:outputPanel id="parentPanel" class="ui-inputgroup">
-                        <p:inputText id="parent" widgetVar="parent" readonly="true"
-                                     value="#{viewScope.resource.parent.data.title}">
-                        </p:inputText>
-                        <p:commandLink styleClass="ui-inputgroup-addon" process="parent"
-                                       update="parent">
-                            <i class="fa fa-times"/>
-                            <p:resetInput target="parent"/>
-                        </p:commandLink>
-                    </p:outputPanel>
+                    <h:outputText rendered="#{viewScope.resource.id != null}" style="line-height: 30px"
+                                  value="#{viewScope.resource.parent != null ? viewScope.resource.parent.title : msg['resource']['root']}"/>
 
-                    <p:overlayPanel id="treePanel" for="parent" widgetVar="treePanel"
-                                    appendTo="parentPanel" hideEvent="scroll"
-                                    dynamic="true" hideEffect="blind"
-                                    showEffect="blind">
-                        <p:tree id="menuTree" widgetVar="menuTree" value="#{viewScope.rootTree}"
-                                var="node" datakey="#{node.id}" selection="#{viewScope.resource.parent}"
-                                onNodeClick="PF('treePanel').hide()"
-                                style="border: 0px transparent;" selectionMode="single">
-                            <p:ajax event="select" update="@widgetVar(parent)"/>
-                            <p:treeNode type="catalog">
-                                <h:outputText value="#{node.title}"/>
-                            </p:treeNode>
-                            <p:treeNode type="menu">
-                                <h:outputText value="#{node.title}"/>
-                            </p:treeNode>
-                        </p:tree>
-                    </p:overlayPanel>
-
+                    <p:tree id="parent" widgetVar="parent" value="#{viewScope.rootTree}"
+                            rendered="#{viewScope.resource.id == null}"
+                            var="node" datakey="#{node.id}" selection="#{viewScope.resource.parentNode}"
+                            selectionMode="single">
+                        <p:treeNode>
+                            <h:outputText value="#{node.title}"/>
+                        </p:treeNode>
+                    </p:tree>
                 </framework:label>
 
                 <framework:label target="resourceType" value="#{msg['resource']['type']}">
@@ -130,12 +116,11 @@
                                        itemLabel="#{msg['resource'][type.title]}" itemValue="#{type}"/>
                     </p:selectOneRadio>
                 </framework:label>
-                <framework:label target="title" value="#{msg['resource']['title']}">
-                    <p:inputText id="title" value="#{viewScope.resource.title}"/>
-                </framework:label>
+
                 <framework:label widgetVar="path" target="path" value="#{msg['resource']['path']}">
                     <p:inputText id="path" value="#{viewScope.resource.path}"/>
                 </framework:label>
+
                 <framework:label widgetVar="target" target="target"
                                  value="#{msg['resource']['target']}">
                     <p:selectOneMenu id="target" value="#{viewScope.resource.target}" autoWidth="true">
@@ -143,55 +128,26 @@
                                        itemLabel="#{msg['resource'][target.title]}" itemValue="#{target}"/>
                     </p:selectOneMenu>
                 </framework:label>
+
                 <framework:label widgetVar="perms" target="perms"
                                  value="#{msg['resource']['perms']}">
                     <p:inputText id="perms" value="#{viewScope.resource.perms}"/>
                 </framework:label>
+
                 <framework:label widgetVar="seq" target="seq" value="#{msg['resource']['seq']}">
                     <p:inputText id="seq" value="#{viewScope.resource.seq}"/>
                 </framework:label>
-                <framework:label widgetVar="iconPlane" target="iconPlane" value="#{msg['resource']['icon']}">
-                    <p:fragment>
-                        <p:outputPanel id="iconPlane" styleClass="ui-inputgroup">
-                            <p:inputText id="iconInput" widgetVar="iconInput"
-                                         readonly="true" value="#{viewScope.resource.icon}"
-                                         onclick="panelWidth()"/>
-                            <p:commandLink class="ui-inputgroup-addon" update="iconPlane">
-                                <i class="fa fa-times"/>
-                                <p:resetInput target="iconInput" resetValues="true"/>
-                            </p:commandLink>
-                        </p:outputPanel>
-                        <p:overlayPanel widgetVar="icon_panel" id="icon_panel"
-                                        target="iconInput" hideEffect="fade">
-                            <p:outputPanel layout="block" style="width:300px">
-                                <p:inputText onkeyup="onFilter(event)"
-                                             placeholder="Search an icon"
-                                             style="width:100%; margin: 16px 0px 26px;"/>
-                                <div class="p-grid icons-gird"
-                                     style=" max-height: 300px;">
-                                    <ui:repeat value="#{viewScope.icons}" var="icon">
-                                        <div class="p-col-6 p-md-6 p-lg-4 icon-container"
-                                             onclick="PF('icon_panel').hide()" data-name="#{icon.name}"
-                                             data-key="#{icon.key}">
-                                            <p:commandLink>
-                                                <i class="pi pi-#{icon.name}"></i>
-                                                <div>#{icon.name}</div>
-                                                <f:setPropertyActionListener value="#{icon.name}"
-                                                                             target="#{viewScope.resource.icon}"/>
-                                            </p:commandLink>
-                                        </div>
-                                    </ui:repeat>
-                                </div>
-                            </p:outputPanel>
-                        </p:overlayPanel>
-                    </p:fragment>
+
+                <framework:label widgetVar="icon" target="icon" value="#{msg['resource']['icon']}">
+                    <p:inputText id="icon" widgetVar="icon"
+                                 value="#{viewScope.resource.icon}"/>
                 </framework:label>
+
                 <framework:label widgetVar="display" target="display"
                                  value="#{msg['resource']['display']}">
                     <p:selectBooleanButton id="display" value="#{viewScope.resource.display}"
                                            onLabel="#{msg['framework']['yes']}" offLabel="#{msg['framework']['no']}"
                                            onIcon="pi pi-check" offIcon="pi pi-times" style="width:60px">
-
                     </p:selectBooleanButton>
                 </framework:label>
 

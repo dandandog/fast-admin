@@ -8,7 +8,7 @@
         <result property="code" column="code" jdbcType="VARCHAR"/>
         <result property="level" column="level" jdbcType="INTEGER"/>
         <result property="dataScope" column="data_scope" jdbcType="INTEGER"/>
-        <result property="desc" column="desc" jdbcType="VARCHAR"/>
+        <result property="remark" column="desc" jdbcType="VARCHAR"/>
         <result property="del" column="del" jdbcType="BOOLEAN"/>
         <result property="creator" column="creator" jdbcType="VARCHAR"/>
         <result property="operator" column="operator" jdbcType="VARCHAR"/>

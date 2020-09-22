@@ -40,6 +40,7 @@ public class AuthResourceController extends FacesController {
 
     @Override
     public void onEntry() {
+        putViewScope("resource", null);
         putViewScope("isExpand", true);
         putViewScope("types", ResourceType.values());
         putViewScope("targets", ResourceTarget.values());
@@ -52,7 +53,7 @@ public class AuthResourceController extends FacesController {
     public void add() {
         ResourceVo vo = new ResourceVo();
         putViewScope("resource", vo);
-        putViewScope("rootTree", resourceService.getRootTree(true,
+        putViewScope("rootTree", resourceService.getRootTree(false,
                 new LambdaQueryWrapper<AuthResource>().ne(AuthResource::getType, ResourceType.BUTTON)));
     }
 
@@ -62,6 +63,8 @@ public class AuthResourceController extends FacesController {
         target = Optional.ofNullable(target).orElseThrow(() -> new MessageResolvableException("error", "dataNotFound"));
         ResourceVo vo = MapperRepo.mapTo(target, ResourceVo.class);
         putViewScope("resource", vo);
+        putViewScope("rootTree", resourceService.getRootTree(false,
+                new LambdaQueryWrapper<AuthResource>().ne(AuthResource::getType, ResourceType.BUTTON), vo.getParent()));
     }
 
     @MessageRequired(type = MessageType.SAVE)
