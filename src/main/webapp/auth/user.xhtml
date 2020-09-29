@@ -8,64 +8,109 @@
                 template="/WEB-INF/template.xhtml"
                 xmlns:framework="http://java.sun.com/jsf/composite/components">
     <ui:define name="title">User Page</ui:define>
+
+    <ui:define name="breadCrum">
+        <p:menuitem value="#{msg['authority']['title']}" url="#"/>
+        <p:menuitem value="#{msg['authority']['user']}" outcome="/auth/user"/>
+    </ui:define>
+
     <ui:define name="content">
-        <h:form id="user_form">
+        <h1><h:outputText value="#{msg['framework']['list']}"/></h1>
+        <h:form id="user_form" prependId="false">
             <framework:dataTable id="userTable" widgetVar="userTable" lazy="true"
+                                 filteredValue="#{viewScope.filterUsers}"
                                  value="#{controller.dataModel}" formDialogId="userDialog"
-                                 singleSelection="#{viewScope.user}" resizableColumns="true"
-                                 multipleSelection="#{viewScope.selectedUsers}">
+                                 singleSelection="#{viewScope.sigSelected}" resizableColumns="true"
+                                 multipleSelection="#{viewScope.mulSelected}">
 
-                <p:column headerText="#{msg['user']['avatar']}">
-                    <p:graphicImage name="avatar/#{element.avatar}" library="assets"/>
+                <p:column headerText="#{msg['user']['avatarUrl']}">
+                    <p:graphicImage name="avatar/#{element.avatarUrl}" library="assets"/>
                 </p:column>
-
-                <p:column headerText="#{msg['user']['username']}">
+                <p:column headerText="#{msg['user']['username']}"
+                          filterBy="#{element.username}" filterMatchMode="contains">
                     <h:outputText value="#{element.username}"/>
                 </p:column>
-                <p:column headerText="#{msg['user']['mobile']}">
-                    <h:outputText value="#{element.mobile}"/>
+                <p:column headerText="#{msg['user']['phone']}"
+                          filterBy="#{element.phone}" filterMatchMode="contains">
+                    <h:outputText value="#{element.phone}"/>
                 </p:column>
-                <p:column headerText="#{msg['user']['email']}">
+                <p:column headerText="#{msg['user']['email']}"
+                          filterBy="#{element.email}" filterMatchMode="contains">
                     <h:outputText value="#{element.email}"/>
                 </p:column>
-                <p:column headerText="#{msg['user']['status']}">
-                    <h:outputText value="#{element.status}"/>
+                <p:column headerText="#{msg['user']['state']}"
+                          filterBy="#{element.state}" filterMatchMode="equals">
+                    <f:facet name="filter">
+                        <p:selectOneMenu onchange="PF('userTable').filter()" converter="#{userStateConverter}">
+                            <f:selectItem itemLabel="#{msg['framework']['all']}" itemValue="#{null}"
+                                          noSelectionOption="true"/>
+                            <f:selectItems value="#{viewScope.states}" var="state"
+                                           itemLabel="#{msg['user'][state.title]}" itemValue="#{state}"/>
+                        </p:selectOneMenu>
+                    </f:facet>
+                    <h:outputText value="#{msg['user'][element.state.title]}"/>
+                </p:column>
+                <p:column headerText="#{msg['user']['gender']}"
+                          filterBy="#{element.gender}" filterMatchMode="equals">
+                    <f:facet name="filter">
+                        <p:selectOneMenu onchange="PF('userTable').filter()" converter="#{userGenderConverter}">
+                            <f:selectItem itemLabel="#{msg['framework']['all']}" itemValue="#{null}"
+                                          noSelectionOption="true"/>
+                            <f:selectItems value="#{viewScope.genders}" var="gender"
+                                           itemLabel="#{msg['user'][gender.title]}" itemValue="#{gender}"/>
+                        </p:selectOneMenu>
+                    </f:facet>
+                    <h:outputText value="#{msg['user'][element.gender.title]}"/>
                 </p:column>
             </framework:dataTable>
         </h:form>
     </ui:define>
+
     <ui:define name="dialog">
         <h:form id="dialogform">
             <framework:dialog id="userDialog" value="#{viewScope.user}" saveUpdate="@widgetVar(userTable)">
-                <framework:label for="username" value="#{msg['user']['usermane']}">
-                    <p:inputText id="username" required="true" value="#{viewScope.user.username}"/>
-                </framework:label>
-                <framework:label for="nickname" value="#{msg['user']['nickname']}">
+
+                <framework:label target="nickname" value="#{msg['user']['nickname']}">
                     <p:inputText id="nickname" value="#{viewScope.user.nickname}"/>
                 </framework:label>
-                <framework:label for="password1" value="#{msg['user']['password']}">
-                    <p:password id="password1" required="true" match="@widgetVar(password2)" value="#{viewScope.user.password}"/>
+
+                <framework:label target="username" value="#{msg['user']['username']}">
+                    <p:inputText id="username" required="true" value="#{viewScope.user.username}" autocomplete="false"/>
                 </framework:label>
-                <framework:label for="password2" value="#{msg['user']['password']}">
-                    <p:password id="password2" widgetVar="password2" required="true" value="#{viewScope.user.password}"/>
+                <p:fieldset rendered="#{!not viewScope.user.id}">
+                    <framework:label target="password1" value="#{msg['user']['password1']}">
+                        <p:password id="password1" match="@widgetVar(password2)" feedback="true" autocomplete="false"
+                                    promptLabel="#{msg['user']['prompt']}" weakLabel="#{msg['user']['weak']}"
+                                    goodLabel="#{msg['user']['good']}" strongLabel="#{msg['user']['strong']}"
+                                    value="#{viewScope.user.password}"/>
+                    </framework:label>
+
+                    <framework:label target="password2" value="#{msg['user']['password2']}">
+                        <p:password id="password2" widgetVar="password2" autocomplete="false"
+                                    value="#{viewScope.user.password}"/>
+                    </framework:label>
+                </p:fieldset>
+                <framework:label target="gender" value="#{msg['user']['gender']}">
+                    <p:selectOneMenu id="gender" value="#{viewScope.user.gender}">
+                        <f:selectItems value="#{viewScope.genders}" var="gender"
+                                       itemLabel="#{msg['user'][gender.title]}" itemValue="#{gender}"/>
+                    </p:selectOneMenu>
                 </framework:label>
 
-                <framework:label for="mobile" value="#{msg['user']['mobile']}">
-                    <p:inputNumber id="mobile" value="#{viewScope.user.mobile}"/>
+                <framework:label target="mobile" value="#{msg['user']['phone']}">
+                    <p:inputNumber id="mobile" value="#{viewScope.user.phone}" decimalPlaces="0"/>
                 </framework:label>
 
-                <framework:label for="email" value="#{msg['user']['email']}">
+                <framework:label target="email" value="#{msg['user']['email']}">
                     <p:inputText id="email" value="#{viewScope.user.email}"/>
                 </framework:label>
 
-                <framework:label for="userRole" value="#{msg['menu']['role']}">
-                    <p:selectCheckboxMenu id="userRole" value="#{viewScope.selectedRoles}" label="Roles" multiple="true"
-                                          filter="true" filterMatchMode="startsWith">
-                        <f:selectItems value="#{viewScope.roles}" var="role" itemLabel="#{role.name}" itemValue="#{role}"/>
-                    </p:selectCheckboxMenu>
+                <framework:label target="role" value="#{msg['user']['role']}" full="true">
+                    <p:pickList id="role" value="#{viewScope.user.roleModel}" var="role" itemLabel="#{role.name}"
+                                itemValue="#{role}" responsive="true" converter="#{authRoleConverter}"/>
                 </framework:label>
 
-                <framework:label for="remark" value="#{msg['framework']['remark']}">
+                <framework:label target="remark" value="#{msg['user']['remark']}" full="true">
                     <p:inputTextarea id="remark" value="#{viewScope.user.remark}" autoResize="false"/>
                 </framework:label>
 

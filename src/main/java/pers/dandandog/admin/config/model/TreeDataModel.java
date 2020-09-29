@@ -4,7 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.dandandog.framework.core.entity.ITree;
+import com.dandandog.framework.common.model.ITree;
 import com.dandandog.framework.core.utils.MybatisUtil;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;

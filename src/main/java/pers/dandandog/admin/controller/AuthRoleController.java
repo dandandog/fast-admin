@@ -5,7 +5,6 @@ import com.dandandog.framework.faces.annotation.MessageType;
 import com.dandandog.framework.faces.controller.FacesController;
 import com.dandandog.framework.faces.exception.MessageResolvableException;
 import com.dandandog.framework.mapstruct.MapperRepo;
-import org.primefaces.model.TreeNode;
 import org.springframework.stereotype.Controller;
 import pers.dandandog.admin.entity.AuthResource;
 import pers.dandandog.admin.entity.AuthRole;
@@ -14,7 +13,7 @@ import pers.dandandog.admin.service.AuthResourceService;
 import pers.dandandog.admin.service.AuthRoleService;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -36,8 +35,7 @@ public class AuthRoleController extends FacesController {
         putViewScope("roles", roleService.list());
         putViewScope("role", null);
         putViewScope("sinSelected", null);
-        putViewScope("mulSelected", new AuthRole[0]);
-        putViewScope("resourceSelected", new TreeNode[0]);
+        putViewScope("mulSelected", new ArrayList<AuthRole>());
         putViewScope("rootTree", resourceService.getRootTree(true, null));
     }
 
@@ -72,8 +70,8 @@ public class AuthRoleController extends FacesController {
 
     @MessageRequired(type = MessageType.DELETE)
     public void deleteBatch() {
-        AuthRole[] selected = getViewScope("mulSelected");
-        List<String> deleteIds = Arrays.stream(selected).map(AuthRole::getId).collect(Collectors.toList());
+        List<AuthRole> selected = getViewScope("mulSelected");
+        List<String> deleteIds = selected.stream().map(AuthRole::getId).collect(Collectors.toList());
         roleService.removeByIds(deleteIds);
         onEntry();
     }

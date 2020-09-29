@@ -1,8 +1,8 @@
 package pers.dandandog.admin.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.dandandog.framework.common.model.ITree;
 import com.dandandog.framework.core.entity.AuditableEntity;
-import com.dandandog.framework.core.entity.ITree;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import pers.dandandog.admin.entity.enums.ResourceTarget;

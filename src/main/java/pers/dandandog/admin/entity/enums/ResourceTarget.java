@@ -16,7 +16,7 @@ public enum ResourceTarget implements IBaseEnum<Integer> {
     /**
      * 新窗口
      */
-    NEW_WINDOW(1, "newWindow");
+    NEW_WINDOW(2, "newWindow");
 
     private final int value;
 

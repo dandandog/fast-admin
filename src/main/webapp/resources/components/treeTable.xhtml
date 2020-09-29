@@ -22,6 +22,9 @@
     <composite:attribute name="tableStyle"/>
     <composite:attribute name="tableStyleClass"/>
     <composite:attribute name="emptyMessage" default="#{msg['framework']['noRecords']}"/>
+    <composite:attribute name="filterDelay" default="300"/>
+    <composite:attribute name="filterEvent" default="enter"/>
+    <composite:attribute name="filteredNode"/>
     <composite:attribute name="resizableColumns" default="false"/>
     <composite:attribute name="rowStyleClass"/>
     <composite:attribute name="liveResize" default="false"/>
@@ -111,7 +114,6 @@
         .ui-my-toolbar {
             border: #ffffff !important;
             background: #ffffff !important;
-            padding: .571em .6em .571em .6em !important;
         }
     </h:outputStylesheet>
     <script>
@@ -149,7 +151,7 @@
 
         <f:facet name="right">
             <div class="ui-inputgroup">
-                <p:inputText id="globalFilter" style="width:150px" placeholder="Enter keyword"/>
+                <p:inputText id="globalFilter" style="width:150px" placeholder="#{msg['framework']['enterKeyword']}"/>
                 <p:commandButton id="searchBtn" type="button" icon="fa fa-search"
                                  onclick="PF('#{cc.attrs.widgetVar}').filter()"/>
                 <p:commandButton id="refreshBtn" widgetVar="refreshBtn" icon="fa fa-refresh"
@@ -179,6 +181,9 @@
                  tableStyle="#{cc.attrs.tableStyle}"
                  tableStyleClass="#{cc.attrs.tableStyleClass}"
                  emptyMessage="#{cc.attrs.emptyMessage}"
+                 filterDelay="#{cc.attrs.filterDelay}"
+                 filterEvent="#{cc.attrs.filterEvent}"
+                 filteredNode="#{cc.attrs.filteredNode}"
                  resizableColumns="#{cc.attrs.resizableColumns}"
                  rowStyleClass="#{cc.attrs.rowStyleClass}"
                  liveResize="#{cc.attrs.liveResize}"
@@ -212,6 +217,13 @@
         <c:set target="#{component}" property="var" value="#{cc.attrs.var}"/>
 
         <composite:insertChildren/>
+
+        <p:column priority="4" headerText="#{msg['framework']['createdTime']}" style="text-align: center"
+                  width="150">
+            <h:outputText value="#{element.createdTime}">
+                <f:convertDateTime type="localDateTime" pattern="#{msg['format']['localDateTime']}"/>
+            </h:outputText>
+        </p:column>
 
         <p:column headerText="#{msg['framework']['operation']}" style="text-align: center"
                   rendered="#{cc.attrs.rowOperationSupport}" toggleable="false">

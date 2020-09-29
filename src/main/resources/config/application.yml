@@ -5,18 +5,18 @@ server:
 joinfaces:
   jsf:
     project-stage: Production
-    facelets-refresh-period: -1
+    #facelets-refresh-period: -1
     state-saving-method: server
     facelets-suffix: .faces
-    facelets-skip-comments: true
+    #facelets-skip-comments: true
     enable-validate-whole-bean: true
     interpret-empty-string-submitted-values-as-null: true
   primefaces:
     theme: omega #nova-light
     font-awesome: true
-    transform-metadata: true
-    client-side-validation: true
-    move-scripts-to-bottom: true
+    #transform-metadata: true
+    #client-side-validation: true
+    #move-scripts-to-bottom: true
     uploader: auto
     submit: partial
 spring:

@@ -1,20 +1,23 @@
 package pers.dandandog.admin.config.model;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.core.util.TypeUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.dandandog.framework.core.entity.BaseEntity;
 import com.dandandog.framework.core.utils.MybatisUtil;
+import lombok.Getter;
 import org.primefaces.model.FilterMeta;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
-import java.lang.reflect.ParameterizedType;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author JohnnyLiu
@@ -22,33 +25,50 @@ import java.util.Map;
 public class PageDataModel<T extends BaseEntity> extends LazyDataModel<T> {
     private static final long serialVersionUID = 2957926997919683676L;
 
+    @Getter
+    private BaseMapper<T> baseMapper;
 
-    public Map<String, Object> filters;
-
-    public PageDataModel setFilters(Map filters) {
-        this.filters = filters;
-        return this;
-    }
-
-
-    public BaseMapper<T> getBaseMapper() {
-        Class clazz = getMClass();
+    private PageDataModel(Class<T> clazz) {
         try {
-            return MybatisUtil.getMapper(clazz);
+            this.baseMapper = MybatisUtil.getMapper(clazz);
         } catch (Exception ignored) {
         }
-        return null;
+    }
+
+    private static class InnerDataModel {
+        private final static Map<Class<?>, PageDataModel<?>> dataModelMap = new ConcurrentHashMap<>();
+
+        private static PageDataModel<?> get(Class<?> instanceClass) {
+            return dataModelMap.get(instanceClass);
+        }
+
+        private static void put(Class<?> instanceClass, PageDataModel<?> dataModel) {
+            dataModelMap.put(instanceClass, dataModel);
+        }
+
+        private static boolean containsKey(Class<?> instanceClass) {
+            return dataModelMap.containsKey(instanceClass);
+        }
+
+    }
+
+    public synchronized static <T extends BaseEntity> PageDataModel<T> getInstance(Class<T> instanceClass) {
+        if (!InnerDataModel.containsKey(instanceClass)) {
+            InnerDataModel.put(instanceClass, new PageDataModel<>(instanceClass));
+        }
+        return (PageDataModel<T>) InnerDataModel.get(instanceClass);
     }
 
     @Override
     public T getRowData(String rowKey) {
-        return getBaseMapper().selectById(Long.valueOf(rowKey));
+        return getBaseMapper().selectById(rowKey);
     }
 
     @Override
     public List<T> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, FilterMeta> filters) {
+
         IPage<T> page = getBaseMapper().selectPage(new Page<>(getPage(first, pageSize), pageSize),
-                new QueryWrapper<T>().orderBy(StrUtil.isNotBlank(sortField),
+                createQuery(filters.values()).orderBy(StrUtil.isNotBlank(sortField),
                         SortOrder.ASCENDING.equals(sortOrder), sortField));
         this.setRowCount((int) page.getTotal());
         return page.getRecords();
@@ -64,9 +84,75 @@ public class PageDataModel<T extends BaseEntity> extends LazyDataModel<T> {
         return pageNum + 1;
     }
 
-    private Class<?> getMClass() {
-        ParameterizedType type = (ParameterizedType) this.getClass().getGenericSuperclass();
-        return TypeUtil.getClass(type);
+    private QueryWrapper<T> createQuery(Collection<FilterMeta> filters) {
+        QueryWrapper<T> queryWrapper = new QueryWrapper<>();
+        if (CollUtil.isEmpty(filters)) {
+            return queryWrapper;
+        }
+        filters.forEach(filterMeta -> {
+            switch (filterMeta.getFilterMatchMode()) {
+                //("startsWith"),
+                case STARTS_WITH:
+                    queryWrapper.likeLeft(ObjectUtil.isNotNull(filterMeta.getFilterValue()),
+                            filterMeta.getFilterField(), filterMeta.getFilterValue());
+                    break;
+                //("endsWith"),
+                case ENDS_WITH:
+                    queryWrapper.likeRight(ObjectUtil.isNotNull(filterMeta.getFilterValue()),
+                            filterMeta.getFilterField(), filterMeta.getFilterValue());
+                    break;
+                //("contains"),
+                case CONTAINS:
+                    queryWrapper.like(ObjectUtil.isNotNull(filterMeta.getFilterValue()),
+                            filterMeta.getFilterField(), filterMeta.getFilterValue());
+                    break;
+                //("exact"),
+                case EXACT:
+                    queryWrapper.eq(ObjectUtil.isNotNull(filterMeta.getFilterValue()),
+                            filterMeta.getFilterField(), filterMeta.getFilterValue());
+                    break;
+                //("lt"),
+                case LESS_THAN:
+                    queryWrapper.lt(ObjectUtil.isNotNull(filterMeta.getFilterValue()),
+                            filterMeta.getFilterField(), filterMeta.getFilterValue());
+                    break;
+                //("lte"),
+                case LESS_THAN_EQUALS:
+                    queryWrapper.le(ObjectUtil.isNotNull(filterMeta.getFilterValue()),
+                            filterMeta.getFilterField(), filterMeta.getFilterValue());
+                    break;
+                //("gt"),
+                case GREATER_THAN:
+                    queryWrapper.gt(ObjectUtil.isNotNull(filterMeta.getFilterValue()),
+                            filterMeta.getFilterField(), filterMeta.getFilterValue());
+                    break;
+                //("gte"),
+                case GREATER_THAN_EQUALS:
+                    queryWrapper.ge(ObjectUtil.isNotNull(filterMeta.getFilterValue()),
+                            filterMeta.getFilterField(), filterMeta.getFilterValue());
+                    break;
+                //("equals"),
+                case EQUALS:
+
+                    queryWrapper.eq(ObjectUtil.isNotNull(filterMeta.getFilterValue()),
+                            filterMeta.getFilterField(), filterMeta.getFilterValue());
+                    break;
+                //("in"),
+                case IN:
+                    queryWrapper.in(ObjectUtil.isNotNull(filterMeta.getFilterValue()),
+                            filterMeta.getFilterField(), filterMeta.getFilterValue());
+                    break;
+                //("global");
+                case GLOBAL:
+                    //TODO
+                    break;
+                default:
+                    break;
+            }
+        });
+
+        return queryWrapper;
     }
+
 
 }

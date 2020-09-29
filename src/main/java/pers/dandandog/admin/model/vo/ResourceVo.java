@@ -21,7 +21,7 @@ public class ResourceVo {
     @NotBlank
     private String title;
 
-    private TreeNode parentNode;
+    private String parentId;
 
     private String path;
 
@@ -44,7 +44,9 @@ public class ResourceVo {
     @Max(999)
     private Integer level = 0;
 
+    private TreeNode parentNode;
+
     public AuthResource getParent() {
-        return (AuthResource) Optional.ofNullable(parentNode).orElse(new CheckboxTreeNode()).getData();
+        return (AuthResource) Optional.ofNullable(parentNode).orElse(new CheckboxTreeNode(new AuthResource())).getData();
     }
 }

@@ -1,7 +1,7 @@
 package pers.dandandog.admin.config.security;
 
 import com.dandandog.framework.common.components.security.IAuthenticationFacade;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -20,6 +20,6 @@ public class AuthenticationFacade implements IAuthenticationFacade {
 
     @Override
     public boolean isLogin() {
-        return !(getAuthentication() instanceof AnonymousAuthenticationToken);
+        return getAuthentication() instanceof UsernamePasswordAuthenticationToken;
     }
 }

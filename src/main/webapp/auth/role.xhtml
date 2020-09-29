@@ -8,37 +8,41 @@
                 xmlns:framework="http://java.sun.com/jsf/composite/components">
     <ui:define name="head">
         <style type="text/css">
-            li.menu-list > ul:last-child {
+            ul.ui-treenode-children {
                 display: flex;
-                width: 100%;
                 flex-wrap: wrap;
             }
         </style>
     </ui:define>
+    <ui:define name="title">Role Page</ui:define>
     <ui:define name="breadCrum">
         <p:menuitem value="#{msg['authority']['title']}" url="#"/>
         <p:menuitem value="#{msg['authority']['role']}" outcome="/auth/role"/>
     </ui:define>
     <ui:define name="content">
+        <h1><h:outputText value="#{msg['framework']['list']}"/></h1>
         <h:form id="contentform" prependId="false">
-            <framework:dataTable id="roleTable" widgetVar="roleTable"
+            <framework:dataTable id="roleTable" widgetVar="roleTable" filteredValue="#{viewScope.filterRoles}"
                                  value="#{viewScope.roles}" formDialogId="roleDialog"
                                  singleSelection="#{viewScope.sinSelected}" resizableColumns="true"
                                  multipleSelection="#{viewScope.mulSelected}">
-                <p:column headerText="#{msg['role']['name']}">
+                <p:column headerText="#{msg['role']['name']}"
+                          filterBy="#{element.name}" filterMatchMode="contains">
                     <h:outputText value="#{element.name}"/>
                 </p:column>
-                <p:column headerText="#{msg['role']['code']}">
+
+                <p:column headerText="#{msg['role']['code']}"
+                          filterBy="#{element.code}" filterMatchMode="contains">
                     <h:outputText value="#{element.code}"/>
                 </p:column>
-                <p:column headerText="#{msg['role']['dataScope']}">
+
+                <p:column headerText="#{msg['role']['dataScope']}"
+                          filterBy="#{element.dataScope}" filterMatchMode="exact">
                     <h:outputText value="#{element.dataScope}"/>
                 </p:column>
+
                 <p:column headerText="#{msg['role']['level']}">
                     <h:outputText value="#{element.level}"/>
-                </p:column>
-                <p:column headerText="#{msg['framework']['createdTime']}">
-                    <h:outputText value="#{element.createdTime}"/>
                 </p:column>
             </framework:dataTable>
         </h:form>
@@ -65,12 +69,9 @@
                     <p:inputText id="level" value="#{viewScope.role.level}"/>
                 </framework:label>
 
-                <framework:label target="remark" value="#{msg['role']['remark']}">
-                    <p:inputTextarea id="remark" value="#{viewScope.role.remark}" autoResize="false"/>
-                </framework:label>
                 <framework:label target="perms" value="#{msg['role']['perms']}" full="true">
                     <p:tree id="perms" widgetVar="perms" value="#{viewScope.rootTree}"
-                            propagateSelectionUp="false"
+                            propagateSelectionUp="false" highlight="20"
                             selectionMode="checkbox"
                             var="node" datakey="#{node.id}" selection="#{viewScope.role.resourceNodes}">
                         <p:treeNode>
@@ -78,6 +79,11 @@
                         </p:treeNode>
                     </p:tree>
                 </framework:label>
+
+                <framework:label target="remark" value="#{msg['role']['remark']}" full="true">
+                    <p:inputTextarea id="remark" value="#{viewScope.role.remark}" autoResize="false"/>
+                </framework:label>
+
             </framework:dialog>
         </h:form>
     </ui:define>

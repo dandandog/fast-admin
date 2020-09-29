@@ -2594,7 +2594,7 @@ html {
 #login-wrapper #login-container {
     margin-top: 20px;
     box-sizing: border-box;
-    height: 300px;
+    height: auto;
     background-color: #ffffff;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
     padding: 2em;
@@ -2655,7 +2655,7 @@ html {
     }
 
     #login-wrapper #login-container {
-        height: 350px;
+        height: auto;
     }
 }
 
@@ -4140,7 +4140,6 @@ h2 {
 }
 
 .ui-message .ui-message-error-icon {
-    margin-top: -1px;
     font-size: 18px;
 }
 
@@ -4358,7 +4357,7 @@ h2 {
 }
 
 .ui-breadcrumb .ui-icon {
-    margin-top: 4px;
+    margin-top: 6px;
 }
 
 .ui-breadcrumb .ui-icon.ui-icon-home {

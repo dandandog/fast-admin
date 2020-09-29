@@ -3,29 +3,26 @@ package pers.dandandog.admin.entity.enums;
 import com.dandandog.framework.core.entity.enums.IBaseEnum;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/**
- * @author JohnnyLiu
- */
+public enum UserGender implements IBaseEnum<Integer> {
 
-public enum ResourceType implements IBaseEnum<Integer> {
     /**
-     * 目录
+     * 未知
      */
-    CATALOG(0, "catalog"),
+    UNKNOWN(0, "unknown"),
     /**
-     * 菜单
+     * 男性
      */
-    MENU(1, "menu"),
+    MALE(1, "male"),
     /**
-     * 按钮
+     * 女性
      */
-    BUTTON(2, "button");
+    FEMALE(2, "female");
 
     private final int value;
 
     private final String title;
 
-    ResourceType(int value, String title) {
+    UserGender(int value, String title) {
         this.value = value;
         this.title = title;
     }

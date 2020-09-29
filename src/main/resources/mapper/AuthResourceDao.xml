@@ -12,7 +12,7 @@
         <result property="icon" column="icon" jdbcType="VARCHAR"/>
         <result property="seq" column="seq" jdbcType="INTEGER"/>
         <result property="display" column="display" jdbcType="BOOLEAN"/>
-        <result property="frame" column="frame" jdbcType="BOOLEAN"/>
+        <result property="target" column="frame" jdbcType="INTEGER"/>
         <result property="level" column="level" jdbcType="INTEGER"/>
         <result property="del" column="del" jdbcType="BOOLEAN"/>
         <result property="creator" column="creator" jdbcType="VARCHAR"/>

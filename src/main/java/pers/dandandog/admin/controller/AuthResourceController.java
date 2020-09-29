@@ -8,7 +8,6 @@ import com.dandandog.framework.faces.annotation.MessageType;
 import com.dandandog.framework.faces.controller.FacesController;
 import com.dandandog.framework.faces.exception.MessageResolvableException;
 import com.dandandog.framework.mapstruct.MapperRepo;
-import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.TreeNode;
 import org.springframework.stereotype.Controller;
 import pers.dandandog.admin.entity.AuthResource;
@@ -18,7 +17,7 @@ import pers.dandandog.admin.model.vo.ResourceVo;
 import pers.dandandog.admin.service.AuthResourceService;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -45,7 +44,7 @@ public class AuthResourceController extends FacesController {
         putViewScope("types", ResourceType.values());
         putViewScope("targets", ResourceTarget.values());
         putViewScope("sinSelected", null);
-        putViewScope("mulSelected", new TreeNode[0]);
+        putViewScope("mulSelected", new ArrayList<TreeNode>());
         putViewScope("parent", null);
         putViewScope("resources", resourceService.getRootTree(true, null));
     }
@@ -84,20 +83,12 @@ public class AuthResourceController extends FacesController {
 
     @MessageRequired(type = MessageType.DELETE)
     public void deleteBatch() {
-        TreeNode[] mulSelected = getViewScope("mulSelected");
-        List<String> delIds = Arrays.stream(mulSelected)
+        List<TreeNode> mulSelected = getViewScope("mulSelected");
+        List<String> delIds = mulSelected.stream()
                 .map(TreeNode::getData)
                 .map(o -> ((BaseEntity) o).getId())
                 .collect(Collectors.toList());
         resourceService.removeByIds(delIds);
         onEntry();
-    }
-
-    public void onSelectParent(NodeSelectEvent event) {
-        AuthResource resource = getViewScope("resource");
-        String parentId = ((AuthResource) event.getTreeNode().getData()).getId();
-        AuthResource parent = resourceService.getById(parentId);
-        resource.setParentId(parentId);
-        putViewScope("parent", parent);
     }
 }

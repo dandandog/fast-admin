@@ -13,6 +13,6 @@ import org.springframework.stereotype.Service;
  * @since 2020-09-06 22:06:06
  */
 @Service("sysUserRoleService")
-public class SysUserRoleServiceImpl extends ServiceImpl<AuthUserRoleDao, AuthUserRole> implements AuthUserRoleService {
+public class AuthUserRoleServiceImpl extends ServiceImpl<AuthUserRoleDao, AuthUserRole> implements AuthUserRoleService {
 
 }

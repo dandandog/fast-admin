@@ -3,29 +3,26 @@ package pers.dandandog.admin.entity.enums;
 import com.dandandog.framework.core.entity.enums.IBaseEnum;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/**
- * @author JohnnyLiu
- */
+public enum UserState implements IBaseEnum<Integer> {
 
-public enum ResourceType implements IBaseEnum<Integer> {
     /**
-     * 目录
+     * 正常
      */
-    CATALOG(0, "catalog"),
+    NORMAL(0, "normal"),
     /**
-     * 菜单
+     * 冻结
      */
-    MENU(1, "menu"),
+    FREEZE(1, "freeze"),
     /**
-     * 按钮
+     * 未激活
      */
-    BUTTON(2, "button");
+    INACTIVATED(2, "inactivated");
 
     private final int value;
 
     private final String title;
 
-    ResourceType(int value, String title) {
+    UserState(int value, String title) {
         this.value = value;
         this.title = title;
     }
@@ -40,4 +37,5 @@ public enum ResourceType implements IBaseEnum<Integer> {
     public String getTitle() {
         return this.title;
     }
+
 }

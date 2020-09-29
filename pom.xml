@@ -29,6 +29,10 @@
             <groupId>com.dandandog.fastcode</groupId>
             <artifactId>framework-mapstruct</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.dandandog.fastcode</groupId>
+            <artifactId>framework-captcha</artifactId>
+        </dependency>
     </dependencies>
     <profiles>
         <profile>

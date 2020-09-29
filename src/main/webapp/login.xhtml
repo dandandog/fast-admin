@@ -3,7 +3,7 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui" xmlns:c="http://java.sun.com/jsf/core">
 
 <h:head>
     <f:facet name="first">
@@ -12,38 +12,75 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
         <meta name="apple-mobile-web-app-capable" content="yes"/>
     </f:facet>
-    <title>PrimeFaces Omega</title>
+    <title>#{msg['project']['name']}</title>
 </h:head>
 
 <h:body styleClass="login-body">
     <h:form id="login" prependId="false">
         <div id="login-wrapper">
             <p:graphicImage name="images/login-logo.png" library="omega-layout"/>
-
             <div id="login-container">
-                <span class="title">Omega</span>
-                <p:outputLabel value="Login failed!" styleClass="red"
-                               rendered="#{!empty param['error']}"/>
-                <div class="ui-g ui-fluid">
+                <span class="title">#{msg['project']['name']}</span>
+                <p:outputPanel class="ui-g ui-fluid">
+                    <div class="ui-g-12">
+                        <p:messages id="errorMsg" severity="error" summary="ERROR!"
+                                    rendered="#{!empty param['error']}" style="margin: 0px; text-align: left"/>
+                    </div>
+                </p:outputPanel>
+                <p:outputPanel rendered="#{viewScope.isForgot}" class="ui-g ui-fluid">
+                    <div class="ui-g-12">
+                        <p:inputText id="email" placeholder="Email"/>
+                    </div>
+                    <div class="ui-g-6">
+                        <p:commandLink update="login"
+                                       value="#{msg['framework']['returnToLogin']}">
+                            <i class="fa fa-long-arrow-left"></i>
+                            <c:setPropertyActionListener value="#{false}" target="#{viewScope.isForgot}"/>
+                        </p:commandLink>
+                    </div>
+                    <div class="ui-g-12">
+                        <p:commandButton action="#{controller.sendEmail}" update="errorMsg"
+                                         value="#{msg['framework']['send']}" icon="fa fa-send"/>
+                    </div>
+
+                </p:outputPanel>
+
+                <p:outputPanel rendered="#{!viewScope.isForgot}" class="ui-g ui-fluid">
                     <div class="ui-g-12">
                         <p:inputText id="username" placeholder="Username"/>
                     </div>
                     <div class="ui-g-12">
                         <p:password id="password" placeholder="Password" feedback="false"/>
                     </div>
+
                     <div class="ui-g-12 ui-md-6">
-                        <span class="remember-me">Remember Me</span>
+                        <p:inputText id="captcha" placeholder="Captcha"/>
+                    </div>
+                    <div class="ui-g-12 ui-md-6">
+                        <p:graphicImage id="captchaImg" value="#{viewScope.captcha}" stream="false"
+                                        style="margin-right: 10px;"/>
+                        <p:commandLink style="vertical-align: super;" update="captchaImg"
+                                       action="#{controller.loadCaptcha}">
+                            <i class="fa fa-refresh"/>
+                        </p:commandLink>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-6">
+                        <span class="remember-me">#{msg['framework']['rememberMe']}</span>
                         <p:selectBooleanCheckbox id="rememberMe"/>
                     </div>
                     <div class="ui-g-12 ui-md-6">
-                        <p:link>Forgot Password</p:link>
+                        <p:commandLink update="login"
+                                       value="#{msg['framework']['forgotPassword']}">
+                            <c:setPropertyActionListener value="#{true}" target="#{viewScope.isForgot}"/>
+                        </p:commandLink>
                     </div>
                     <div class="ui-g-12">
-                        <p:commandButton ajax="false" value="Login" icon="fa fa-check"/>
+                        <p:commandButton action="#{controller.onLogin}" ajax="false" update="errorMsg"
+                                         value="#{msg['framework']['login']}" icon="fa fa-check"/>
                     </div>
-                </div>
+                </p:outputPanel>
             </div>
-
             <div class="login-footer">PrimeFaces Omega</div>
         </div>
     </h:form>

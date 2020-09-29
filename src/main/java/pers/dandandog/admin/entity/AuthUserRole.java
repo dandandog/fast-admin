@@ -2,6 +2,7 @@ package pers.dandandog.admin.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.dandandog.framework.core.entity.BaseEntity;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -15,8 +16,10 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @TableName("auth_user_role")
+@AllArgsConstructor
 public class AuthUserRole extends BaseEntity {
     private static final long serialVersionUID = -47129877502580903L;
+
 
     /**
      * 用户uuid
@@ -26,6 +29,10 @@ public class AuthUserRole extends BaseEntity {
      * 角色uuid
      */
     private String roleId;
+    /**
+     * 角色唯一标识
+     */
+    private String roleCode;
 
 
 }

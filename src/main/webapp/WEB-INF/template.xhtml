@@ -28,7 +28,13 @@
                 <ui:insert name="breadCrum"/>
             </p:breadCrumb>
             <div class="content">
-                <ui:insert name="content"/>
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card">
+                            <ui:insert name="content"/>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <ui:include src="footer.xhtml"/>
@@ -78,6 +84,22 @@
             text-align: right;
         }
 
+        .ui-outputlabel-rfi {
+            color: red;
+        }
+
+        .ui-label-message {
+            background-color: transparent !important;
+            border: 0px solid transparent !important;
+            color: #a80000 !important;
+            padding: 0px !important;
+        }
+
+        .customPanelGrid .ui-panelgrid-content {
+            align-items: center;
+            border: 0px;
+            margin-bottom: 10px;
+        }
     </h:outputStylesheet>
 </h:body>
 

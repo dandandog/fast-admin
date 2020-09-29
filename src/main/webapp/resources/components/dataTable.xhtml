@@ -106,7 +106,7 @@
 
 
     <composite:attribute name="singleSelection"/>
-    <composite:attribute name="multipleSelection"/>
+    <composite:attribute name="multipleSelection" type="java.util.List"/>
 
 
     <!--  add操作按钮-->
@@ -177,8 +177,13 @@
         .ui-state-highlight a {
             color: #ffffff !important;
         }
+
+        .ui-my-toolbar {
+            border: #ffffff !important;
+            background: #ffffff !important;
+        }
     </h:outputStylesheet>
-    <p:toolbar id="entityToolbar">
+    <p:toolbar id="entityToolbar" styleClass="ui-my-toolbar">
         <f:facet name="left">
             <p:commandButton id="addBtn" widgetVar="#{cc.attrs.widgetVar}_addBtn" icon="fa fa-plus"
                              value="#{msg['framework']['add']}" process="@this"
@@ -195,15 +200,18 @@
         </f:facet>
 
         <f:facet name="right">
-            <p:commandButton id="searchBtn" type="button" icon="fa fa-search"/>
+            <div class="ui-inputgroup">
+                <p:inputText id="globalFilter" style="width:150px" placeholder="#{msg['framework']['enterKeyword']}"/>
+                <p:commandButton id="searchBtn" type="button" icon="fa fa-search"/>
 
-            <p:commandButton id="refreshBtn" widgetVar="refreshBtn" icon="fa fa-refresh"
-                             rendered="#{cc.attrs.refreshRendered}"
-                             action="#{cc.attrs.refreshMethod}"
-                             update="#{cc.attrs.refreshUpdate}"
-                             oncomplete="PF('#{cc.attrs.widgetVar}').clearFilters()"/>
-            <p:commandButton id="toggler" type="button" icon="fa fa-align-justify"/>
-            <p:columnToggler datasource="entityDataTable" trigger="toggler"/>
+                <p:commandButton id="refreshBtn" widgetVar="refreshBtn" icon="fa fa-refresh"
+                                 rendered="#{cc.attrs.refreshRendered}"
+                                 action="#{cc.attrs.refreshMethod}"
+                                 update="#{cc.attrs.refreshUpdate}"
+                                 oncomplete="PF('#{cc.attrs.widgetVar}').clearFilters()"/>
+                <p:commandButton id="toggler" type="button" icon="fa fa-align-justify"/>
+                <p:columnToggler datasource="entityDataTable" trigger="toggler"/>
+            </div>
         </f:facet>
     </p:toolbar>
     <p:sticky target="entityToolbar" margin="70"/>
@@ -305,17 +313,21 @@
 
         <composite:insertChildren/>
 
-        <p:column headerText="#{msg['framework']['operation']}"
+        <p:column priority="4" headerText="#{msg['framework']['createdTime']}" style="text-align: center"
+                  width="150">
+            <h:outputText value="#{element.createdTime}">
+                <f:convertDateTime type="localDateTime" pattern="#{msg['format']['localDateTime']}"/>
+            </h:outputText>
+        </p:column>
+
+        <p:column headerText="#{msg['framework']['operation']}" style="text-align: center" toggleable="false"
                   rendered="#{cc.attrs.rowOperationSupport}">
             <p:commandLink id="editLine" process="@this" value="#{msg['framework']['edit']}"
                            rendered="#{cc.attrs.editRowRendered}" action="#{cc.attrs.editRowMethod}"
                            update="#{cc.attrs.editRowUpdate}" oncomplete="#{cc.attrs.editRowOncomplete}">
                 <f:setPropertyActionListener value="#{element}" target="#{cc.attrs.singleSelection}"/>
             </p:commandLink>
-            <p:outputPanel layout="inline" styleClass="ui-separator" style="text-align: center;display:inline-block;"
-                           rendered="#{cc.attrs.deleteRowRendered}">
-                <span class="ui-icon fa fa-ellipsis-v"/>
-            </p:outputPanel>
+            |
             <p:commandLink id="deleteRowLine" value="#{msg['framework']['delete']}"
                            rendered="#{cc.attrs.deleteRowRendered}" action="#{cc.attrs.deleteRowMethod}"
                            update="#{cc.attrs.deleteRowUpdate}" oncomplete="#{cc.attrs.deleteRowOncomplete}">
@@ -337,14 +349,14 @@
 
 
     <p:confirmDialog id="#{cc.attrs.widgetVar}_select_tips" widgetVar="#{cc.attrs.widgetVar}_select_tips"
-                     header="#{msg['framework']['message']}" severity="fa fa-exclamation-triangle"
+                     header="#{msg['framework']['message']}" severity=" fa fa-question-circle"
                      showEffect="fade" hideEffect="fade" width="300" message="#{msg['framework']['selectRecordFirst']}">
         <p:commandButton value="#{msg['framework']['confirm']}" type="button"
                          onclick="PF('#{cc.attrs.widgetVar}_select_tips').hide()"
                          styleClass="ui-confirmdialog-no" icon="fa fa-check"/>
     </p:confirmDialog>
     <p:confirmDialog id="#{cc.attrs.widgetVar}_delete_tip" widgetVar="#{cc.attrs.widgetVar}_delete_tips"
-                     rendered="#{cc.attrs.deleteRendered}" severity="fa fa-question-circle"
+                     rendered="#{cc.attrs.deleteRendered}" severity=" fa fa-question-circle"
                      header="#{msg['framework']['message']}" message="#{msg['framework']['confirmDeletion']}"
                      showEffect="fade" hideEffect="fade" width="300">
         <p:commandButton value="#{msg['framework']['cancel']}" type="button"

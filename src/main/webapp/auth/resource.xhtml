@@ -43,48 +43,51 @@
         </script>
     </ui:define>
     <ui:define name="content">
-        <div class="ui-g">
-            <div class="ui-g-12">
-                <div class="card">
-                    <h1>Empty Page</h1>
-                    <h:form id="contentForm">
-                        <framework:treeTable id="resourceTreeTable" widgetVar="resourceTreeTable"
-                                             value="#{viewScope.resources}" formDialogId="resource"
-                                             singleSelection="#{viewScope.sinSelected}" resizableColumns="true"
-                                             multipleSelection="#{viewScope.mulSelected}">
-                            <p:column headerText="#{msg['resource']['title']}" width="200">
-                                <p:outputPanel layout="inline" style="vertical-align: middle;">
-                                    <i class="#{element.icon}"/>
-                                    <h:outputText value="#{element.title}"/>
-                                </p:outputPanel>
-                            </p:column>
-                            <p:column priority="4" headerText="#{msg['resource']['seq']}">
-                                <h:outputText value="#{element.seq}"/>
-                            </p:column>
-                            <p:column priority="2" headerText="#{msg['resource']['path']}">
-                                <h:outputText value="#{element.path}"/>
-                            </p:column>
-                            <p:column priority="2" headerText="#{msg['resource']['type']}"
-                                      style="text-align: center" width="60">
-                                <h:outputText value="#{msg['resource'][element.type.title]}"/>
-                            </p:column>
-                            <p:column priority="3" headerText="#{msg['resource']['display']}"
-                                      style="text-align: center" width="60">
-                                <p:selectBooleanButton value="#{element.display}"
-                                                       onLabel="#{msg['framework']['yes']}"
-                                                       offLabel="#{msg['framework']['no']}"
-                                                       onIcon="pi pi-check" offIcon="pi pi-times" style="width:60px">
-                                    <p:ajax listener="#{controller.onChangeStatus(element)}"/>
-                                </p:selectBooleanButton>
-                            </p:column>
-                            <p:column priority="4" headerText="#{msg['resource']['perms']}">
-                                <h:outputText value="#{element.perms}"/>
-                            </p:column>
-                        </framework:treeTable>
-                    </h:form>
-                </div>
-            </div>
-        </div>
+        <h1><h:outputText value="#{msg['framework']['list']}"/></h1>
+        <h:form id="contentForm" prependId="false">
+            <framework:treeTable id="resourceTreeTable" widgetVar="resourceTreeTable"
+                                 value="#{viewScope.resources}" formDialogId="resource"
+                                 filteredNode="#{viewScope.filterResources}"
+                                 singleSelection="#{viewScope.sinSelected}" resizableColumns="true"
+                                 multipleSelection="#{viewScope.mulSelected}">
+
+                <p:column headerText="#{msg['resource']['title']}" width="200"
+                          filterBy="#{element.title}" filterMatchMode="contains">
+                    <p:outputPanel layout="inline" style="vertical-align: middle;">
+                        <i class="#{element.icon}"/>
+                        <h:outputText value="#{element.title}"/>
+                    </p:outputPanel>
+                </p:column>
+
+                <p:column priority="2" headerText="#{msg['resource']['path']}"
+                          filterBy="#{element.path}" filterMatchMode="contains">
+                    <h:outputText value="#{element.path}"/>
+                </p:column>
+
+                <p:column priority="4" headerText="#{msg['resource']['perms']}"
+                          filterBy="#{element.path}" filterMatchMode="contains">
+                    <h:outputText value="#{element.perms}"/>
+                </p:column>
+
+                <p:column priority="2" headerText="#{msg['resource']['type']}"
+                          style="text-align: center" width="80">
+                    <h:outputText value="#{msg['resource'][element.type.title]}"/>
+                </p:column>
+
+                <p:column priority="3" headerText="#{msg['resource']['display']}" style="text-align: center" width="60">
+                    <p:selectBooleanButton value="#{element.display}"
+                                           onLabel="#{msg['framework']['yes']}"
+                                           offLabel="#{msg['framework']['no']}"
+                                           onIcon="pi pi-check" offIcon="pi pi-times" style="width:60px">
+                        <p:ajax listener="#{controller.onChangeStatus(element)}"/>
+                    </p:selectBooleanButton>
+                </p:column>
+
+                <p:column priority="4" headerText="#{msg['resource']['seq']}" style="text-align: center" width="60">
+                    <h:outputText value="#{element.seq}"/>
+                </p:column>
+            </framework:treeTable>
+        </h:form>
     </ui:define>
     <ui:define name="dialog">
         <h:form id="dialogForm">
