@@ -1,6 +1,7 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
@@ -70,7 +71,10 @@
                 </framework:label>
 
                 <framework:label target="perms" value="#{msg['role']['perms']}" full="true">
-                    <p:tree id="perms" widgetVar="perms" value="#{viewScope.rootTree}"
+                    <h:outputText rendered="#{fn:length(fviewScope.rootTree.children) == 0}"
+                                  value="#{msg['framework']['noRecords']}" style="line-height: 30px;"/>
+                    <p:tree id="perms" rendered="#{fn:length(fviewScope.rootTree.children) != 0}" widgetVar="perms"
+                            value="#{viewScope.rootTree}"
                             propagateSelectionUp="false" highlight="20"
                             selectionMode="checkbox"
                             var="node" datakey="#{node.id}" selection="#{viewScope.role.resourceNodes}">

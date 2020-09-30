@@ -44,6 +44,8 @@ spring:
         test-on-borrow: false
         test-on-return: false
 
+
+
 mybatis-plus:
   type-aliases-package: pers.dandandog.**.entity
   typeEnumsPackage: pers.dandandog.**.entity.enums

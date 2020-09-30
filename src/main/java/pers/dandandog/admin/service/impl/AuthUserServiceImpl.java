@@ -61,6 +61,11 @@ public class AuthUserServiceImpl extends ServiceImpl<AuthUserDao, AuthUser> impl
     }
 
     @Override
+    public AuthUser findByEmail(String email) {
+        return getOne(new LambdaQueryWrapper<AuthUser>().eq(AuthUser::getEmail, email));
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         AuthUser user = getOne(new LambdaQueryWrapper<AuthUser>().eq(AuthUser::getUsername, username));
         user = Optional.ofNullable(user).orElseThrow(() -> new UsernameNotFoundException("username not found"));

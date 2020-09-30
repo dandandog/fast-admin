@@ -12,6 +12,7 @@
     <composite:attribute name="value" required="true"/>
     <composite:attribute name="target" required="true"/>
     <composite:attribute name="columns" default="1"/>
+    <composite:attribute name="rendered" default="true"/>
     <composite:attribute name="columnClasses" default="ui-g-12 ui-md-12 ui-g-nopad"/>
     <composite:attribute name="margin" default="0"/>
     <composite:attribute name="messageSupport" default="true"/>
@@ -35,7 +36,7 @@
         }
     </h:outputScript>
 
-    <p:panelGrid id="labelPanel" columns="3" layout="grid" styleClass="customPanelGrid"
+    <p:panelGrid rendered="#{cc.attrs.rendered}" id="labelPanel" columns="3" layout="grid" styleClass="customPanelGrid"
                  contentStyleClass="p-align-baseline ui-fluid"
                  columnClasses="ui-g-12 ui-md-12 ui-lg-2 ui-lg-offset-1 ,
                  #{cc.attrs.full ? 'ui-g-12 ui-md-12 ui-lg-9, ui-g-12 ui-md-12 ui-lg-9 ui-lg-offset-3':

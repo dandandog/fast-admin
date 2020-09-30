@@ -41,20 +41,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        //auth.inMemoryAuthentication().withUser("admin").password("{noop}password").roles("ADMIN").;
+        auth.inMemoryAuthentication().withUser("admin").password("{noop}password").roles("ADMIN");
         auth.authenticationProvider(authenticationProvider());
     }
 
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        ForwardAuthenticationFailureHandler facesFailureHandler = new ForwardAuthenticationFailureHandler(page.getLoginFailed());
+        FacesFailureHandler facesFailureHandler = new FacesFailureHandler(page.getLoginFailed());
+        FacesSuccessHandler facesSuccessHandler = new FacesSuccessHandler(page.getIndex());
         CaptchaFilter captchaFilter = new CaptchaFilter();
         captchaFilter.setAuthenticationFailureHandler(facesFailureHandler);
         captchaFilter.setSessionKey(captcha.getKey());
 
         http.addFilterBefore(captchaFilter, UsernamePasswordAuthenticationFilter.class);
         http.formLogin().loginPage(page.getLogin()).permitAll()
+                .successHandler(facesSuccessHandler)
                 .failureHandler(facesFailureHandler)
                 .and().authorizeRequests().anyRequest().authenticated();
         http.logout().logoutSuccessUrl(page.getLogin());

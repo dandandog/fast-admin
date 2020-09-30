@@ -13,9 +13,23 @@
         <meta name="apple-mobile-web-app-capable" content="yes"/>
     </f:facet>
     <title>#{msg['project']['name']}</title>
+    <h:outputScript>
+        $(function () {
+            loadCaptcha();
+        });
+    </h:outputScript>
+    <h:outputStylesheet>
+        .captchaImg {
+            height: 24px;
+            width: 100px;
+            margin-right: 20px;
+        }
+    </h:outputStylesheet>
 </h:head>
 
 <h:body styleClass="login-body">
+    <p:remoteCommand name="loadCaptcha" update="captchaImg" process="@none"
+                     actionListener="#{controller.loadCaptcha}"/>
     <h:form id="login" prependId="false">
         <div id="login-wrapper">
             <p:graphicImage name="images/login-logo.png" library="omega-layout"/>
@@ -32,42 +46,40 @@
                         <p:inputText id="email" placeholder="Email"/>
                     </div>
                     <div class="ui-g-6">
-                        <p:commandLink update="login"
+                        <i class="remember-me fa fa-arrow-left"/>
+                        <p:commandLink update="login" onclick="loadCaptcha()"
                                        value="#{msg['framework']['returnToLogin']}">
-                            <i class="fa fa-long-arrow-left"></i>
                             <c:setPropertyActionListener value="#{false}" target="#{viewScope.isForgot}"/>
                         </p:commandLink>
                     </div>
-                    <div class="ui-g-12">
+                    <div class="ui-g-6">
                         <p:commandButton action="#{controller.sendEmail}" update="errorMsg"
                                          value="#{msg['framework']['send']}" icon="fa fa-send"/>
                     </div>
-
                 </p:outputPanel>
 
                 <p:outputPanel rendered="#{!viewScope.isForgot}" class="ui-g ui-fluid">
                     <div class="ui-g-12">
-                        <p:inputText id="username" placeholder="Username"/>
+                        <p:inputText id="username" placeholder="#{msg['framework']['username']}"/>
                     </div>
                     <div class="ui-g-12">
-                        <p:password id="password" placeholder="Password" feedback="false"/>
+                        <p:password id="password" placeholder="#{msg['framework']['pasword']}" feedback="false"/>
                     </div>
-
                     <div class="ui-g-12 ui-md-6">
-                        <p:inputText id="captcha" placeholder="Captcha"/>
+                        <p:inputText id="captcha" placeholder="#{msg['framework']['captcha']}"/>
                     </div>
                     <div class="ui-g-12 ui-md-6">
                         <p:graphicImage id="captchaImg" value="#{viewScope.captcha}" stream="false"
-                                        style="margin-right: 10px;"/>
-                        <p:commandLink style="vertical-align: super;" update="captchaImg"
-                                       action="#{controller.loadCaptcha}">
+                                        styleClass="captchaImg"/>
+                        <p:commandLink style="vertical-align: super;" onclick="loadCaptcha()">
                             <i class="fa fa-refresh"/>
                         </p:commandLink>
                     </div>
-
                     <div class="ui-g-12 ui-md-6">
-                        <span class="remember-me">#{msg['framework']['rememberMe']}</span>
-                        <p:selectBooleanCheckbox id="rememberMe"/>
+                        <p:selectBooleanCheckbox class="remember-me" id="rememberMe"/>
+                        <p:commandLink update="login" type="button"
+                                       value="#{msg['framework']['rememberMe']}">
+                        </p:commandLink>
                     </div>
                     <div class="ui-g-12 ui-md-6">
                         <p:commandLink update="login"

@@ -1,6 +1,7 @@
 package pers.dandandog.admin.model.mapper;
 
 
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.dandandog.framework.core.utils.MybatisUtil;
@@ -32,6 +33,6 @@ public interface RoleVoMapper extends StandardMapper<AuthRole, RoleVo> {
         BaseMapper<AuthResource> resourceMapper = MybatisUtil.getMapper(AuthResource.class);
         List<String> ids = roleResourceMapper.selectList(new LambdaQueryWrapper<AuthRoleResource>().eq(AuthRoleResource::getRoleId, roleId)).stream()
                 .map(AuthRoleResource::getResId).collect(Collectors.toList());
-        return resourceMapper.selectBatchIds(ids).stream().map(CheckboxTreeNode::new).toArray(TreeNode[]::new);
+        return CollUtil.isNotEmpty(ids) ? resourceMapper.selectBatchIds(ids).stream().map(CheckboxTreeNode::new).toArray(TreeNode[]::new) : new TreeNode[0];
     }
 }

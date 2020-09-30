@@ -2,6 +2,8 @@ package pers.dandandog.admin.config.security;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+import org.springframework.security.web.util.UrlUtils;
+import org.springframework.util.Assert;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -10,16 +12,17 @@ import java.io.IOException;
 
 public class FacesFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
+    private final String forwardUrl;
 
-    public FacesFailureHandler(String defaultFailureUrl) {
-        this.setDefaultFailureUrl(defaultFailureUrl);
-        this.setUseForward(true);
+    public FacesFailureHandler(String forwardUrl) {
+        Assert.isTrue(UrlUtils.isValidRedirectUrl(forwardUrl), () -> {
+            return "'" + forwardUrl + "' is not a valid forward URL";
+        });
+        this.forwardUrl = forwardUrl;
     }
 
-
-    @Override
-    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {
-        System.out.println("Failure");
-        super.onAuthenticationFailure(request, response, e);
+    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
+        request.setAttribute("SPRING_SECURITY_LAST_EXCEPTION", exception);
+        request.getRequestDispatcher(this.forwardUrl).forward(request, response);
     }
 }

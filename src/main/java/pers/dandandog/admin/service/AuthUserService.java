@@ -22,4 +22,7 @@ public interface AuthUserService extends IService<AuthUser>, UserDetailsService 
     void save(AuthUser user, List<AuthRole> roles);
 
 
+    AuthUser findByEmail(String email);
+
+
 }

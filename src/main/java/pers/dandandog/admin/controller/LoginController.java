@@ -5,6 +5,8 @@ import com.dandandog.framework.captcha.CaptchaFactory;
 import com.dandandog.framework.captcha.exception.VerifyCaptchaException;
 import com.dandandog.framework.captcha.model.ImageCaptcha;
 import com.dandandog.framework.common.utils.SecurityUtil;
+import com.dandandog.framework.faces.annotation.MessageRequired;
+import com.dandandog.framework.faces.annotation.MessageType;
 import com.dandandog.framework.faces.controller.FacesController;
 import lombok.extern.slf4j.Slf4j;
 import org.primefaces.model.DefaultStreamedContent;
@@ -12,6 +14,8 @@ import org.primefaces.model.StreamedContent;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
+import pers.dandandog.admin.entity.AuthUser;
+import pers.dandandog.admin.service.AuthUserService;
 
 import javax.annotation.Resource;
 import java.io.ByteArrayInputStream;
@@ -26,9 +30,11 @@ public class LoginController extends FacesController {
     @Resource
     private CaptchaFactory captchaFactory;
 
+    @Resource
+    private AuthUserService userService;
+
     @Override
     public void onEntry() {
-        loadCaptcha();
         if (SecurityUtil.isLogin()) {
             redirectInternal("/index");
         }
@@ -48,12 +54,11 @@ public class LoginController extends FacesController {
         }
     }
 
+    @MessageRequired(type = MessageType.OPERATION)
     public void sendEmail() {
-        putViewScope("isRegister", true);
-    }
+        String email = getViewScope("email");
+        AuthUser user = userService.findByEmail(email);
 
-    public void forgotPassword() {
-        putViewScope("isForgot", true);
     }
 
     public void loadCaptcha() {
