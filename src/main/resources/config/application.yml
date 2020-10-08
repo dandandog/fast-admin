@@ -11,6 +11,7 @@ joinfaces:
     #facelets-skip-comments: true
     enable-validate-whole-bean: true
     interpret-empty-string-submitted-values-as-null: true
+
   primefaces:
     theme: omega #nova-light
     font-awesome: true
@@ -19,6 +20,7 @@ joinfaces:
     #move-scripts-to-bottom: true
     uploader: auto
     submit: partial
+
 spring:
   messages:
     basename: framework-messages, admin-messages

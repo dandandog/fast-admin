@@ -12,16 +12,16 @@ import java.io.IOException;
 
 public class FacesSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    private final String forwardUrl;
+    private final String redirectUrl;
 
-    public FacesSuccessHandler(String forwardUrl) {
-        Assert.isTrue(UrlUtils.isValidRedirectUrl(forwardUrl), () -> {
-            return "'" + forwardUrl + "' is not a valid forward URL";
+    public FacesSuccessHandler(String redirectUrl) {
+        Assert.isTrue(UrlUtils.isValidRedirectUrl(redirectUrl), () -> {
+            return "'" + redirectUrl + "' is not a valid redirectUrl URL";
         });
-        this.forwardUrl = forwardUrl;
+        this.redirectUrl = redirectUrl;
     }
 
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        response.sendRedirect(request.getServletContext().getContextPath() + forwardUrl);
+        response.sendRedirect(request.getServletContext().getContextPath() + redirectUrl);
     }
 }

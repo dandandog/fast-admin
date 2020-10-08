@@ -13,11 +13,7 @@
         <meta name="apple-mobile-web-app-capable" content="yes"/>
     </f:facet>
     <title>#{msg['project']['name']}</title>
-    <h:outputScript>
-        $(function () {
-            loadCaptcha();
-        });
-    </h:outputScript>
+
     <h:outputStylesheet>
         .captchaImg {
             height: 24px;
@@ -28,8 +24,7 @@
 </h:head>
 
 <h:body styleClass="login-body">
-    <p:remoteCommand name="loadCaptcha" update="captchaImg"
-                     actionListener="#{controller.loadCaptcha}"/>
+
     <h:form id="login" prependId="false">
         <div id="login-wrapper">
             <p:graphicImage name="images/login-logo.png" library="omega-layout"/>
@@ -69,9 +64,9 @@
                         <p:inputText id="captcha" placeholder="#{msg['framework']['captcha']}"/>
                     </div>
                     <div class="ui-g-12 ui-md-6">
-                        <p:graphicImage id="captchaImg" value="#{viewScope.captcha}" stream="false"
-                                        styleClass="captchaImg"/>
-                        <p:commandLink style="vertical-align: super;" onclick="loadCaptcha()">
+                        <p:graphicImage id="captchaImg" value="/captcha/image.jpg" styleClass="captchaImg"/>
+                        <p:commandLink style="vertical-align: super;" process="@none"
+                                       onclick="document.getElementById('captchaImg').src = '/captcha/image.jpg?' + Math.random();  return false">
                             <i class="fa fa-refresh"/>
                         </p:commandLink>
                     </div>

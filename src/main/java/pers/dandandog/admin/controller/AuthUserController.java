@@ -44,7 +44,7 @@ public class AuthUserController extends FacesController {
         putViewScope("states", UserState.values());
     }
 
-    public LazyDataModel<AuthUser> getDataModel() throws Exception {
+    public LazyDataModel<AuthUser> getDataModel() {
         return PageDataModel.getInstance(AuthUser.class);
     }
 
@@ -78,10 +78,9 @@ public class AuthUserController extends FacesController {
 
     @MessageRequired(type = MessageType.DELETE)
     public void deleteBatch() {
-        List<AuthRole> selected = getViewScope("mulSelected");
-        List<String> deleteIds = selected.stream().map(AuthRole::getId).collect(Collectors.toList());
-        roleService.removeByIds(deleteIds);
-        onEntry();
+        List<AuthUser> selected = getViewScope("mulSelected");
+        List<String> deleteIds = selected.stream().map(AuthUser::getId).collect(Collectors.toList());
+        userService.removeByIds(deleteIds);
     }
 
     private void findUserRole(UserVo vo) {

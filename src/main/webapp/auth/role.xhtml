@@ -71,9 +71,9 @@
                 </framework:label>
 
                 <framework:label target="perms" value="#{msg['role']['perms']}" full="true">
-                    <h:outputText rendered="#{fn:length(fviewScope.rootTree.children) == 0}"
+                    <h:outputText rendered="#{fn:length(viewScope.rootTree.children) == 0}"
                                   value="#{msg['framework']['noRecords']}" style="line-height: 30px;"/>
-                    <p:tree id="perms" rendered="#{fn:length(fviewScope.rootTree.children) != 0}" widgetVar="perms"
+                    <p:tree id="perms" rendered="#{fn:length(viewScope.rootTree.children) != 0}" widgetVar="perms"
                             value="#{viewScope.rootTree}"
                             propagateSelectionUp="false" highlight="20"
                             selectionMode="checkbox"

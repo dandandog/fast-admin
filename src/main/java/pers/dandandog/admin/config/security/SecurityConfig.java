@@ -1,9 +1,10 @@
 package pers.dandandog.admin.config.security;
 
+import com.dandandog.framework.captcha.CaptchaServlet;
 import com.dandandog.framework.captcha.config.properties.CaptchaProperties;
-import com.dandandog.framework.captcha.filter.CaptchaFilter;
 import com.dandandog.framework.faces.config.properties.PageProperties;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -15,8 +16,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.ForwardAuthenticationFailureHandler;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.annotation.Resource;
 
@@ -50,11 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         FacesFailureHandler facesFailureHandler = new FacesFailureHandler(page.getLoginFailed());
         FacesSuccessHandler facesSuccessHandler = new FacesSuccessHandler(page.getIndex());
-        CaptchaFilter captchaFilter = new CaptchaFilter();
-        captchaFilter.setAuthenticationFailureHandler(facesFailureHandler);
-        captchaFilter.setSessionKey(captcha.getKey());
-
-        http.addFilterBefore(captchaFilter, UsernamePasswordAuthenticationFilter.class);
+        //http.addFilterBefore(new CaptchaAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         http.formLogin().loginPage(page.getLogin()).permitAll()
                 .successHandler(facesSuccessHandler)
                 .failureHandler(facesFailureHandler)
@@ -81,6 +76,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         provider.setUserDetailsService(authUserService);
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
+    }
+
+    @Bean
+    public ServletRegistrationBean<CaptchaServlet> getServletRegistrationBean() {  //一定要返回ServletRegistrationBean
+        ServletRegistrationBean<CaptchaServlet> bean = new ServletRegistrationBean<>(new CaptchaServlet());     //放入自己的Servlet对象实例
+        bean.addUrlMappings("/captcha/image.jpg");  //访问路径值
+        return bean;
     }
 
 }
