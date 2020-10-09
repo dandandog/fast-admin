@@ -1,4 +1,9 @@
 spring:
+  redis:
+    database: 10
+    host: 127.0.0.1
+    port: 6379
+    password:
   datasource:
     dynamic:
       datasource:

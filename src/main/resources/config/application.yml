@@ -30,6 +30,14 @@ spring:
     name: fast-admin
   profiles:
     active: @profileActive@
+  redis:
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 8
+        min-idle: 0
+    timeout: 1200
   datasource:
     dynamic:
       druid:
@@ -53,6 +61,7 @@ mybatis-plus:
   typeEnumsPackage: pers.dandandog.**.entity.enums
   configuration:
     default-enum-type-handler: org.apache.ibatis.type.EnumOrdinalTypeHandler
+    cache-enabled: true
 fast-code:
   map-struct:
     url-domain: https://www.myelephant.cn

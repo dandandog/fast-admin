@@ -1,7 +1,9 @@
 package pers.dandandog.admin.config.security;
 
 import com.dandandog.framework.captcha.CaptchaServlet;
-import com.dandandog.framework.captcha.config.properties.CaptchaProperties;
+import com.dandandog.framework.captcha.CaptchaServletFactory;
+import com.dandandog.framework.captcha.filter.CaptchaAuthenticationFilter;
+import com.dandandog.framework.captcha.model.ImageCaptcha;
 import com.dandandog.framework.faces.config.properties.PageProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -16,6 +18,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.annotation.Resource;
 
@@ -25,31 +28,31 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final PageProperties page;
 
-    private final CaptchaProperties captcha;
-
     @Resource
     private UserDetailsService authUserService;
 
-
     @Autowired
-    public SecurityConfig(PageProperties page, CaptchaProperties captcha) {
+    public SecurityConfig(PageProperties page) {
         this.page = page;
-        this.captcha = captcha;
     }
-
 
     @Autowired
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("admin").password("{noop}password").roles("ADMIN");
+        //auth.inMemoryAuthentication().withUser("admin").password("{noop}password").roles("ADMIN");
         auth.authenticationProvider(authenticationProvider());
     }
-
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         FacesFailureHandler facesFailureHandler = new FacesFailureHandler(page.getLoginFailed());
         FacesSuccessHandler facesSuccessHandler = new FacesSuccessHandler(page.getIndex());
-        //http.addFilterBefore(new CaptchaAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+
+        http.addFilterBefore(new CaptchaAuthenticationFilter((request, response, e) -> {
+            try {
+                facesFailureHandler.onAuthenticationFailure(request, response, new CaptchaErrorException(e.getMessage()));
+            } catch (Exception ignored) {
+            }
+        }), UsernamePasswordAuthenticationFilter.class);
         http.formLogin().loginPage(page.getLogin()).permitAll()
                 .successHandler(facesSuccessHandler)
                 .failureHandler(facesFailureHandler)
@@ -59,10 +62,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/javax.faces.resource/**");
+    public void configure(WebSecurity web) {
+        web.ignoring().antMatchers("/javax.faces.resource/**", "/captcha/**");
     }
-
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -79,9 +81,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public ServletRegistrationBean<CaptchaServlet> getServletRegistrationBean() {  //一定要返回ServletRegistrationBean
-        ServletRegistrationBean<CaptchaServlet> bean = new ServletRegistrationBean<>(new CaptchaServlet());     //放入自己的Servlet对象实例
-        bean.addUrlMappings("/captcha/image.jpg");  //访问路径值
+    public ServletRegistrationBean<CaptchaServlet> getServletRegistrationBean(CaptchaServletFactory servletFactory) {
+        CaptchaServlet captchaServlet = servletFactory.generate(ImageCaptcha.class);
+        ServletRegistrationBean<CaptchaServlet> bean = new ServletRegistrationBean<>(captchaServlet);
+        bean.addUrlMappings("/captcha/image.jpg");
         return bean;
     }
 

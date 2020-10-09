@@ -31,7 +31,7 @@
             <div id="login-container">
                 <span class="title">#{msg['project']['name']}</span>
                 <p:outputPanel class="ui-g ui-fluid">
-                    <div class="ui-g-12">
+                    <div class="ui-g-12 ui-g-nopad">
                         <p:messages id="errorMsg" severity="error" summary="ERROR!"
                                     rendered="#{!empty param['error']}" style="margin: 0px; text-align: left"/>
                     </div>
@@ -42,8 +42,7 @@
                     </div>
                     <div class="ui-g-6">
                         <i class="remember-me fa fa-arrow-left"/>
-                        <p:commandLink update="login" onclick="loadCaptcha()"
-                                       value="#{msg['framework']['returnToLogin']}">
+                        <p:commandLink update="login" value="#{msg['framework']['returnToLogin']}">
                             <c:setPropertyActionListener value="#{false}" target="#{viewScope.isForgot}"/>
                         </p:commandLink>
                     </div>
@@ -66,7 +65,7 @@
                     <div class="ui-g-12 ui-md-6">
                         <p:graphicImage id="captchaImg" value="/captcha/image.jpg" styleClass="captchaImg"/>
                         <p:commandLink style="vertical-align: super;" process="@none"
-                                       onclick="document.getElementById('captchaImg').src = '/captcha/image.jpg?' + Math.random();  return false">
+                                       onclick="document.getElementById('captchaImg').src = '/admin/captcha/image.jpg?' + Math.random();  return false">
                             <i class="fa fa-refresh"/>
                         </p:commandLink>
                     </div>

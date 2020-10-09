@@ -73,7 +73,7 @@ public class AuthUserServiceImpl extends ServiceImpl<AuthUserDao, AuthUser> impl
         List<SimpleGrantedAuthority> roles = userRoles.stream().map(authUserRole -> new SimpleGrantedAuthority("ROLE_" + authUserRole.getRoleCode())).collect(Collectors.toList());
 
         return new User(user.getUsername(), user.getPassword(), !user.getDel(),
-                user.getExpiredTime().isBefore(LocalDateTime.now()),
+                user.getExpiredTime().isAfter(LocalDateTime.now()),
                 !UserState.INACTIVATED.equals(user.getState()),
                 !UserState.FREEZE.equals(user.getState()), roles);
     }
