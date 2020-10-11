@@ -13,7 +13,6 @@ import pers.dandandog.admin.entity.AuthRole;
  * @since 2020-09-06 22:06:06
  */
 @Mapper
-@CacheNamespace(implementation = MybatisRedisCache.class, eviction = MybatisRedisCache.class)
 public interface AuthRoleDao extends BaseMapper<AuthRole> {
 
 

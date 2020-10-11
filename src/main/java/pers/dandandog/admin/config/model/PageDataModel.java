@@ -56,7 +56,7 @@ public class PageDataModel<T extends BaseEntity> extends LazyDataModel<T> {
         if (!InnerDataModel.containsKey(instanceClass)) {
             InnerDataModel.put(instanceClass, new PageDataModel<>(instanceClass));
         }
-        return (PageDataModel<T>) InnerDataModel.get(instanceClass);
+        return (PageDataModel) InnerDataModel.get(instanceClass);
     }
 
     @Override
