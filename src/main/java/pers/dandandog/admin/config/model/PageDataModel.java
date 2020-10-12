@@ -3,10 +3,13 @@ package pers.dandandog.admin.config.model;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.spring.SpringUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.dandandog.framework.common.utils.SpringContextUtil;
 import com.dandandog.framework.core.entity.BaseEntity;
 import com.dandandog.framework.core.utils.MybatisUtil;
 import lombok.Getter;
@@ -28,9 +31,13 @@ public class PageDataModel<T extends BaseEntity> extends LazyDataModel<T> {
     @Getter
     private BaseMapper<T> baseMapper;
 
+    @Getter
+    private ServiceImpl<? extends T, T> service;
+
     private PageDataModel(Class<T> clazz) {
         try {
             this.baseMapper = MybatisUtil.getMapper(clazz);
+            this.service = MybatisUtil.getService(clazz);
         } catch (Exception ignored) {
         }
     }
