@@ -24,7 +24,7 @@ import java.util.Optional;
  * @since 2020-09-06 22:06:06
  */
 @Service
-public class AuthResourceServiceImpl extends ServiceImpl<AuthResourceDao, AuthResource> implements AuthResourceService {
+public class AuthResourceServiceImpl extends BaseServiceImpl<AuthResourceDao, AuthResource> implements AuthResourceService {
 
 
     @Override

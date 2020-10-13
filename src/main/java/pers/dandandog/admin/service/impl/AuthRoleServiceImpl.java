@@ -3,7 +3,7 @@ package pers.dandandog.admin.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.dandandog.framework.core.cache.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pers.dandandog.admin.dao.AuthRoleDao;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
  * @since 2020-09-06 22:06:06
  */
 @Service("sysRoleService")
-public class AuthRoleServiceImpl extends ServiceImpl<AuthRoleDao, AuthRole> implements AuthRoleService {
+public class AuthRoleServiceImpl extends BaseServiceImpl<AuthRoleDao, AuthRole> implements AuthRoleService {
 
     @Resource
     private AuthRoleResourceService roleResourceService;

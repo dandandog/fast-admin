@@ -3,13 +3,10 @@ package pers.dandandog.admin.config.model;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.extra.spring.SpringUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.dandandog.framework.common.utils.SpringContextUtil;
 import com.dandandog.framework.core.entity.BaseEntity;
 import com.dandandog.framework.core.utils.MybatisUtil;
 import lombok.Getter;
@@ -29,15 +26,11 @@ public class PageDataModel<T extends BaseEntity> extends LazyDataModel<T> {
     private static final long serialVersionUID = 2957926997919683676L;
 
     @Getter
-    private BaseMapper<T> baseMapper;
-
-    @Getter
-    private ServiceImpl<? extends T, T> service;
+    private ServiceImpl<? extends T, T> baseService;
 
     private PageDataModel(Class<T> clazz) {
         try {
-            this.baseMapper = MybatisUtil.getMapper(clazz);
-            this.service = MybatisUtil.getService(clazz);
+            this.baseService = MybatisUtil.getService(clazz);
         } catch (Exception ignored) {
         }
     }
@@ -68,13 +61,12 @@ public class PageDataModel<T extends BaseEntity> extends LazyDataModel<T> {
 
     @Override
     public T getRowData(String rowKey) {
-        return getBaseMapper().selectById(rowKey);
+        return getBaseService().getById(rowKey);
     }
 
     @Override
     public List<T> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, FilterMeta> filters) {
-
-        IPage<T> page = getBaseMapper().selectPage(new Page<>(getPage(first, pageSize), pageSize),
+        IPage<T> page = getBaseService().page(new Page<>(getPage(first, pageSize), pageSize),
                 createQuery(filters.values()).orderBy(StrUtil.isNotBlank(sortField),
                         SortOrder.ASCENDING.equals(sortOrder), sortField));
         this.setRowCount((int) page.getTotal());
