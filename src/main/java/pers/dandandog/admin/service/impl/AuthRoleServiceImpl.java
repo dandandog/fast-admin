@@ -18,12 +18,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * 系统角色表(SysRole)表服务实现类
+ * 系统角色表(AuthRole)表服务实现类
  *
  * @author JohnnyLiu
  * @since 2020-09-06 22:06:06
  */
-@Service("sysRoleService")
+@Service
 public class AuthRoleServiceImpl extends BaseServiceImpl<AuthRoleDao, AuthRole> implements AuthRoleService {
 
     @Resource

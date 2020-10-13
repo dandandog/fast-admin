@@ -25,12 +25,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * 系统用户表(SysUser)表服务实现类
+ * 系统用户表(AuthUser)表服务实现类
  *
  * @author JohnnyLiu
  * @since 2020-09-06 22:06:06
  */
-@Service("sysUserService")
+@Service
 public class AuthUserServiceImpl extends BaseServiceImpl<AuthUserDao, AuthUser> implements AuthUserService {
 
     @Resource

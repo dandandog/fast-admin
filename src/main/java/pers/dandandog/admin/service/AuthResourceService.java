@@ -6,7 +6,7 @@ import org.primefaces.model.TreeNode;
 import pers.dandandog.admin.entity.AuthResource;
 
 /**
- * 系统资源表(SysResource)表服务接口
+ * 系统资源表(AuthResource)表服务接口
  *
  * @author JohnnyLiu
  * @since 2020-09-06 22:06:06

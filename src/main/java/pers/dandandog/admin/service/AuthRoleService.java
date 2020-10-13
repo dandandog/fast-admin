@@ -7,7 +7,7 @@ import pers.dandandog.admin.entity.AuthRole;
 import java.util.List;
 
 /**
- * 系统角色表(SysRole)表服务接口
+ * 系统角色表(AuthRole)表服务接口
  *
  * @author JohnnyLiu
  * @since 2020-09-06 22:06:06

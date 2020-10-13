@@ -8,7 +8,7 @@ import pers.dandandog.admin.entity.AuthUser;
 import java.util.List;
 
 /**
- * 系统用户表(SysUser)表服务接口
+ * 系统用户表(AuthUser)表服务接口
  *
  * @author JohnnyLiu
  * @since 2020-09-06 22:06:06

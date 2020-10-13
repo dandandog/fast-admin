@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import pers.dandandog.admin.entity.AuthRoleResource;
 
 /**
- * 系统角色资源关系表(SysRoleResource)表服务接口
+ * 系统角色资源关系表(AuthRoleResource)表服务接口
  *
  * @author JohnnyLiu
  * @since 2020-09-06 22:06:06

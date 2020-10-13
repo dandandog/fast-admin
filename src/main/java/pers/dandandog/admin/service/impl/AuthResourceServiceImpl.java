@@ -18,7 +18,7 @@ import java.util.Collection;
 import java.util.Optional;
 
 /**
- * 系统资源表(SysResource)表服务实现类
+ * 系统资源表(AuthResource)表服务实现类
  *
  * @author JohnnyLiu
  * @since 2020-09-06 22:06:06
