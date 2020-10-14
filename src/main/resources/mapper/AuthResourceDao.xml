@@ -3,7 +3,7 @@
 
 <mapper namespace="pers.dandandog.admin.dao.AuthResourceDao">
 
-    <resultMap type="pers.dandandog.admin.entity.AuthResource" id="SysResourceMap">
+    <resultMap type="pers.dandandog.admin.entity.AuthResource" id="AuthResourceMap">
         <result property="id" column="id" jdbcType="VARCHAR"/>
         <result property="title" column="title" jdbcType="VARCHAR"/>
         <result property="parentId" column="parent_id" jdbcType="VARCHAR"/>

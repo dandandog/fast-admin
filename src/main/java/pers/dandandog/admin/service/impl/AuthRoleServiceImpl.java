@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.dandandog.framework.core.service.BaseServiceImpl;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pers.dandandog.admin.dao.AuthRoleDao;
@@ -32,6 +33,7 @@ public class AuthRoleServiceImpl extends BaseServiceImpl<AuthRoleDao, AuthRole> 
 
     @Override
     @Transactional
+    @CacheEvict(value = "entity", key = "#root.targetClass + ':' + #role.id", beforeInvocation = true)
     public void save(AuthRole role, List<AuthResource> resources) {
         if (saveOrUpdate(role)) {
             roleResourceService.remove(new LambdaQueryWrapper<AuthRoleResource>().eq(AuthRoleResource::getRoleId, role.getId()));
