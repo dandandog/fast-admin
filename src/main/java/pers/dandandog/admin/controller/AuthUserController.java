@@ -7,7 +7,7 @@ import com.dandandog.framework.faces.exception.MessageResolvableException;
 import com.dandandog.framework.mapstruct.MapperRepo;
 import org.primefaces.model.LazyDataModel;
 import org.springframework.stereotype.Controller;
-import pers.dandandog.admin.config.model.PageDataModel;
+import pers.dandandog.admin.model.data.PageDataModel;
 import pers.dandandog.admin.entity.AuthRole;
 import pers.dandandog.admin.entity.AuthUser;
 import pers.dandandog.admin.entity.enums.UserGender;
@@ -54,6 +54,7 @@ public class AuthUserController extends FacesController {
         putViewScope("user", vo);
     }
 
+    @MessageRequired(type = MessageType.OPERATION, growl = false)
     public void edit() {
         AuthUser selected = getViewScope("sigSelected");
         AuthUser target = userService.getById(selected.getId());

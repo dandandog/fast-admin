@@ -44,6 +44,7 @@ public class AuthRoleController extends FacesController {
         putViewScope("role", vo);
     }
 
+    @MessageRequired(type = MessageType.OPERATION, growl = false)
     public void edit() {
         AuthRole selected = getViewScope("sinSelected");
         AuthRole target = roleService.getById(selected.getId());

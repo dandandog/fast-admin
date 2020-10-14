@@ -1,35 +1,34 @@
-package pers.dandandog.admin.config.model;
+package pers.dandandog.admin.model.data;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dandandog.framework.common.model.ITree;
 import com.dandandog.framework.core.utils.MybatisUtil;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import lombok.Getter;
 
 import java.util.List;
 
 /**
- * @author create by Johnny
- * @description com.johnny.framework.web.faces.model
- * @date 八月 01,2019
+ * @author JohnnyLiu
  */
 public class TreeDataModel<T extends ITree> {
 
-    BaseMapper<T> baseMapper;
+    @Getter
+    private ServiceImpl<? extends T, T> baseService;
 
-    public TreeDataModel(Class<T> tClass) {
+    public TreeDataModel(Class<T> clazz) {
         try {
-            this.baseMapper = MybatisUtil.getMapper(tClass);
+            this.baseService = MybatisUtil.getOneServiceByModelClass(clazz);
         } catch (Exception ignored) {
         }
     }
 
-
     private List<T> load(LambdaQueryWrapper<T> queryWrapper) {
-        return baseMapper.selectList(queryWrapper);
+        return getBaseService().list(queryWrapper);
     }
 
     public Multimap<T, T> getValue(LambdaQueryWrapper<T> queryWrapper) {

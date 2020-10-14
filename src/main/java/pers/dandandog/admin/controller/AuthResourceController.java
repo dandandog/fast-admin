@@ -56,6 +56,7 @@ public class AuthResourceController extends FacesController {
                 new LambdaQueryWrapper<AuthResource>().ne(AuthResource::getType, ResourceType.BUTTON)));
     }
 
+    @MessageRequired(type = MessageType.OPERATION, growl = false)
     public void edit() {
         AuthResource selected = getViewScope("sinSelected");
         AuthResource target = resourceService.getById(selected.getId());

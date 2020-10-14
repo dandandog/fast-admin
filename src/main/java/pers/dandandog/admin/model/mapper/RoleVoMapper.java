@@ -29,8 +29,8 @@ public interface RoleVoMapper extends StandardMapper<AuthRole, RoleVo> {
 
     @Named("treeNodeConverter")
     default TreeNode[] treeNodeConverter(String roleId) throws ClassNotFoundException {
-        BaseMapper<AuthRoleResource> roleResourceMapper = MybatisUtil.getMapper(AuthRoleResource.class);
-        BaseMapper<AuthResource> resourceMapper = MybatisUtil.getMapper(AuthResource.class);
+        BaseMapper<AuthRoleResource> roleResourceMapper = MybatisUtil.getOneMappersByModelClass(AuthRoleResource.class);
+        BaseMapper<AuthResource> resourceMapper = MybatisUtil.getOneMappersByModelClass(AuthResource.class);
         List<String> ids = roleResourceMapper.selectList(new LambdaQueryWrapper<AuthRoleResource>().eq(AuthRoleResource::getRoleId, roleId)).stream()
                 .map(AuthRoleResource::getResId).collect(Collectors.toList());
         return CollUtil.isNotEmpty(ids) ? resourceMapper.selectBatchIds(ids).stream().map(CheckboxTreeNode::new).toArray(TreeNode[]::new) : new TreeNode[0];

@@ -1,4 +1,4 @@
-package pers.dandandog.admin.config.model;
+package pers.dandandog.admin.model.data;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
@@ -23,14 +23,13 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author JohnnyLiu
  */
 public class PageDataModel<T extends BaseEntity> extends LazyDataModel<T> {
-    private static final long serialVersionUID = 2957926997919683676L;
 
     @Getter
     private ServiceImpl<? extends T, T> baseService;
 
     private PageDataModel(Class<T> clazz) {
         try {
-            this.baseService = MybatisUtil.getService(clazz);
+            this.baseService = MybatisUtil.getOneServiceByModelClass(clazz);
         } catch (Exception ignored) {
         }
     }
@@ -56,7 +55,7 @@ public class PageDataModel<T extends BaseEntity> extends LazyDataModel<T> {
         if (!InnerDataModel.containsKey(instanceClass)) {
             InnerDataModel.put(instanceClass, new PageDataModel<>(instanceClass));
         }
-        return (PageDataModel) InnerDataModel.get(instanceClass);
+        return (PageDataModel<T>) InnerDataModel.get(instanceClass);
     }
 
     @Override

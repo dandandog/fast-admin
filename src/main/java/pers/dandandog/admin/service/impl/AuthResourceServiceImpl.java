@@ -1,14 +1,13 @@
 package pers.dandandog.admin.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dandandog.framework.common.model.ITree;
-import com.dandandog.framework.core.cache.BaseServiceImpl;
+import com.dandandog.framework.core.service.BaseServiceImpl;
 import com.google.common.collect.Multimap;
 import org.primefaces.model.CheckboxTreeNode;
 import org.primefaces.model.TreeNode;
 import org.springframework.stereotype.Service;
-import pers.dandandog.admin.config.model.TreeDataModel;
+import pers.dandandog.admin.model.data.TreeDataModel;
 import pers.dandandog.admin.dao.AuthResourceDao;
 import pers.dandandog.admin.entity.AuthResource;
 import pers.dandandog.admin.service.AuthResourceService;

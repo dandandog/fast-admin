@@ -26,7 +26,7 @@ public interface ResourceVoMapper extends StandardMapper<AuthResource, ResourceV
 
     @Named("id2TreeNodeConverter")
     default TreeNode treeNode2IdConverter(String parentId) throws ClassNotFoundException {
-        BaseMapper<AuthResource> baseMapper = MybatisUtil.getMapper(AuthResource.class);
+        BaseMapper<AuthResource> baseMapper = MybatisUtil.getOneMappersByModelClass(AuthResource.class);
         AuthResource resource = baseMapper.selectById(parentId);
         return new CheckboxTreeNode(resource);
     }
