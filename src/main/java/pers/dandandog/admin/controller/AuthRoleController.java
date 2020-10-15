@@ -58,7 +58,7 @@ public class AuthRoleController extends FacesController {
     public void save() {
         RoleVo vo = getViewScope("role");
         AuthRole role = MapperRepo.mapFrom(vo, AuthRole.class);
-        roleService.save(role, vo.getResources());
+        roleService.saveOrUpdate(role);
         onEntry();
     }
 

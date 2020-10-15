@@ -2,14 +2,14 @@ package pers.dandandog.admin.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.dandandog.framework.common.model.ITree;
-import com.dandandog.framework.core.service.BaseServiceImpl;
+import com.dandandog.framework.core.service.CacheServiceImpl;
 import com.google.common.collect.Multimap;
 import org.primefaces.model.CheckboxTreeNode;
 import org.primefaces.model.TreeNode;
 import org.springframework.stereotype.Service;
-import pers.dandandog.admin.model.data.TreeDataModel;
 import pers.dandandog.admin.dao.AuthResourceDao;
 import pers.dandandog.admin.entity.AuthResource;
+import pers.dandandog.admin.model.data.TreeDataModel;
 import pers.dandandog.admin.service.AuthResourceService;
 
 import java.util.Arrays;
@@ -23,7 +23,7 @@ import java.util.Optional;
  * @since 2020-09-06 22:06:06
  */
 @Service
-public class AuthResourceServiceImpl extends BaseServiceImpl<AuthResourceDao, AuthResource> implements AuthResourceService {
+public class AuthResourceServiceImpl extends CacheServiceImpl<AuthResourceDao, AuthResource> implements AuthResourceService {
 
 
     @Override

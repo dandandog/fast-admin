@@ -1,6 +1,7 @@
 package pers.dandandog.admin.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.dandandog.framework.core.service.ICacheService;
 import pers.dandandog.admin.entity.AuthUserRole;
 
 /**
@@ -9,6 +10,6 @@ import pers.dandandog.admin.entity.AuthUserRole;
  * @author JohnnyLiu
  * @since 2020-09-06 22:06:06
  */
-public interface AuthUserRoleService extends IService<AuthUserRole> {
+public interface AuthUserRoleService extends ICacheService<AuthUserRole> {
 
 }

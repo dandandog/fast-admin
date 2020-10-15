@@ -1,6 +1,7 @@
 package pers.dandandog.admin.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.dandandog.framework.core.service.ICacheService;
 import org.primefaces.model.TreeNode;
 import pers.dandandog.admin.entity.AuthResource;

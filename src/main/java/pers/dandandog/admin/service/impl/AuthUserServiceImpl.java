@@ -3,6 +3,7 @@ package pers.dandandog.admin.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.dandandog.framework.core.service.BaseServiceImpl;
+import com.dandandog.framework.core.service.CacheServiceImpl;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,7 +32,7 @@ import java.util.stream.Collectors;
  * @since 2020-09-06 22:06:06
  */
 @Service
-public class AuthUserServiceImpl extends BaseServiceImpl<AuthUserDao, AuthUser> implements AuthUserService {
+public class AuthUserServiceImpl extends CacheServiceImpl<AuthUserDao, AuthUser> implements AuthUserService {
 
     @Resource
     private AuthUserRoleService userRoleService;
