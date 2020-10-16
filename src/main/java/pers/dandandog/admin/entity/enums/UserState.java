@@ -1,9 +1,9 @@
 package pers.dandandog.admin.entity.enums;
 
-import com.dandandog.framework.core.entity.enums.IBaseEnum;
+import com.dandandog.framework.core.entity.enums.BaseEnum;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum UserState implements IBaseEnum<Integer> {
+public enum UserState implements BaseEnum<Integer> {
 
     /**
      * 正常

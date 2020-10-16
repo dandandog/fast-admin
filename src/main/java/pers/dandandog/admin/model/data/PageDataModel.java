@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dandandog.framework.core.entity.BaseEntity;
+import com.dandandog.framework.core.service.BaseServiceImpl;
 import com.dandandog.framework.core.utils.MybatisUtil;
 import lombok.Getter;
 import org.primefaces.model.FilterMeta;
@@ -25,7 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class PageDataModel<T extends BaseEntity> extends LazyDataModel<T> {
 
     @Getter
-    private ServiceImpl<? extends T, T> baseService;
+    private BaseServiceImpl<? extends T, T> baseService;
 
     private PageDataModel(Class<T> clazz) {
         try {
@@ -65,7 +66,7 @@ public class PageDataModel<T extends BaseEntity> extends LazyDataModel<T> {
 
     @Override
     public List<T> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, FilterMeta> filters) {
-        IPage<T> page = getBaseService().page(new Page<>(getPage(first, pageSize), pageSize),
+        IPage<T> page = getBaseService().cachePage(new Page<>(getPage(first, pageSize), pageSize),
                 createQuery(filters.values()).orderBy(StrUtil.isNotBlank(sortField),
                         SortOrder.ASCENDING.equals(sortOrder), sortField));
         this.setRowCount((int) page.getTotal());

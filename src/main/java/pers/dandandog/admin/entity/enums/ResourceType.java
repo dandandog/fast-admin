@@ -1,13 +1,13 @@
 package pers.dandandog.admin.entity.enums;
 
-import com.dandandog.framework.core.entity.enums.IBaseEnum;
+import com.dandandog.framework.core.entity.enums.BaseEnum;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
  * @author JohnnyLiu
  */
 
-public enum ResourceType implements IBaseEnum<Integer> {
+public enum ResourceType implements BaseEnum<Integer> {
     /**
      * 目录
      */

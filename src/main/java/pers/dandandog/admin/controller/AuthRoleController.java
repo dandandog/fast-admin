@@ -32,33 +32,33 @@ public class AuthRoleController extends FacesController {
 
     @Override
     public void onEntry() {
-        putViewScope("roles", roleService.list());
+        putViewScope("roles", roleService.cacheList());
         putViewScope("role", null);
         putViewScope("sinSelected", null);
         putViewScope("mulSelected", new ArrayList<AuthRole>());
-        putViewScope("rootTree", resourceService.getRootTree(true, null));
     }
 
     public void add() {
         RoleVo vo = new RoleVo();
         putViewScope("role", vo);
+        putViewScope("rootTree", resourceService.getRootTree(true));
     }
 
     @MessageRequired(type = MessageType.OPERATION, growl = false)
     public void edit() {
         AuthRole selected = getViewScope("sinSelected");
-        AuthRole target = roleService.getById(selected.getId());
-        target = Optional.ofNullable(target).orElseThrow(() -> new MessageResolvableException("error", "dataNotFound"));
-        RoleVo vo = MapperRepo.mapTo(target, RoleVo.class);
+        AuthRole source = roleService.getById(selected.getId());
+        source = Optional.ofNullable(source).orElseThrow(() -> new MessageResolvableException("error", "dataNotFound"));
+        RoleVo vo = MapperRepo.mapTo(source, RoleVo.class);
         putViewScope("role", vo);
-        putViewScope("rootTree", resourceService.getRootTree(true, null, vo.getResources().toArray(new AuthResource[0])));
+        putViewScope("rootTree", resourceService.getRootTree(true, vo.getResources().toArray(new AuthResource[0])));
     }
 
     @MessageRequired(type = MessageType.SAVE)
     public void save() {
         RoleVo vo = getViewScope("role");
         AuthRole role = MapperRepo.mapFrom(vo, AuthRole.class);
-        roleService.saveOrUpdate(role);
+        roleService.save(role, vo.getResources());
         onEntry();
     }
 

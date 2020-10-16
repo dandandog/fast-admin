@@ -1,8 +1,10 @@
 package pers.dandandog.admin.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.dandandog.framework.common.model.ITree;
-import com.dandandog.framework.core.service.CacheServiceImpl;
+import com.dandandog.framework.core.service.BaseServiceImpl;
 import com.google.common.collect.Multimap;
 import org.primefaces.model.CheckboxTreeNode;
 import org.primefaces.model.TreeNode;
@@ -23,14 +25,18 @@ import java.util.Optional;
  * @since 2020-09-06 22:06:06
  */
 @Service
-public class AuthResourceServiceImpl extends CacheServiceImpl<AuthResourceDao, AuthResource> implements AuthResourceService {
+public class AuthResourceServiceImpl extends BaseServiceImpl<AuthResourceDao, AuthResource> implements AuthResourceService {
 
 
     @Override
-    public TreeNode getRootTree(boolean isExpand, LambdaQueryWrapper<AuthResource> queryWrapper, AuthResource... selected) {
+    public TreeNode getRootTree(boolean isExpand, AuthResource... selected) {
+        return getRootTree(Wrappers.emptyWrapper(), isExpand, selected);
+    }
+
+    @Override
+    public TreeNode getRootTree(Wrapper<AuthResource> queryWrapper, boolean isExpand, AuthResource... selected) {
         TreeDataModel<AuthResource> treeDataModel = new TreeDataModel<>(AuthResource.class);
         queryWrapper = Optional.ofNullable(queryWrapper).orElse(new LambdaQueryWrapper<>());
-        queryWrapper.orderByAsc(AuthResource::getSeq);
         Multimap sources = treeDataModel.getValue(queryWrapper);
         TreeNode root = new CheckboxTreeNode(null, null);
         setTreeLeaf(root, sources, isExpand, selected);

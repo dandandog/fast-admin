@@ -1,9 +1,9 @@
 package pers.dandandog.admin.entity.enums;
 
-import com.dandandog.framework.core.entity.enums.IBaseEnum;
+import com.dandandog.framework.core.entity.enums.BaseEnum;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum ResourceTarget implements IBaseEnum<Integer> {
+public enum ResourceTarget implements BaseEnum<Integer> {
     /**
      * 当前页
      */

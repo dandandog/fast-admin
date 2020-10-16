@@ -1,9 +1,9 @@
 package pers.dandandog.admin.entity.enums;
 
-import com.dandandog.framework.core.entity.enums.IBaseEnum;
+import com.dandandog.framework.core.entity.enums.BaseEnum;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum UserGender implements IBaseEnum<Integer> {
+public enum UserGender implements BaseEnum<Integer> {
 
     /**
      * 未知

@@ -1,6 +1,8 @@
 package pers.dandandog.admin.service;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.dandandog.framework.core.service.ICacheService;
 import org.primefaces.model.TreeNode;
@@ -14,6 +16,8 @@ import pers.dandandog.admin.entity.AuthResource;
  */
 public interface AuthResourceService extends ICacheService<AuthResource> {
 
-    TreeNode getRootTree(boolean isExpand, LambdaQueryWrapper<AuthResource> queryWrapper, AuthResource... selected);
+    TreeNode getRootTree(boolean isExpand, AuthResource... selected);
+
+    TreeNode getRootTree(Wrapper<AuthResource> queryWrapper, boolean isExpand, AuthResource... selected);
 
 }

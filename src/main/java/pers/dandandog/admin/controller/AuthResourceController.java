@@ -1,6 +1,7 @@
 package pers.dandandog.admin.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.dandandog.framework.core.entity.BaseEntity;
 import com.dandandog.framework.faces.annotation.MessageRequired;
@@ -18,6 +19,7 @@ import pers.dandandog.admin.service.AuthResourceService;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -46,14 +48,14 @@ public class AuthResourceController extends FacesController {
         putViewScope("sinSelected", null);
         putViewScope("mulSelected", new ArrayList<TreeNode>());
         putViewScope("parent", null);
-        putViewScope("resources", resourceService.getRootTree(true, null));
+        putViewScope("resources", resourceService.getRootTree(true));
     }
 
     public void add() {
         ResourceVo vo = new ResourceVo();
+        Wrapper<AuthResource> wrapper = new LambdaQueryWrapper<AuthResource>().ne(AuthResource::getType, ResourceType.BUTTON).orderByAsc(AuthResource::getSeq);
         putViewScope("resource", vo);
-        putViewScope("rootTree", resourceService.getRootTree(false,
-                new LambdaQueryWrapper<AuthResource>().ne(AuthResource::getType, ResourceType.BUTTON)));
+        putViewScope("rootTree", resourceService.getRootTree(wrapper, false));
     }
 
     @MessageRequired(type = MessageType.OPERATION, growl = false)
@@ -62,9 +64,10 @@ public class AuthResourceController extends FacesController {
         AuthResource target = resourceService.getById(selected.getId());
         target = Optional.ofNullable(target).orElseThrow(() -> new MessageResolvableException("error", "dataNotFound"));
         ResourceVo vo = MapperRepo.mapTo(target, ResourceVo.class);
+
+        Wrapper<AuthResource> wrapper = new LambdaQueryWrapper<AuthResource>().ne(AuthResource::getType, ResourceType.BUTTON).orderByAsc(AuthResource::getSeq);
         putViewScope("resource", vo);
-        putViewScope("rootTree", resourceService.getRootTree(false,
-                new LambdaQueryWrapper<AuthResource>().ne(AuthResource::getType, ResourceType.BUTTON), vo.getParent()));
+        putViewScope("rootTree", resourceService.getRootTree(wrapper, false, vo.getParent()));
     }
 
     @MessageRequired(type = MessageType.SAVE)
