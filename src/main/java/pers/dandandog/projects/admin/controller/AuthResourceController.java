@@ -41,20 +41,16 @@ public class AuthResourceController extends FacesController {
     @Override
     public void onEntry() {
         putViewScope("resource", null);
-        putViewScope("isExpand", true);
-        putViewScope("types", ResourceType.values());
-        putViewScope("targets", ResourceTarget.values());
+        putViewScope("resources", resourceService.getRootTree(true));
         putViewScope("sinSelected", null);
         putViewScope("mulSelected", new ArrayList<TreeNode>());
-        putViewScope("parent", null);
-        putViewScope("resources", resourceService.getRootTree(true));
+        putViewScope("types", ResourceType.values());
+        putViewScope("targets", ResourceTarget.values());
     }
 
     public void add() {
         ResourceVo vo = new ResourceVo();
-        Wrapper<AuthResource> wrapper = new LambdaQueryWrapper<AuthResource>().ne(AuthResource::getType, ResourceType.BUTTON).orderByAsc(AuthResource::getSeq);
-        putViewScope("resource", vo);
-        putViewScope("rootTree", resourceService.getRootTree(wrapper, false));
+        putResourceView(vo);
     }
 
     @MessageRequired(type = MessageType.OPERATION, growl = false)
@@ -63,10 +59,7 @@ public class AuthResourceController extends FacesController {
         AuthResource target = resourceService.getById(selected.getId());
         target = Optional.ofNullable(target).orElseThrow(() -> new MessageResolvableException("error", "dataNotFound"));
         ResourceVo vo = MapperRepo.mapTo(target, ResourceVo.class);
-
-        Wrapper<AuthResource> wrapper = new LambdaQueryWrapper<AuthResource>().ne(AuthResource::getType, ResourceType.BUTTON).orderByAsc(AuthResource::getSeq);
-        putViewScope("resource", vo);
-        putViewScope("rootTree", resourceService.getRootTree(wrapper, false, vo.getParent()));
+        putResourceView(vo);
     }
 
     @MessageRequired(type = MessageType.SAVE)
@@ -93,5 +86,11 @@ public class AuthResourceController extends FacesController {
                 .collect(Collectors.toList());
         resourceService.removeByIds(delIds);
         onEntry();
+    }
+
+    private void putResourceView(ResourceVo vo) {
+        Wrapper<AuthResource> wrapper = new LambdaQueryWrapper<AuthResource>().ne(AuthResource::getType, ResourceType.BUTTON).orderByAsc(AuthResource::getSeq);
+        putViewScope("resource", vo);
+        putViewScope("rootTree", resourceService.getRootTree(wrapper, false, vo.getParent()));
     }
 }

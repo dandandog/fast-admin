@@ -1,6 +1,6 @@
 package pers.dandandog.projects.admin.service.impl;
 
-import com.dandandog.framework.core.service.BaseServiceImpl;
+import com.dandandog.framework.core.service.impl.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 import pers.dandandog.projects.admin.dao.AuthUserRoleDao;
 import pers.dandandog.projects.admin.entity.AuthUserRole;

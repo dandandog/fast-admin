@@ -3,11 +3,11 @@ package pers.dandandog.projects.model.data;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.dandandog.framework.core.entity.BaseEntity;
-import com.dandandog.framework.core.service.BaseServiceImpl;
+import com.dandandog.framework.core.service.impl.BaseServiceImpl;
 import com.dandandog.framework.core.utils.MybatisUtil;
 import lombok.Getter;
 import org.primefaces.model.FilterMeta;
@@ -27,21 +27,34 @@ public class PageDataModel<T extends BaseEntity> extends LazyDataModel<T> {
     @Getter
     private BaseServiceImpl<? extends T, T> baseService;
 
+    @Getter
+    private boolean cacheAble;
+
     private PageDataModel(Class<T> clazz) {
         try {
             this.baseService = MybatisUtil.getOneServiceByModelClass(clazz);
+            this.cacheAble = false;
         } catch (Exception ignored) {
         }
     }
 
+    private PageDataModel(Class<T> clazz, boolean cacheAble) {
+        try {
+            this.baseService = MybatisUtil.getOneServiceByModelClass(clazz);
+            this.cacheAble = cacheAble;
+        } catch (Exception ignored) {
+        }
+    }
+
+
     private static class InnerDataModel {
         private final static Map<Class<?>, PageDataModel<?>> dataModelMap = new ConcurrentHashMap<>();
 
-        private static PageDataModel<?> get(Class<?> instanceClass) {
-            return dataModelMap.get(instanceClass);
+        private static <T extends BaseEntity> PageDataModel<T> get(Class<T> instanceClass) {
+            return (PageDataModel<T>) dataModelMap.get(instanceClass);
         }
 
-        private static void put(Class<?> instanceClass, PageDataModel<?> dataModel) {
+        private static <T extends BaseEntity> void put(Class<T> instanceClass, PageDataModel<T> dataModel) {
             dataModelMap.put(instanceClass, dataModel);
         }
 
@@ -51,11 +64,15 @@ public class PageDataModel<T extends BaseEntity> extends LazyDataModel<T> {
 
     }
 
-    public synchronized static <T extends BaseEntity> PageDataModel<T> getInstance(Class<T> instanceClass) {
+    public synchronized static <T extends BaseEntity> PageDataModel<T> getInstance(Class<T> instanceClass, boolean cacheAble) {
         if (!InnerDataModel.containsKey(instanceClass)) {
-            InnerDataModel.put(instanceClass, new PageDataModel<>(instanceClass));
+            InnerDataModel.put(instanceClass, new PageDataModel<>(instanceClass, cacheAble));
         }
-        return (PageDataModel<T>) InnerDataModel.get(instanceClass);
+        return InnerDataModel.get(instanceClass);
+    }
+
+    public synchronized static <T extends BaseEntity> PageDataModel<T> getInstance(Class<T> instanceClass) {
+        return getInstance(instanceClass, false);
     }
 
     @Override
@@ -65,9 +82,10 @@ public class PageDataModel<T extends BaseEntity> extends LazyDataModel<T> {
 
     @Override
     public List<T> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, FilterMeta> filters) {
-        IPage<T> page = getBaseService().cachePage(new Page<>(getPage(first, pageSize), pageSize),
-                createQuery(filters.values()).orderBy(StrUtil.isNotBlank(sortField),
-                        SortOrder.ASCENDING.equals(sortOrder), sortField));
+        Wrapper<T> query = createQuery(filters.values()).orderBy(StrUtil.isNotBlank(sortField),
+                SortOrder.ASCENDING.equals(sortOrder), sortField);
+        Page<T> page = new Page<>(getPage(first, pageSize), pageSize);
+        page = isCacheAble() ? getBaseService().cachePage(page, query) : getBaseService().page(page, query);
         this.setRowCount((int) page.getTotal());
         return page.getRecords();
     }

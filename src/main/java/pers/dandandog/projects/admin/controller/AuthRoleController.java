@@ -32,8 +32,8 @@ public class AuthRoleController extends FacesController {
 
     @Override
     public void onEntry() {
-        putViewScope("roles", roleService.cacheList());
         putViewScope("role", null);
+        putViewScope("roles", roleService.list());
         putViewScope("sinSelected", null);
         putViewScope("mulSelected", new ArrayList<AuthRole>());
     }
@@ -58,7 +58,7 @@ public class AuthRoleController extends FacesController {
     public void save() {
         RoleVo vo = getViewScope("role");
         AuthRole role = MapperRepo.mapFrom(vo, AuthRole.class);
-        roleService.cacheSaveOrUpdate(role);
+        roleService.saveOrUpdate(role);
         onEntry();
     }
 

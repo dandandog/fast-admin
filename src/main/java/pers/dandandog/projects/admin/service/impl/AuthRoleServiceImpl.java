@@ -3,7 +3,7 @@ package pers.dandandog.projects.admin.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.dandandog.framework.core.service.BaseServiceImpl;
+import com.dandandog.framework.core.service.impl.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pers.dandandog.projects.admin.dao.AuthRoleDao;

@@ -313,14 +313,13 @@
 
         <composite:insertChildren/>
 
-        <p:column priority="4" headerText="#{msg['framework']['createdTime']}" style="text-align: center"
-                  width="150">
+        <p:column priority="4" headerText="#{msg['framework']['createdTime']}" width="150">
             <h:outputText value="#{element.createdTime}">
                 <f:convertDateTime type="localDateTime" pattern="#{msg['format']['localDateTime']}"/>
             </h:outputText>
         </p:column>
 
-        <p:column headerText="#{msg['framework']['operation']}" style="text-align: center" toggleable="false"
+        <p:column headerText="#{msg['framework']['operation']}" toggleable="false" width="150"
                   rendered="#{cc.attrs.rowOperationSupport}">
             <p:commandLink id="editLine" process="@this" value="#{msg['framework']['edit']}"
                            rendered="#{cc.attrs.editRowRendered}" action="#{cc.attrs.editRowMethod}"

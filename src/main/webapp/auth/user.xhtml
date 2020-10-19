@@ -14,6 +14,10 @@
         <p:menuitem value="#{msg['authority']['user']}" outcome="/auth/user"/>
     </ui:define>
 
+    <ui:define name="head">
+        <h:outputScript name="/auth/js/user.js" library="custom"/>
+    </ui:define>
+
     <ui:define name="content">
         <h1><h:outputText value="#{msg['framework']['list']}"/></h1>
         <h:form id="user_form" prependId="false">
@@ -23,8 +27,12 @@
                                  singleSelection="#{viewScope.sigSelected}" resizableColumns="true"
                                  multipleSelection="#{viewScope.mulSelected}">
 
-                <p:column headerText="#{msg['user']['avatarUrl']}">
-                    <p:graphicImage name="avatar/#{element.avatarUrl}" library="assets"/>
+                <p:column headerText="#{msg['user']['avatar']}" width="60">
+                    <p:graphicImage name="images/profile.png" library="omega-layout"/>
+                </p:column>
+                <p:column headerText="#{msg['user']['nickname']}"
+                          filterBy="#{element.nickname}" filterMatchMode="contains">
+                    <h:outputText value="#{element.nickname}"/>
                 </p:column>
                 <p:column headerText="#{msg['user']['username']}"
                           filterBy="#{element.username}" filterMatchMode="contains">
@@ -70,17 +78,21 @@
         <h:form id="dialogform">
             <framework:dialog id="userDialog" value="#{viewScope.user}" saveUpdate="@widgetVar(userTable)">
 
+                <framework:label target="avatar" value="#{msg['user']['avatar']}">
+                    <p:graphicImage id="avatar" url="" name="images/profile.png" library="omega-layout"/>
+                </framework:label>
+
                 <framework:label target="nickname" value="#{msg['user']['nickname']}">
                     <p:inputText id="nickname" value="#{viewScope.user.nickname}"/>
                 </framework:label>
 
                 <framework:label target="username" value="#{msg['user']['username']}">
-                    <p:inputText id="username" required="true" value="#{viewScope.user.username}" autocomplete="false"/>
+                    <p:inputText id="username" required="true" value="#{viewScope.user.username}"/>
                 </framework:label>
 
                 <framework:label target="password1" value="#{msg['user']['password1']}"
                                  rendered="#{viewScope.user.id == null}">
-                    <p:password id="password1" match="@widgetVar(password2)" feedback="true" autocomplete="false"
+                    <p:password id="password1" match="@widgetVar(password2)" feedback="true" autocomplete="new-password"
                                 promptLabel="#{msg['user']['prompt']}" weakLabel="#{msg['user']['weak']}"
                                 goodLabel="#{msg['user']['good']}" strongLabel="#{msg['user']['strong']}"
                                 value="#{viewScope.user.password}"/>
@@ -88,19 +100,20 @@
 
                 <framework:label target="password2" value="#{msg['user']['password2']}"
                                  rendered="#{viewScope.user.id == null}">
-                    <p:password id="password2" widgetVar="password2" autocomplete="false"
+                    <p:password id="password2" widgetVar="password2" autocomplete="new-password"
                                 value="#{viewScope.user.password}"/>
                 </framework:label>
 
                 <framework:label target="gender" value="#{msg['user']['gender']}">
-                    <p:selectOneMenu id="gender" value="#{viewScope.user.gender}">
+                    <p:selectOneMenu id="gender" value="#{viewScope.user.gender}"
+                                     onchange="UserPage.onChangeGender('')">
                         <f:selectItems value="#{viewScope.genders}" var="gender"
                                        itemLabel="#{msg['user'][gender.title]}" itemValue="#{gender}"/>
                     </p:selectOneMenu>
                 </framework:label>
 
                 <framework:label target="mobile" value="#{msg['user']['phone']}">
-                    <p:inputNumber id="mobile" value="#{viewScope.user.phone}" decimalPlaces="0" />
+                    <p:inputNumber id="mobile" value="#{viewScope.user.phone}" decimalPlaces="0"/>
                 </framework:label>
 
                 <framework:label target="email" value="#{msg['user']['email']}">

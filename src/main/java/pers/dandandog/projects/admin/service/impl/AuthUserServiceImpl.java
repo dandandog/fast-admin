@@ -2,7 +2,7 @@ package pers.dandandog.projects.admin.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.dandandog.framework.core.service.BaseServiceImpl;
+import com.dandandog.framework.core.service.impl.BaseServiceImpl;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;

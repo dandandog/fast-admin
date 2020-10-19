@@ -13,9 +13,9 @@
         <meta name="apple-mobile-web-app-capable" content="yes"/>
     </f:facet>
     <title>#{msg['project']['name']}</title>
-
+    <h:outputScript name="login.js" library="custom"/>
     <h:outputStylesheet>
-        .captchaImg {
+        #captchaImg {
             height: 24px;
             width: 100px;
             margin-right: 20px;
@@ -57,15 +57,16 @@
                         <p:inputText id="username" placeholder="#{msg['framework']['username']}"/>
                     </div>
                     <div class="ui-g-12">
-                        <p:password id="password" placeholder="#{msg['framework']['pasword']}" feedback="false"/>
+                        <p:password id="password" placeholder="#{msg['framework']['password']}" feedback="false"
+                                    autocomplete="new-password"/>
                     </div>
                     <div class="ui-g-12 ui-md-6">
-                        <p:inputText id="captcha" placeholder="#{msg['framework']['captcha']}"/>
+                        <p:inputText id="captcha" widgetVar="captcha" placeholder="#{msg['framework']['captcha']}"/>
                     </div>
                     <div class="ui-g-12 ui-md-6">
-                        <p:graphicImage id="captchaImg" value="/captcha/image.jpg" styleClass="captchaImg"/>
+                        <p:graphicImage id="captchaImg" value="/captcha/image.jpg"/>
                         <p:commandLink style="vertical-align: super;" process="@none"
-                                       onclick="document.getElementById('captchaImg').src = '/admin/captcha/image.jpg?' + Math.random();  return false">
+                                       onclick="LoginPage.onRefresh()">
                             <i class="fa fa-refresh"/>
                         </p:commandLink>
                     </div>
@@ -82,8 +83,10 @@
                         </p:commandLink>
                     </div>
                     <div class="ui-g-12">
-                        <p:commandButton action="#{controller.onLogin}" ajax="false" update="errorMsg"
-                                         value="#{msg['framework']['login']}" icon="fa fa-check"/>
+                        <p:commandButton action="#{controller.onLogin}" ajax="false" update="errorMsg,captcha"
+                                         value="#{msg['framework']['login']}" icon="fa fa-check">
+                            <p:resetInput target="captcha"/>
+                        </p:commandButton>
                     </div>
                 </p:outputPanel>
             </div>
