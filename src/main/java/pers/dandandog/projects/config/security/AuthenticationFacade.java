@@ -9,17 +9,22 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthenticationFacade implements IAuthenticationFacade {
 
-    public Authentication getAuthentication() {
+    public static Authentication getAuthentication() {
         return SecurityContextHolder.getContext().getAuthentication();
-    }
-
-    @Override
-    public String getUsername() {
-        return getAuthentication().getName();
     }
 
     @Override
     public boolean isLogin() {
         return getAuthentication() instanceof UsernamePasswordAuthenticationToken;
+    }
+
+    @Override
+    public Object getPrincipal() {
+        return getAuthentication().getPrincipal();
+    }
+
+    @Override
+    public String getUniqueId() {
+        return getAuthentication().getName();
     }
 }
