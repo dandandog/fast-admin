@@ -5,6 +5,7 @@ import com.dandandog.framework.captcha.CaptchaServletFactory;
 import com.dandandog.framework.captcha.filter.CaptchaAuthenticationFilter;
 import com.dandandog.framework.captcha.model.ImageCaptcha;
 import com.dandandog.framework.faces.config.properties.PageProperties;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -19,9 +20,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.filter.GenericFilterBean;
 
 import javax.annotation.Resource;
 
+@Slf4j
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -47,18 +50,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         FacesFailureHandler facesFailureHandler = new FacesFailureHandler(page.getLoginFailed());
         FacesSuccessHandler facesSuccessHandler = new FacesSuccessHandler(page.getIndex());
 
-        http.addFilterBefore(new CaptchaAuthenticationFilter((request, response, e) -> {
-            try {
-                facesFailureHandler.onAuthenticationFailure(request, response, new CaptchaErrorException(e.getMessage()));
-            } catch (Exception ignored) {
-            }
-        }), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(captchaFilter(facesFailureHandler), UsernamePasswordAuthenticationFilter.class);
         http.formLogin().loginPage(page.getLogin()).permitAll()
                 .successHandler(facesSuccessHandler)
                 .failureHandler(facesFailureHandler)
                 .and().authorizeRequests().anyRequest().authenticated();
         http.logout().logoutSuccessUrl(page.getLogin());
         http.csrf().disable();
+    }
+
+    private GenericFilterBean captchaFilter(FacesFailureHandler facesFailureHandler) {
+        return new CaptchaAuthenticationFilter((request, response, e) -> {
+            try {
+                facesFailureHandler.onAuthenticationFailure(request, response, new CaptchaErrorException(e.getMessage()));
+            } catch (Exception ignored) {
+                log.error("captcha filter error");
+            }
+        });
     }
 
     @Override
