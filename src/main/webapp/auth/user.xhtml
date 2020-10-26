@@ -79,7 +79,8 @@
             <framework:dialog id="userDialog" value="#{viewScope.user}" saveUpdate="@widgetVar(userTable)">
 
                 <framework:label target="avatar" value="#{msg['user']['avatar']}">
-                    <p:graphicImage id="avatar" url="" name="images/profile.png" library="omega-layout"/>
+                    <p:fileUpload value="#{viewScope.file}" mode="simple" skinSimple="true"/>
+                    <!--                    <p:graphicImage id="avatar" url="" name="images/profile.png" library="omega-layout"/>-->
                 </framework:label>
 
                 <framework:label target="nickname" value="#{msg['user']['nickname']}">

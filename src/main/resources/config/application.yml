@@ -63,5 +63,11 @@ mybatis-plus:
     default-enum-type-handler: org.apache.ibatis.type.EnumOrdinalTypeHandler
     cache-enabled: true
 fast-code:
+  oos:
+    enable: true
+    type : Qiniu
+    def-bucket: dsn-typecho
+    access-key: HsZYuKCblXqc2ZsJnfSxVlbrk0uPwarEJTmXth9W
+    secret-key: hIFZtoT9nAe9GHn41jCjakfhmfUbKsWnR6dOTKUb
   map-struct:
     url-domain: https://www.myelephant.cn

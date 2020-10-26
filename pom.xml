@@ -33,6 +33,10 @@
             <groupId>com.dandandog.fastcode</groupId>
             <artifactId>framework-captcha</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.dandandog.fastcode</groupId>
+            <artifactId>framework-oos</artifactId>
+        </dependency>
     </dependencies>
     <profiles>
         <profile>

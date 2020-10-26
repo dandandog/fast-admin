@@ -5,7 +5,9 @@ import com.dandandog.framework.faces.annotation.MessageType;
 import com.dandandog.framework.faces.controller.FacesController;
 import com.dandandog.framework.faces.exception.MessageResolvableException;
 import com.dandandog.framework.mapstruct.MapperRepo;
+import com.dandandog.framework.oos.service.FileService;
 import org.primefaces.model.LazyDataModel;
+import org.primefaces.model.file.UploadedFile;
 import org.springframework.stereotype.Controller;
 import pers.dandandog.projects.model.data.PageDataModel;
 import pers.dandandog.projects.admin.entity.AuthRole;
@@ -17,6 +19,7 @@ import pers.dandandog.projects.admin.service.AuthRoleService;
 import pers.dandandog.projects.admin.service.AuthUserService;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +38,9 @@ public class AuthUserController extends FacesController {
     @Resource
     private AuthRoleService roleService;
 
+    @Resource
+    private FileService fileService;
+
     @Override
     public void onEntry() {
         putViewScope("user", null);
@@ -42,6 +48,7 @@ public class AuthUserController extends FacesController {
         putViewScope("mulSelected", new ArrayList<AuthUser>());
         putViewScope("genders", UserGender.values());
         putViewScope("states", UserState.values());
+        putViewScope("file", null);
     }
 
     public LazyDataModel<AuthUser> getDataModel() {
@@ -84,6 +91,19 @@ public class AuthUserController extends FacesController {
         userService.removeByIds(deleteIds);
     }
 
+    @MessageRequired(type = MessageType.UPLOAD)
+    public void uploadAvatar() {
+        try {
+            UploadedFile file = getViewScope("file");
+            UserVo vo = getViewScope("user");
+            String url = fileService.putItem(file.getFileName(), file.getInputStream());
+            vo.setAvatarUrl(url);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new MessageResolvableException("error", "dataNotFound");
+        }
+    }
+
     private void findUserRole(UserVo vo) {
         List<AuthRole> source = roleService.list();
         List<AuthRole> target = Optional.ofNullable(vo.getId()).map(userId -> {
@@ -94,4 +114,6 @@ public class AuthUserController extends FacesController {
         vo.getRoleModel().setSource(source);
         vo.getRoleModel().setTarget(target);
     }
+
+
 }
