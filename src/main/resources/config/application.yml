@@ -64,10 +64,10 @@ mybatis-plus:
     cache-enabled: true
 fast-code:
   oos:
-    enable: true
+    enabled: true
     type : Qiniu
-    def-bucket: dsn-typecho
-    access-key: HsZYuKCblXqc2ZsJnfSxVlbrk0uPwarEJTmXth9W
-    secret-key: hIFZtoT9nAe9GHn41jCjakfhmfUbKsWnR6dOTKUb
+    def-bucket: elephantnormal
+    access-key: Fr2VGDGU6CL9W0JcgPcZ9mXSDhlZc12cGxj9yrpF
+    secret-key: tMy3Cykra8pevIF4Wb07Na9AXMkWn-f1_SRGHEZ-
   map-struct:
-    url-domain: https://www.myelephant.cn
+    url-domain: http://image.myelephant.cn

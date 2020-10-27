@@ -5,18 +5,19 @@ import com.dandandog.framework.faces.annotation.MessageType;
 import com.dandandog.framework.faces.controller.FacesController;
 import com.dandandog.framework.faces.exception.MessageResolvableException;
 import com.dandandog.framework.mapstruct.MapperRepo;
-import com.dandandog.framework.oos.service.FileService;
+import com.dandandog.framework.oos.service.OosFileService;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.file.UploadedFile;
 import org.springframework.stereotype.Controller;
-import pers.dandandog.projects.model.data.PageDataModel;
 import pers.dandandog.projects.admin.entity.AuthRole;
 import pers.dandandog.projects.admin.entity.AuthUser;
 import pers.dandandog.projects.admin.entity.enums.UserGender;
 import pers.dandandog.projects.admin.entity.enums.UserState;
-import pers.dandandog.projects.model.vo.UserVo;
 import pers.dandandog.projects.admin.service.AuthRoleService;
 import pers.dandandog.projects.admin.service.AuthUserService;
+import pers.dandandog.projects.model.data.PageDataModel;
+import pers.dandandog.projects.model.vo.UserVo;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -39,7 +40,7 @@ public class AuthUserController extends FacesController {
     private AuthRoleService roleService;
 
     @Resource
-    private FileService fileService;
+    private OosFileService fileService;
 
     @Override
     public void onEntry() {
@@ -48,7 +49,6 @@ public class AuthUserController extends FacesController {
         putViewScope("mulSelected", new ArrayList<AuthUser>());
         putViewScope("genders", UserGender.values());
         putViewScope("states", UserState.values());
-        putViewScope("file", null);
     }
 
     public LazyDataModel<AuthUser> getDataModel() {
@@ -91,10 +91,9 @@ public class AuthUserController extends FacesController {
         userService.removeByIds(deleteIds);
     }
 
-    @MessageRequired(type = MessageType.UPLOAD)
-    public void uploadAvatar() {
+    public void uploadAvatar(FileUploadEvent event) {
         try {
-            UploadedFile file = getViewScope("file");
+            UploadedFile file = event.getFile();
             UserVo vo = getViewScope("user");
             String url = fileService.putItem(file.getFileName(), file.getInputStream());
             vo.setAvatarUrl(url);

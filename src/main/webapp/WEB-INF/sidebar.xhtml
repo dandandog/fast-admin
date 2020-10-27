@@ -20,10 +20,10 @@
                         <a id="profile-button">
                             <span class="username">
                                  <sec:authorize ifAllGranted="ROLE_ADMIN">
-                                  <p:outputLabel value="You have the ADMIN role"/>
+                                  <p:outputLabel value="ADMIN"/>
                                 </sec:authorize>
                                   <sec:authorize ifAllGranted="ROLE_USER">
-                                  <p:outputLabel value="You have the USER role"/>
+                                  <p:outputLabel value="USER"/>
                                 </sec:authorize>
                             </span>
                             <i class="fa fa-fw fa-cog"/>
