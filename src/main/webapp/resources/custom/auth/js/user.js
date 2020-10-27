@@ -3,5 +3,5 @@ let UserPage = {
         debugger
         $("[id$='avatar']")
         console.log()
-    }
+    },
 }
