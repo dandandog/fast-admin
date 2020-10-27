@@ -1,6 +1,6 @@
 let AvatarComponents = {
     onSelected: function () {
-        $("[id$=':uploadInput']").trigger("click")
+        PF('fileUpload').chooseButton.trigger("click")
     },
     preview: function (e) {
         var files = $(e)[0].files;

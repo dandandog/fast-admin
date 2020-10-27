@@ -8,7 +8,8 @@
 <composite:interface>
     <!-- coustom attrs-->
     <composite:attribute name="value" required="true"/>
-    <composite:attribute name="action" method-signature="void upload()" default="#{controller.upload}"/>
+    <composite:attribute name="action" method-signature="void upload(org.primefaces.event.FileUploadEvent)"
+                         default="#{controller.upload(org.primefaces.event.FileUploadEvent)}"/>
 
 </composite:interface>
 
@@ -45,14 +46,16 @@
 
     <p:outputPanel id="avatarPanel" class="avatarPanel">
         <div id="uploadPanel" tabindex="0" class="fs-upload">
-            <i id="plusIcon" class="avatar-uploader-icon fa fa-plus"
-               style="display: #{cc.attrs.value !=null and cc.attrs.value !=''?'none':'block'}"
-               onclick="AvatarComponents.onSelected()"/>
-            <p:graphicImage value="#{cc.attrs.value}"
-                            style="display: #{cc.attrs.value !=null and cc.attrs.value !=''?'block':'none'}"
-                            onclick=" AvatarComponents.onSelected();"/>
-            <p:inputText id="uploadInput" type="file" style="display: none" onchange="AvatarComponents.preview(this)"/>
-            <p:remoteCommand name="uploadAction" update="avatarPanel" action="#{cc.attrs.action}"/>
+            <p:outputPanel layout="block" rendered="#{cc.attrs.value == null}"
+            >
+                <i id="plusIcon" class="avatar-uploader-icon fa fa-plus" onclick="AvatarComponents.onSelected()"/>
+            </p:outputPanel>
+            <p:graphicImage rendered="#{cc.attrs.value != null}" value="#{cc.attrs.value}"
+                            onclick="AvatarComponents.onSelected();"/>
+            <p:fileUpload widgetVar="fileUpload" id="fileUpload" style="display: none" skinSimple="true"
+                          multiple="false" auto="true"
+                          listener="#{cc.attrs.action}"
+                          update="avatarPanel"/>
         </div>
     </p:outputPanel>
 </composite:implementation>
