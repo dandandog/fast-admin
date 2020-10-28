@@ -1,5 +1,6 @@
 let AvatarComponents = {
     onSelected: function () {
+        debugger
         PF('fileUpload').chooseButton.trigger("click")
     },
     preview: function (e) {

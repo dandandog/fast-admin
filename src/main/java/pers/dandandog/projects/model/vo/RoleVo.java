@@ -1,17 +1,20 @@
 package pers.dandandog.projects.model.vo;
 
+import com.dandandog.framework.mapstruct.model.MapperVo;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.primefaces.model.TreeNode;
 import pers.dandandog.projects.admin.entity.AuthResource;
+import pers.dandandog.projects.admin.entity.AuthRole;
+import pers.dandandog.projects.admin.entity.AuthUser;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
-public class RoleVo {
-
-    private String id;
+@EqualsAndHashCode(callSuper = true)
+public class RoleVo extends MapperVo<AuthRole> {
 
     private String name;
 

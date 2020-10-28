@@ -5,6 +5,8 @@ import com.dandandog.framework.faces.annotation.MessageType;
 import com.dandandog.framework.faces.controller.FacesController;
 import com.dandandog.framework.faces.exception.MessageResolvableException;
 import com.dandandog.framework.mapstruct.MapperRepo;
+import com.dandandog.framework.mapstruct.MapperUtil;
+import com.dandandog.framework.mapstruct.qualifier.QualifierUrl;
 import com.dandandog.framework.oos.service.OosFileService;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.LazyDataModel;
@@ -42,6 +44,9 @@ public class AuthUserController extends FacesController {
     @Resource
     private OosFileService fileService;
 
+    @Resource
+    private QualifierUrl qualifierUrl;
+
     @Override
     public void onEntry() {
         putViewScope("user", null);
@@ -67,6 +72,8 @@ public class AuthUserController extends FacesController {
         AuthUser target = userService.getById(selected.getId());
         target = Optional.ofNullable(target).orElseThrow(() -> new MessageResolvableException("error", "dataNotFound"));
         UserVo vo = MapperRepo.mapTo(target, UserVo.class);
+        UserVo vvo = MapperUtil.mapTo(target);
+
         findUserRole(vo);
         putViewScope("user", vo);
     }
@@ -96,7 +103,8 @@ public class AuthUserController extends FacesController {
             UploadedFile file = event.getFile();
             UserVo vo = getViewScope("user");
             String url = fileService.putItem(file.getFileName(), file.getInputStream());
-            vo.setAvatarUrl(url);
+            vo.setAvatarUrl(qualifierUrl.addPrefix(url));
+            putViewScope("user", vo);
         } catch (IOException e) {
             e.printStackTrace();
             throw new MessageResolvableException("error", "dataNotFound");

@@ -79,18 +79,15 @@
             <framework:dialog id="userDialog" value="#{viewScope.user}" saveUpdate="@widgetVar(userTable)">
 
                 <framework:label target="avatar" value="#{msg['user']['avatar']}">
-                    <framework:avatar id="avatar" value="#{viewScope.user.avatarUrl}"
-                                      action="#{controller.uploadAvatar}"/>
+                    <framework:upload id="avatar" value="#{viewScope.user.avatarUrl}"
+                                      listener="#{controller.uploadAvatar}"/>
                 </framework:label>
-
                 <framework:label target="nickname" value="#{msg['user']['nickname']}">
                     <p:inputText id="nickname" value="#{viewScope.user.nickname}"/>
                 </framework:label>
-
                 <framework:label target="username" value="#{msg['user']['username']}">
                     <p:inputText id="username" required="true" value="#{viewScope.user.username}"/>
                 </framework:label>
-
                 <framework:label target="password1" value="#{msg['user']['password1']}"
                                  rendered="#{viewScope.user.id == null}">
                     <p:password id="password1" match="@widgetVar(password2)" feedback="true" autocomplete="new-password"
@@ -98,13 +95,11 @@
                                 goodLabel="#{msg['user']['good']}" strongLabel="#{msg['user']['strong']}"
                                 value="#{viewScope.user.password}"/>
                 </framework:label>
-
                 <framework:label target="password2" value="#{msg['user']['password2']}"
                                  rendered="#{viewScope.user.id == null}">
                     <p:password id="password2" widgetVar="password2" autocomplete="new-password"
                                 value="#{viewScope.user.password}"/>
                 </framework:label>
-
                 <framework:label target="gender" value="#{msg['user']['gender']}">
                     <p:selectOneMenu id="gender" value="#{viewScope.user.gender}"
                                      onchange="UserPage.onChangeGender('')">
@@ -112,9 +107,8 @@
                                        itemLabel="#{msg['user'][gender.title]}" itemValue="#{gender}"/>
                     </p:selectOneMenu>
                 </framework:label>
-
                 <framework:label target="mobile" value="#{msg['user']['phone']}">
-                    <p:inputNumber id="mobile" value="#{viewScope.user.phone}" decimalPlaces="0"/>
+                    <p:inputMask id="mobile" value="#{viewScope.user.phone}" mask="999-999-99999"/>
                 </framework:label>
 
                 <framework:label target="email" value="#{msg['user']['email']}">
