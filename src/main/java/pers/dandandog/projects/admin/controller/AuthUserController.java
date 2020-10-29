@@ -4,7 +4,6 @@ import com.dandandog.framework.faces.annotation.MessageRequired;
 import com.dandandog.framework.faces.annotation.MessageType;
 import com.dandandog.framework.faces.controller.FacesController;
 import com.dandandog.framework.faces.exception.MessageResolvableException;
-import com.dandandog.framework.mapstruct.MapperRepo;
 import com.dandandog.framework.mapstruct.MapperUtil;
 import com.dandandog.framework.mapstruct.qualifier.QualifierUrl;
 import com.dandandog.framework.oos.service.OosFileService;
@@ -71,8 +70,7 @@ public class AuthUserController extends FacesController {
         AuthUser selected = getViewScope("sigSelected");
         AuthUser target = userService.getById(selected.getId());
         target = Optional.ofNullable(target).orElseThrow(() -> new MessageResolvableException("error", "dataNotFound"));
-        UserVo vo = MapperRepo.mapTo(target, UserVo.class);
-        UserVo vvo = MapperUtil.mapTo(target);
+        UserVo vo = MapperUtil.map(target);
 
         findUserRole(vo);
         putViewScope("user", vo);
@@ -81,7 +79,7 @@ public class AuthUserController extends FacesController {
     @MessageRequired(type = MessageType.SAVE)
     public void save() {
         UserVo vo = getViewScope("user");
-        AuthUser user = MapperRepo.mapFrom(vo, AuthUser.class);
+        AuthUser user = MapperUtil.map(vo);
         userService.save(user, vo.getRoleModel().getTarget());
     }
 

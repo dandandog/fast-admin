@@ -1,8 +1,7 @@
 package pers.dandandog.projects.model.vo;
 
-import cn.hutool.core.util.StrUtil;
+import com.dandandog.framework.mapstruct.model.MapperEntity;
 import com.dandandog.framework.mapstruct.model.MapperUrl;
-import com.dandandog.framework.mapstruct.model.MapperVo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.primefaces.model.DualListModel;
@@ -16,7 +15,7 @@ import java.time.LocalDateTime;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class UserVo extends MapperVo<AuthUser> {
+public class UserVo extends MapperEntity<AuthUser> {
 
     @NotEmpty
     private String nickname;

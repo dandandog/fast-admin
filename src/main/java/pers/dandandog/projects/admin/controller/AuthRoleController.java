@@ -4,13 +4,13 @@ import com.dandandog.framework.faces.annotation.MessageRequired;
 import com.dandandog.framework.faces.annotation.MessageType;
 import com.dandandog.framework.faces.controller.FacesController;
 import com.dandandog.framework.faces.exception.MessageResolvableException;
-import com.dandandog.framework.mapstruct.MapperRepo;
+import com.dandandog.framework.mapstruct.MapperUtil;
 import org.springframework.stereotype.Controller;
 import pers.dandandog.projects.admin.entity.AuthResource;
 import pers.dandandog.projects.admin.entity.AuthRole;
-import pers.dandandog.projects.model.vo.RoleVo;
 import pers.dandandog.projects.admin.service.AuthResourceService;
 import pers.dandandog.projects.admin.service.AuthRoleService;
+import pers.dandandog.projects.model.vo.RoleVo;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -49,7 +49,7 @@ public class AuthRoleController extends FacesController {
         AuthRole selected = getViewScope("sinSelected");
         AuthRole source = roleService.getById(selected.getId());
         source = Optional.ofNullable(source).orElseThrow(() -> new MessageResolvableException("error", "dataNotFound"));
-        RoleVo vo = MapperRepo.mapTo(source, RoleVo.class);
+        RoleVo vo = MapperUtil.map(source);
         putViewScope("role", vo);
         putViewScope("rootTree", resourceService.getRootTree(true, vo.getResources().toArray(new AuthResource[0])));
     }
@@ -57,8 +57,8 @@ public class AuthRoleController extends FacesController {
     @MessageRequired(type = MessageType.SAVE)
     public void save() {
         RoleVo vo = getViewScope("role");
-        AuthRole role = MapperRepo.mapFrom(vo, AuthRole.class);
-        roleService.saveOrUpdate(role);
+        AuthRole role = MapperUtil.map(vo);
+        roleService.save(role, vo.getResources());
         onEntry();
     }
 

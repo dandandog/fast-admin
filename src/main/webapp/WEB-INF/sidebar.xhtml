@@ -29,12 +29,14 @@
                             <i class="fa fa-fw fa-cog"/>
                         </a>
                         <ul>
-                            <li><a href="#"><i class="fa fa-fw fa-sliders"/><span>Account</span></a></li>
-                            <li><a href="#"><i class="fa fa-fw fa-bell"/><span>Notifications</span><span
-                                    class="menu-badge">2</span></a></li>
+                            <li><a href="#"><i class="fa fa-fw fa-sliders"/><h:outputText
+                                    value="#{msg['framework']['account']}"/></a></li>
+                            <li><a href="#"><i class="fa fa-fw fa-bell"/><h:outputText
+                                    value="#{msg['framework']['notifications']}"/></a></li>
                             <li>
                                 <p:link href="#{request.contextPath}/logout">
-                                    <i class="fa fa-fw fa-sign-out"/><span>Logout</span>
+                                    <i class="fa fa-fw fa-sign-out"/>
+                                    <h:outputText value="#{msg['framework']['logout']}"/>
                                 </p:link>
                             </li>
                         </ul>
@@ -43,12 +45,15 @@
 
                     <div class="menu">
                         <po:menu>
-                            <p:menuitem id="om_dashboard" value="Dashboard" icon="fa fa-home" outcome="/dashboard"/>
-                            <p:submenu id="om_authority" label="Authority" icon="fa fa-shield">
-                                <p:menuitem id="om_sample" value="User" icon="fa fa-users"
+                            <p:menuitem id="om_dashboard" value="#{msg['root']['dashboard']}" icon="fa fa-home"
+                                        outcome="/dashboard"/>
+                            <p:submenu id="om_authority" label="#{msg['root']['authority']}" icon="fa fa-shield">
+                                <p:menuitem id="om_sample" value="#{msg['auth']['user']}" icon="fa fa-users"
                                             outcome="/auth/user"/>
-                                <p:menuitem id="om_forms" value="Role" icon="fa fa-code" outcome="/auth/role"/>
-                                <p:menuitem id="om_data" value="Resource" icon="fa fa-tasks" outcome="/auth/resource"/>
+                                <p:menuitem id="om_forms" value="#{msg['auth']['role']}" icon="fa fa-code"
+                                            outcome="/auth/role"/>
+                                <p:menuitem id="om_data" value="#{msg['auth']['resource']}" icon="fa fa-tasks"
+                                            outcome="/auth/resource"/>
                             </p:submenu>
                         </po:menu>
                     </div>

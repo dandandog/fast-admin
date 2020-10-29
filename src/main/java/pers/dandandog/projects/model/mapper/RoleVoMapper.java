@@ -5,7 +5,7 @@ import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.dandandog.framework.core.utils.MybatisUtil;
-import com.dandandog.framework.mapstruct.StandardMapper;
+import com.dandandog.framework.mapstruct.IMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
-public interface RoleVoMapper extends StandardMapper<AuthRole, RoleVo> {
+public interface RoleVoMapper extends IMapper<AuthRole, RoleVo> {
 
 
     @Override

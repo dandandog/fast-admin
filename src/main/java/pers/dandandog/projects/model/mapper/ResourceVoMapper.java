@@ -2,7 +2,7 @@ package pers.dandandog.projects.model.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.dandandog.framework.core.utils.MybatisUtil;
-import com.dandandog.framework.mapstruct.StandardMapper;
+import com.dandandog.framework.mapstruct.IMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -12,7 +12,7 @@ import pers.dandandog.projects.admin.entity.AuthResource;
 import pers.dandandog.projects.model.vo.ResourceVo;
 
 @Mapper(componentModel = "spring")
-public interface ResourceVoMapper extends StandardMapper<AuthResource, ResourceVo> {
+public interface ResourceVoMapper extends IMapper<AuthResource, ResourceVo> {
 
 
     @Override

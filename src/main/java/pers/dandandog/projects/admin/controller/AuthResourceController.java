@@ -8,14 +8,14 @@ import com.dandandog.framework.faces.annotation.MessageRequired;
 import com.dandandog.framework.faces.annotation.MessageType;
 import com.dandandog.framework.faces.controller.FacesController;
 import com.dandandog.framework.faces.exception.MessageResolvableException;
-import com.dandandog.framework.mapstruct.MapperRepo;
+import com.dandandog.framework.mapstruct.MapperUtil;
 import org.primefaces.model.TreeNode;
 import org.springframework.stereotype.Controller;
 import pers.dandandog.projects.admin.entity.AuthResource;
 import pers.dandandog.projects.admin.entity.enums.ResourceTarget;
 import pers.dandandog.projects.admin.entity.enums.ResourceType;
-import pers.dandandog.projects.model.vo.ResourceVo;
 import pers.dandandog.projects.admin.service.AuthResourceService;
+import pers.dandandog.projects.model.vo.ResourceVo;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -58,14 +58,14 @@ public class AuthResourceController extends FacesController {
         AuthResource selected = getViewScope("sinSelected");
         AuthResource target = resourceService.getById(selected.getId());
         target = Optional.ofNullable(target).orElseThrow(() -> new MessageResolvableException("error", "dataNotFound"));
-        ResourceVo vo = MapperRepo.mapTo(target, ResourceVo.class);
+        ResourceVo vo = MapperUtil.map(target);
         putResourceView(vo);
     }
 
     @MessageRequired(type = MessageType.SAVE)
     public void save() {
         ResourceVo vo = getViewScope("resource");
-        AuthResource resource = MapperRepo.mapFrom(vo, AuthResource.class);
+        AuthResource resource = MapperUtil.map(vo);
         resourceService.saveOrUpdate(resource);
         onEntry();
     }
@@ -87,6 +87,13 @@ public class AuthResourceController extends FacesController {
         resourceService.removeByIds(delIds);
         onEntry();
     }
+
+    @MessageRequired(type = MessageType.OPERATION)
+    public void onChangeStatus(AuthResource resource) {
+        resourceService.updateById(resource);
+        onEntry();
+    }
+
 
     private void putResourceView(ResourceVo vo) {
         Wrapper<AuthResource> wrapper = new LambdaQueryWrapper<AuthResource>().ne(AuthResource::getType, ResourceType.BUTTON).orderByAsc(AuthResource::getSeq);

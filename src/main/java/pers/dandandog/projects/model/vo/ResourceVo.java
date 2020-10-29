@@ -1,12 +1,11 @@
 package pers.dandandog.projects.model.vo;
 
-import com.dandandog.framework.mapstruct.model.MapperVo;
+import com.dandandog.framework.mapstruct.model.MapperEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.primefaces.model.CheckboxTreeNode;
 import org.primefaces.model.TreeNode;
 import pers.dandandog.projects.admin.entity.AuthResource;
-import pers.dandandog.projects.admin.entity.AuthUser;
 import pers.dandandog.projects.admin.entity.enums.ResourceTarget;
 import pers.dandandog.projects.admin.entity.enums.ResourceType;
 
@@ -19,7 +18,7 @@ import java.util.Optional;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class ResourceVo extends MapperVo<AuthResource> {
+public class ResourceVo extends MapperEntity<AuthResource> {
 
     @NotBlank
     private String title;
